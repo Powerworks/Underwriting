@@ -178,7 +178,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Done when**: Real end-to-end submission receipt proven against the running host (not just compiling)
   - **Commit**: None
 
-- [ ] 3.6 [VERIFY] VE3 E2E cleanup: stop server, free port 5132
+- [x] 3.6 [VERIFY] VE3 E2E cleanup: stop server, free port 5132
   - **Do**: 1. `kill $(cat /tmp/ve-pids.txt) 2>/dev/null; sleep 2; kill -9 $(cat /tmp/ve-pids.txt) 2>/dev/null || true`. 2. `lsof -ti :5132 | xargs -r kill 2>/dev/null || true`. 3. `rm -f /tmp/ve-pids.txt`.
   - **Verify**: `! lsof -ti :5132 && echo PASS`
   - **Done when**: No process on 5132, PID file removed
