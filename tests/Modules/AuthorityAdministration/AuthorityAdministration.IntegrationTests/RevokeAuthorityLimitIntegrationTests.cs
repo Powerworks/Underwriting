@@ -4,6 +4,7 @@ using BrokerConnect.Modules.AuthorityAdministration.Api.IntegrationEvents.Publis
 using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using BrokerConnect.Modules.AuthorityAdministration.Domain.Aggregates;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Shouldly;
 using Wolverine;
@@ -25,7 +26,7 @@ public class RevokeAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         var request = new GrantCellAuthorityLimitRequest(
             "Underwriting Governance", "TFP-CELL-2026", Scope(), "USD",
             DateOnly.FromDateTime(DateTime.UtcNow));
-        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
         return result.Result.ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>().Value!.AuthorityLimitId;
     }
 
@@ -40,7 +41,7 @@ public class RevokeAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         await using var session = fixture.Store.LightweightSession();
         var request = new RevokeAuthorityLimitRequest("Cell exited the class", "Immediate");
 
-        var result = await RevokeAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, CancellationToken.None);
+        var result = await RevokeAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, NullLogger<RevokeAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var ok = result.Result.ShouldBeOfType<Ok<RevokeAuthorityLimitResponse>>();
         ok.Value!.AuthorityLimitId.ShouldBe(authorityLimitId);
@@ -61,7 +62,7 @@ public class RevokeAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         await using var session = fixture.Store.LightweightSession();
         var request = new RevokeAuthorityLimitRequest("Cell exited the class", "Immediate");
 
-        await RevokeAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, CancellationToken.None);
+        await RevokeAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, NullLogger<RevokeAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         await bus.Received(1).PublishAsync(Arg.Is<AuthorityLimitChangedV1>(e =>
             e.AuthorityLimitId == authorityLimitId && e.ChangeType == "Revoked" && e.CellId == cellId));

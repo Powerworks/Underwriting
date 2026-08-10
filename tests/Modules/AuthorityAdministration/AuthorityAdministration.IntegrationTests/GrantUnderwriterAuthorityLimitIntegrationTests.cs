@@ -2,6 +2,7 @@ using BrokerConnect.Modules.AuthorityAdministration.Api.Commands.GrantCellAuthor
 using BrokerConnect.Modules.AuthorityAdministration.Api.Commands.GrantUnderwriterAuthorityLimit;
 using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Xunit;
 
@@ -25,7 +26,7 @@ public class GrantUnderwriterAuthorityLimitIntegrationTests(AuthorityAdministrat
         var request = new GrantCellAuthorityLimitRequest(
             "Underwriting Governance", "TFP-CELL-2026", CellScope(cellMaxLineSize), "USD",
             DateOnly.FromDateTime(DateTime.UtcNow));
-        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
         result.Result.ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>();
     }
 
@@ -41,7 +42,7 @@ public class GrantUnderwriterAuthorityLimitIntegrationTests(AuthorityAdministrat
         var request = new GrantUnderwriterAuthorityLimitRequest(UnderwriterScope(5_000_000), "Cell Head");
 
         var result = await GrantUnderwriterAuthorityLimitHandler.Handle(
-            cellId, underwriterId, request, session, CancellationToken.None);
+            cellId, underwriterId, request, session, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var created = result.Result.ShouldBeOfType<Created<GrantUnderwriterAuthorityLimitResponse>>();
         created.Value!.UnderwriterId.ShouldBe(underwriterId);
@@ -61,7 +62,7 @@ public class GrantUnderwriterAuthorityLimitIntegrationTests(AuthorityAdministrat
         var request = new GrantUnderwriterAuthorityLimitRequest(UnderwriterScope(20_000_000), "Cell Head");
 
         var result = await GrantUnderwriterAuthorityLimitHandler.Handle(
-            cellId, underwriterId, request, session, CancellationToken.None);
+            cellId, underwriterId, request, session, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var problem = result.Result.ShouldBeOfType<ProblemHttpResult>();
         problem.ProblemDetails.Status.ShouldBe(409);
@@ -79,12 +80,12 @@ public class GrantUnderwriterAuthorityLimitIntegrationTests(AuthorityAdministrat
 
         await using var first = fixture.Store.LightweightSession();
         var firstResult = await GrantUnderwriterAuthorityLimitHandler.Handle(
-            cellId, underwriterId, request, first, CancellationToken.None);
+            cellId, underwriterId, request, first, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
         firstResult.Result.ShouldBeOfType<Created<GrantUnderwriterAuthorityLimitResponse>>();
 
         await using var second = fixture.Store.LightweightSession();
         var secondResult = await GrantUnderwriterAuthorityLimitHandler.Handle(
-            cellId, underwriterId, request, second, CancellationToken.None);
+            cellId, underwriterId, request, second, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var problem = secondResult.Result.ShouldBeOfType<ProblemHttpResult>();
         problem.ProblemDetails.Status.ShouldBe(409);

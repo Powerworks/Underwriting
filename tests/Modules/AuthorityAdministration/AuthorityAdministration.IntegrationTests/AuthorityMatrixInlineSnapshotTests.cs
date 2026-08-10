@@ -2,6 +2,7 @@ using BrokerConnect.Modules.AuthorityAdministration.Api.Commands.GrantCellAuthor
 using BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.AuthorityMatrix;
 using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Xunit;
 
@@ -25,11 +26,11 @@ public class AuthorityMatrixInlineSnapshotTests(AuthorityAdministrationPostgresF
         var grantRequest = new GrantCellAuthorityLimitRequest(
             "Underwriting Governance", "TFP-CELL-2026", Scope(), "USD",
             DateOnly.FromDateTime(DateTime.UtcNow));
-        var grantResult = await GrantCellAuthorityLimitHandler.Handle(cellId, grantRequest, session, CancellationToken.None);
+        var grantResult = await GrantCellAuthorityLimitHandler.Handle(cellId, grantRequest, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
         var authorityLimitId = grantResult.Result
             .ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>().Value!.AuthorityLimitId;
 
-        var matrixResult = await GetAuthorityMatrix.Handle(authorityLimitId, session, CancellationToken.None);
+        var matrixResult = await GetAuthorityMatrix.Handle(authorityLimitId, session, NullLogger<GetAuthorityMatrix>.Instance, CancellationToken.None);
 
         var ok = matrixResult.Result.ShouldBeOfType<Ok<AuthorityMatrixResponse>>();
         ok.Value!.AuthorityLimitId.ShouldBe(authorityLimitId);
@@ -44,7 +45,7 @@ public class AuthorityMatrixInlineSnapshotTests(AuthorityAdministrationPostgresF
     {
         await using var session = fixture.Store.LightweightSession();
 
-        var result = await GetAuthorityMatrix.Handle(Guid.NewGuid(), session, CancellationToken.None);
+        var result = await GetAuthorityMatrix.Handle(Guid.NewGuid(), session, NullLogger<GetAuthorityMatrix>.Instance, CancellationToken.None);
 
         result.Result.ShouldBeOfType<NotFound>();
     }

@@ -3,6 +3,7 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using BrokerConnect.Modules.AuthorityAdministration.Domain.Aggregates;
 using Marten;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Xunit;
 
@@ -28,7 +29,7 @@ public class GrantCellAuthorityLimitIntegrationTests(AuthorityAdministrationPost
             "Underwriting Governance", "TFP-CELL-2026", Scope(), "USD",
             DateOnly.FromDateTime(DateTime.UtcNow));
 
-        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var created = result.Result.ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>();
         created.Value!.CellId.ShouldBe(cellId);
@@ -51,10 +52,10 @@ public class GrantCellAuthorityLimitIntegrationTests(AuthorityAdministrationPost
             "Underwriting Governance", "TFP-CELL-2026", Scope(), "USD",
             DateOnly.FromDateTime(DateTime.UtcNow));
 
-        var first = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+        var first = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
         first.Result.ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>();
 
-        var second = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+        var second = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var problem = second.Result.ShouldBeOfType<ProblemHttpResult>();
         problem.ProblemDetails.Status.ShouldBe(409);

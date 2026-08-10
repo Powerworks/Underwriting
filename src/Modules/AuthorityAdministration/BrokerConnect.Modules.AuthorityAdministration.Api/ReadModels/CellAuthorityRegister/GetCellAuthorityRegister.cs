@@ -2,11 +2,12 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.CellAuthorityRegister;
 
-public static class GetCellAuthorityRegister
+public class GetCellAuthorityRegister
 {
     // Contracts doc: "v1 default page size TBD, not specified by source — flag at
     // implementation time." Flagging here: 20 is a guess, not a transcribed value —
@@ -20,11 +21,15 @@ public static class GetCellAuthorityRegister
         int? page,
         int? pageSize,
         IQuerySession session,
+        ILogger<GetCellAuthorityRegister> logger,
         CancellationToken cancellationToken)
     {
         var register = await session.LoadAsync<CellAuthorityRegister>(cellId, cancellationToken);
         if (register is null)
+        {
+            logger.LogDebug("CellAuthorityRegister not found for cell {CellId}", cellId);
             return TypedResults.NotFound();
+        }
 
         var effectivePage = page is > 0 ? page.Value : 1;
         var effectivePageSize = pageSize is > 0 ? Math.Min(pageSize.Value, MaxPageSize) : DefaultPageSize;

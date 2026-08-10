@@ -4,11 +4,12 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain.Events;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.Commands.GrantUnderwriterAuthorityLimit;
 
-public static class GrantUnderwriterAuthorityLimitHandler
+public class GrantUnderwriterAuthorityLimitHandler
 {
     [WolverinePost("/api/v1/authority/cells/{cellId}/underwriters/{underwriterId}/limits")]
     public static async Task<Results<Created<GrantUnderwriterAuthorityLimitResponse>, NotFound, ProblemHttpResult>> Handle(
@@ -16,6 +17,7 @@ public static class GrantUnderwriterAuthorityLimitHandler
         string underwriterId,
         GrantUnderwriterAuthorityLimitRequest request,
         IDocumentSession session,
+        ILogger<GrantUnderwriterAuthorityLimitHandler> logger,
         CancellationToken cancellationToken)
     {
         var cellGrant = await session.Query<AuthorityLimit>()
@@ -23,7 +25,12 @@ public static class GrantUnderwriterAuthorityLimitHandler
             .FirstOrDefaultAsync(cancellationToken);
 
         if (cellGrant is null)
+        {
+            logger.LogInformation(
+                "Underwriter authority limit grant for underwriter {UnderwriterId} rejected: no Active Cell-tier grant found for cell {CellId}",
+                underwriterId, cellId);
             return TypedResults.NotFound();
+        }
 
         // FR-003/FR-006: cascade check against the Cell's own current limit.
         var exceedsCellLimit = request.RequestedScope.MaxLineSize > cellGrant.Scope.MaxLineSize
@@ -31,7 +38,7 @@ public static class GrantUnderwriterAuthorityLimitHandler
 
         if (exceedsCellLimit)
         {
-            await RejectAsync(session, cellGrant.AuthorityLimitId, underwriterId, cellId, request,
+            await RejectAsync(session, logger, cellGrant.AuthorityLimitId, underwriterId, cellId, request,
                 AuthorityLimitRejectionReasons.ExceedsCellLimit, cancellationToken);
             return AuthorityRejectionProblem.Conflict(
                 cellGrant.AuthorityLimitId, AuthorityLimitRejectionReasons.ExceedsCellLimit,
@@ -50,7 +57,7 @@ public static class GrantUnderwriterAuthorityLimitHandler
 
         if (duplicate)
         {
-            await RejectAsync(session, cellGrant.AuthorityLimitId, underwriterId, cellId, request,
+            await RejectAsync(session, logger, cellGrant.AuthorityLimitId, underwriterId, cellId, request,
                 AuthorityLimitRejectionReasons.DuplicateActiveGrant, cancellationToken);
             return AuthorityRejectionProblem.Conflict(
                 cellGrant.AuthorityLimitId, AuthorityLimitRejectionReasons.DuplicateActiveGrant,
@@ -72,6 +79,10 @@ public static class GrantUnderwriterAuthorityLimitHandler
         session.Events.StartStream<AuthorityLimit>(authorityLimitId, granted);
         await session.SaveChangesAsync(cancellationToken);
 
+        logger.LogInformation(
+            "Underwriter authority limit {AuthorityLimitId} granted for underwriter {UnderwriterId} under cell {CellId}",
+            authorityLimitId, underwriterId, cellId);
+
         return TypedResults.Created(
             $"/api/v1/authority/matrix/{authorityLimitId}",
             new GrantUnderwriterAuthorityLimitResponse(
@@ -79,7 +90,7 @@ public static class GrantUnderwriterAuthorityLimitHandler
     }
 
     private static async Task RejectAsync(
-        IDocumentSession session, Guid cellAuthorityLimitId, string underwriterId, string cellId,
+        IDocumentSession session, ILogger logger, Guid cellAuthorityLimitId, string underwriterId, string cellId,
         GrantUnderwriterAuthorityLimitRequest request, string rejectionReason, CancellationToken cancellationToken)
     {
         // Appends to the Cell's own stream — the entity the rejection was
@@ -90,5 +101,9 @@ public static class GrantUnderwriterAuthorityLimitHandler
 
         session.Events.Append(cellAuthorityLimitId, rejected);
         await session.SaveChangesAsync(cancellationToken);
+
+        logger.LogWarning(
+            "Underwriter authority limit grant rejected for underwriter {UnderwriterId} under cell {CellId}: {RejectionReason}",
+            underwriterId, cellId, rejectionReason);
     }
 }

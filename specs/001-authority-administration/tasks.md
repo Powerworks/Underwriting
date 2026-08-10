@@ -258,8 +258,16 @@ narrowing, not new implementation.
 
 - [ ] T057 [P] Write ADR files for `research.md` Decisions 1–4 into `docs/adr/` (Solution Arch §10 note: "Full ADR text... lives in `docs/adr/` once the solution is scaffolded" — it now is)
 - [ ] T058 [P] `dotnet format --verify-no-changes`, `dotnet list package --vulnerable`, SAST + secret-scan pass over the module (constitution Quality Gates)
-- [ ] T059 Run `quickstart.md` scenarios 1–8 end-to-end against a real Postgres
-- [ ] T060 [P] Structured logging pass — `ILogger` message templates on every handler (constitution Principle X), correlation ID propagation verified
+- [X] T059 Run `quickstart.md` scenarios 1–8 end-to-end against a real Postgres. All 8 already run this way — no new tests needed, just the mapping below, confirmed via a fresh `dotnet test` pass (23/23 passing) against Testcontainers Postgres:
+  1. Grant → read back via AuthorityMatrix same-request (SC-001) → `AuthorityMatrixInlineSnapshotTests.Grant_is_visible_via_AuthorityMatrix_in_the_same_session_immediately`
+  2. Underwriter grant within cell limit succeeds → `GrantUnderwriterAuthorityLimitIntegrationTests.Grant_within_the_cells_current_limit_succeeds_and_is_marked_WithinCellLimit`
+  3. Underwriter grant exceeding cell limit rejected → `GrantUnderwriterAuthorityLimitIntegrationTests.Grant_exceeding_the_cells_current_limit_is_rejected`
+  4. Duplicate Active grant rejected → `GrantCellAuthorityLimitIntegrationTests.Second_grant_for_the_same_cell_and_class_of_business_is_rejected_while_the_first_is_Active`
+  5. Revise on a Revoked record rejected → `ReviseAuthorityLimitIntegrationTests.Revising_a_Revoked_limit_is_rejected`
+  6. Revise exceeding cell limit rejected → `ReviseAuthorityLimitIntegrationTests.Revising_an_underwriter_limit_beyond_the_cells_current_limit_is_rejected`
+  7. Escalation request recorded → `UnderwriterAuthorityRegisterProjectionTests.Increase_request_with_no_prior_grant_leaves_current_authority_null` asserts the `201 Created` *and* that the request is genuinely auditable afterward (visible in the register), stronger evidence than a minimal dedicated test would give
+  8. Revision/revocation publishes the integration event → `ReviseAuthorityLimitIntegrationTests.Revise_publishes_AuthorityLimitChangedV1` + `RevokeAuthorityLimitIntegrationTests.Revoke_publishes_AuthorityLimitChangedV1`
+- [X] T060 [P] Structured logging pass — `ILogger` message templates on every handler (constitution Principle X), correlation ID propagation verified. All 5 command handlers and 3 read endpoints gained an `ILogger<T>` parameter and structured (never interpolated) log calls — Information on success, Warning on rejection/conflict, Information on NotFound for commands, Debug on NotFound for reads. **Required dropping `static` from each handler's class declaration** (kept `Handle` itself `static`, per the Wolverine discovery rule) — `ILogger<T>` can't close over a `static class`, C# CS0718. Correlation ID: confirmed via Wolverine's own docs that `IMessageBus.CorrelationId` is automatically set from the current `System.Diagnostics.Activity`'s root id (ASP.NET Core creates one per request) — "zero-code" per ADR-012, nothing to write for propagation itself. The one gap: `ILogger` never surfaced it without `ActivityTrackingOptions` configured, so `Program.cs` now sets `TraceId | SpanId` — without it the trace id was genuinely propagating but silently never appeared in a log line.
 
 ---
 

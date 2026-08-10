@@ -4,11 +4,12 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain.Events;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.Commands.GrantCellAuthorityLimit;
 
-public static class GrantCellAuthorityLimitHandler
+public class GrantCellAuthorityLimitHandler
 {
     // TODO(ADR-010): [Authorize] policy deferred until the identity-provider
     // decision (Solution Arch §8, DEC-032) lands — no policy name exists yet to
@@ -18,6 +19,7 @@ public static class GrantCellAuthorityLimitHandler
         string cellId,
         GrantCellAuthorityLimitRequest request,
         IDocumentSession session,
+        ILogger<GrantCellAuthorityLimitHandler> logger,
         CancellationToken cancellationToken)
     {
         // Clarified 2026-08-09 / FR-011: at most one Active Cell-tier grant per
@@ -46,6 +48,10 @@ public static class GrantCellAuthorityLimitHandler
             session.Events.Append(duplicate.AuthorityLimitId, rejected);
             await session.SaveChangesAsync(cancellationToken);
 
+            logger.LogWarning(
+                "Cell authority limit grant rejected for cell {CellId}: {RejectionReason} (existing {AuthorityLimitId})",
+                cellId, rejected.RejectionReason, duplicate.AuthorityLimitId);
+
             return AuthorityRejectionProblem.Conflict(
                 duplicate.AuthorityLimitId, rejected.RejectionReason,
                 $"An Active Cell-tier authority limit already exists for cell '{cellId}' covering the requested class(es) of business.");
@@ -64,6 +70,9 @@ public static class GrantCellAuthorityLimitHandler
 
         session.Events.StartStream<AuthorityLimit>(authorityLimitId, granted);
         await session.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation(
+            "Cell authority limit {AuthorityLimitId} granted for cell {CellId}", authorityLimitId, cellId);
 
         return TypedResults.Created(
             $"/api/v1/authority/matrix/{authorityLimitId}",

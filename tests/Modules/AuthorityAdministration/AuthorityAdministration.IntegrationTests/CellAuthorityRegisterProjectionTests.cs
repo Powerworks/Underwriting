@@ -5,6 +5,7 @@ using BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.CellAuthority
 using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using Marten;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Shouldly;
 using Wolverine;
@@ -39,7 +40,7 @@ public class CellAuthorityRegisterProjectionTests(AuthorityAdministrationPostgre
             var request = new GrantCellAuthorityLimitRequest(
                 "Underwriting Governance", "TFP-CELL-2026", CellScope(), "USD",
                 DateOnly.FromDateTime(DateTime.UtcNow));
-            var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+            var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
             authorityLimitId = result.Result
                 .ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>().Value!.AuthorityLimitId;
         }
@@ -69,7 +70,7 @@ public class CellAuthorityRegisterProjectionTests(AuthorityAdministrationPostgre
             var grantRequest = new GrantCellAuthorityLimitRequest(
                 "Underwriting Governance", "TFP-CELL-2026", CellScope(), "USD",
                 DateOnly.FromDateTime(DateTime.UtcNow));
-            var grantResult = await GrantCellAuthorityLimitHandler.Handle(cellId, grantRequest, session, CancellationToken.None);
+            var grantResult = await GrantCellAuthorityLimitHandler.Handle(cellId, grantRequest, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
             authorityLimitId = grantResult.Result
                 .ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>().Value!.AuthorityLimitId;
         }
@@ -79,7 +80,7 @@ public class CellAuthorityRegisterProjectionTests(AuthorityAdministrationPostgre
             var bus = Substitute.For<IMessageBus>();
             var revokeResult = await RevokeAuthorityLimitHandler.Handle(
                 authorityLimitId, new RevokeAuthorityLimitRequest("Cell exited the class", "Immediate"),
-                session, bus, CancellationToken.None);
+                session, bus, NullLogger<RevokeAuthorityLimitHandler>.Instance, CancellationToken.None);
             revokeResult.Result.ShouldBeOfType<Ok<RevokeAuthorityLimitResponse>>();
         }
 
@@ -108,14 +109,14 @@ public class CellAuthorityRegisterProjectionTests(AuthorityAdministrationPostgre
             var grantCellRequest = new GrantCellAuthorityLimitRequest(
                 "Underwriting Governance", "TFP-CELL-2026", CellScope(), "USD",
                 DateOnly.FromDateTime(DateTime.UtcNow));
-            await GrantCellAuthorityLimitHandler.Handle(cellId, grantCellRequest, session, CancellationToken.None);
+            await GrantCellAuthorityLimitHandler.Handle(cellId, grantCellRequest, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
         }
 
         await using (var session = fixture.Store.LightweightSession())
         {
             var grantUwRequest = new GrantUnderwriterAuthorityLimitRequest(UnderwriterScope(5_000_000), "Cell Head");
             var grantUwResult = await GrantUnderwriterAuthorityLimitHandler.Handle(
-                cellId, underwriterId, grantUwRequest, session, CancellationToken.None);
+                cellId, underwriterId, grantUwRequest, session, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
             underwriterAuthorityLimitId = grantUwResult.Result
                 .ShouldBeOfType<Created<GrantUnderwriterAuthorityLimitResponse>>().Value!.AuthorityLimitId;
         }
@@ -125,7 +126,7 @@ public class CellAuthorityRegisterProjectionTests(AuthorityAdministrationPostgre
             var bus = Substitute.For<IMessageBus>();
             await RevokeAuthorityLimitHandler.Handle(
                 underwriterAuthorityLimitId, new RevokeAuthorityLimitRequest("No longer needed", "Immediate"),
-                session, bus, CancellationToken.None);
+                session, bus, NullLogger<RevokeAuthorityLimitHandler>.Instance, CancellationToken.None);
         }
 
         await fixture.WaitForProjectionsAsync();
@@ -156,21 +157,21 @@ public class CellAuthorityRegisterProjectionTests(AuthorityAdministrationPostgre
                 "Underwriting Governance", "TFP-CELL-2026",
                 new AuthorityScope([classOfBusiness], "Bermuda", 30_000_000, 5_000_000), "USD",
                 DateOnly.FromDateTime(DateTime.UtcNow));
-            var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+            var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
             result.Result.ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>();
         }
 
         await fixture.WaitForProjectionsAsync();
 
         await using var query = fixture.Store.QuerySession();
-        var firstPage = await GetCellAuthorityRegister.Handle(cellId, page: 1, pageSize: 2, query, CancellationToken.None);
+        var firstPage = await GetCellAuthorityRegister.Handle(cellId, page: 1, pageSize: 2, query, NullLogger<GetCellAuthorityRegister>.Instance, CancellationToken.None);
         var firstOk = firstPage.Result.ShouldBeOfType<Ok<CellAuthorityRegisterResponse>>();
         firstOk.Value!.History.Count.ShouldBe(2);
         firstOk.Value.TotalCount.ShouldBe(3);
         firstOk.Value.Page.ShouldBe(1);
         firstOk.Value.PageSize.ShouldBe(2);
 
-        var secondPage = await GetCellAuthorityRegister.Handle(cellId, page: 2, pageSize: 2, query, CancellationToken.None);
+        var secondPage = await GetCellAuthorityRegister.Handle(cellId, page: 2, pageSize: 2, query, NullLogger<GetCellAuthorityRegister>.Instance, CancellationToken.None);
         var secondOk = secondPage.Result.ShouldBeOfType<Ok<CellAuthorityRegisterResponse>>();
         secondOk.Value!.History.Count.ShouldBe(1);
     }
@@ -181,7 +182,7 @@ public class CellAuthorityRegisterProjectionTests(AuthorityAdministrationPostgre
         await using var query = fixture.Store.QuerySession();
 
         var result = await GetCellAuthorityRegister.Handle(
-            $"CELL-{Guid.NewGuid():N}", page: null, pageSize: null, query, CancellationToken.None);
+            $"CELL-{Guid.NewGuid():N}", page: null, pageSize: null, query, NullLogger<GetCellAuthorityRegister>.Instance, CancellationToken.None);
 
         result.Result.ShouldBeOfType<NotFound>();
     }

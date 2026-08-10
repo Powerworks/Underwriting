@@ -2,11 +2,12 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.UnderwriterAuthorityRegister;
 
-public static class GetUnderwriterAuthorityRegister
+public class GetUnderwriterAuthorityRegister
 {
     // Same "not specified by source, flagged not guessed" defaults as
     // GetCellAuthorityRegister.
@@ -19,11 +20,15 @@ public static class GetUnderwriterAuthorityRegister
         int? page,
         int? pageSize,
         IQuerySession session,
+        ILogger<GetUnderwriterAuthorityRegister> logger,
         CancellationToken cancellationToken)
     {
         var register = await session.LoadAsync<UnderwriterAuthorityRegister>(underwriterId, cancellationToken);
         if (register is null)
+        {
+            logger.LogDebug("UnderwriterAuthorityRegister not found for underwriter {UnderwriterId}", underwriterId);
             return TypedResults.NotFound();
+        }
 
         var effectivePage = page is > 0 ? page.Value : 1;
         var effectivePageSize = pageSize is > 0 ? Math.Min(pageSize.Value, MaxPageSize) : DefaultPageSize;

@@ -5,12 +5,13 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain.Events;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.Commands.ReviseAuthorityLimit;
 
-public static class ReviseAuthorityLimitHandler
+public class ReviseAuthorityLimitHandler
 {
     [WolverinePut("/api/v1/authority/limits/{authorityLimitId}/revision")]
     public static async Task<Results<Ok<ReviseAuthorityLimitResponse>, NotFound, ProblemHttpResult>> Handle(
@@ -18,11 +19,15 @@ public static class ReviseAuthorityLimitHandler
         ReviseAuthorityLimitRequest request,
         IDocumentSession session,
         IMessageBus bus,
+        ILogger<ReviseAuthorityLimitHandler> logger,
         CancellationToken cancellationToken)
     {
         var stream = await session.Events.FetchForWriting<AuthorityLimit>(authorityLimitId, cancellationToken);
         if (stream.Aggregate is null)
+        {
+            logger.LogInformation("Revise authority limit {AuthorityLimitId} failed: record not found", authorityLimitId);
             return TypedResults.NotFound();
+        }
 
         var entity = stream.Aggregate;
         var newLimit = entity.Scope with { MaxLineSize = request.NewMaxGrossPremium, MaxAggregate = request.NewMaxLimit };
@@ -33,6 +38,8 @@ public static class ReviseAuthorityLimitHandler
             var rejected = RejectionEvent(entity, newLimit, AuthorityLimitRejectionReasons.RevokedRecord);
             stream.AppendOne(rejected);
             await session.SaveChangesAsync(cancellationToken);
+            logger.LogWarning(
+                "Authority limit {AuthorityLimitId} revision rejected: {RejectionReason}", authorityLimitId, rejected.RejectionReason);
             return AuthorityRejectionProblem.Conflict(
                 authorityLimitId, rejected.RejectionReason, "This authority limit has been revoked and cannot be revised — grant a new one instead.");
         }
@@ -51,6 +58,8 @@ public static class ReviseAuthorityLimitHandler
                 var rejected = RejectionEvent(entity, newLimit, AuthorityLimitRejectionReasons.ExceedsCellLimit);
                 stream.AppendOne(rejected);
                 await session.SaveChangesAsync(cancellationToken);
+                logger.LogWarning(
+                    "Authority limit {AuthorityLimitId} revision rejected: {RejectionReason}", authorityLimitId, rejected.RejectionReason);
                 return AuthorityRejectionProblem.Conflict(
                     authorityLimitId, rejected.RejectionReason, "Revised limit would exceed the cell's own current delegated authority.");
             }
@@ -76,6 +85,9 @@ public static class ReviseAuthorityLimitHandler
             authorityLimitId, ChangeType: "Revised", entity.CellId, entity.UnderwriterId, revised.RevisedAt));
 
         await session.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation(
+            "Authority limit {AuthorityLimitId} revised to version {Version}", authorityLimitId, revised.Version);
 
         return TypedResults.Ok(new ReviseAuthorityLimitResponse(authorityLimitId, revised.Version, revised.RevisedAt));
     }

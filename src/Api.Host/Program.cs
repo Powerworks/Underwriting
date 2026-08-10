@@ -3,12 +3,25 @@ using BrokerConnect.Modules.AuthorityAdministration.Api;
 using JasperFx;
 using JasperFx.Events.Daemon;
 using Marten;
+using Microsoft.Extensions.Logging;
 using Wolverine;
 using Wolverine.Http;
 using Wolverine.Marten;
 using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Constitution Principle X: "A correlation ID is generated once at the HTTP entry
+// point, propagated through every downstream Wolverine/Marten/RabbitMQ call, and
+// included in every log line." ASP.NET Core already creates a System.Diagnostics.Activity
+// per request, and Wolverine already sets IMessageBus.CorrelationId from that
+// Activity's root id automatically (wolverinefx.net/guide/logging) — this is the
+// "zero-code" half (ADR-012). The one piece that needs enabling is having ILogger
+// actually surface it: without ActivityTrackingOptions, the trace/span id is
+// tracked but never attached to a log scope, so it silently never appears in a
+// log line despite genuinely propagating end-to-end.
+builder.Logging.Configure(options =>
+    options.ActivityTrackingOptions = ActivityTrackingOptions.TraceId | ActivityTrackingOptions.SpanId);
 
 // One entry per module — Api.Host composes all modules into a single deployable
 // (ADR-001). New modules register themselves here as their own feature lands.

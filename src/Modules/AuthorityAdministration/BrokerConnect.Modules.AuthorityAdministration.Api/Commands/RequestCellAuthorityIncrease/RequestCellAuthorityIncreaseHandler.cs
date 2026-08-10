@@ -3,11 +3,12 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain.Events;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.Commands.RequestCellAuthorityIncrease;
 
-public static class RequestCellAuthorityIncreaseHandler
+public class RequestCellAuthorityIncreaseHandler
 {
     // authorityLimitId here is the Cell's own record — the one
     // UnderwriterAuthorityLimitRejected (US3) was appended onto — used to look up
@@ -18,11 +19,16 @@ public static class RequestCellAuthorityIncreaseHandler
         Guid authorityLimitId,
         RequestCellAuthorityIncreaseRequest request,
         IDocumentSession session,
+        ILogger<RequestCellAuthorityIncreaseHandler> logger,
         CancellationToken cancellationToken)
     {
         var cellGrant = await session.Events.AggregateStreamAsync<AuthorityLimit>(authorityLimitId, token: cancellationToken);
         if (cellGrant is null)
+        {
+            logger.LogInformation(
+                "Cell authority increase request against {AuthorityLimitId} failed: record not found", authorityLimitId);
             return TypedResults.NotFound();
+        }
 
         var requestId = Guid.NewGuid();
         var requested = new CellAuthorityIncreaseRequested(
@@ -37,6 +43,10 @@ public static class RequestCellAuthorityIncreaseHandler
 
         session.Events.StartStream<CellAuthorityIncreaseRequest>(requestId, requested);
         await session.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation(
+            "Cell authority increase request {RequestId} recorded for underwriter {UnderwriterId} on cell {CellId}",
+            requestId, request.UnderwriterId, cellGrant.CellId);
 
         return TypedResults.Created(
             $"/api/v1/authority/increase-requests/{requestId}",

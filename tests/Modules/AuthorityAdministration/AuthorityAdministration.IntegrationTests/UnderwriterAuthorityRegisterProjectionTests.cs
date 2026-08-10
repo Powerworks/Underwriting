@@ -4,6 +4,7 @@ using BrokerConnect.Modules.AuthorityAdministration.Api.Commands.RequestCellAuth
 using BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.UnderwriterAuthorityRegister;
 using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Xunit;
 
@@ -26,7 +27,7 @@ public class UnderwriterAuthorityRegisterProjectionTests(AuthorityAdministration
         var request = new GrantCellAuthorityLimitRequest(
             "Underwriting Governance", "TFP-CELL-2026", CellScope(), "USD",
             DateOnly.FromDateTime(DateTime.UtcNow));
-        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
         return result.Result.ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>().Value!.AuthorityLimitId;
     }
 
@@ -43,7 +44,7 @@ public class UnderwriterAuthorityRegisterProjectionTests(AuthorityAdministration
         {
             var request = new GrantUnderwriterAuthorityLimitRequest(UnderwriterScope(5_000_000), "Cell Head");
             var result = await GrantUnderwriterAuthorityLimitHandler.Handle(
-                cellId, underwriterId, request, session, CancellationToken.None);
+                cellId, underwriterId, request, session, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
             authorityLimitId = result.Result
                 .ShouldBeOfType<Created<GrantUnderwriterAuthorityLimitResponse>>().Value!.AuthorityLimitId;
         }
@@ -75,7 +76,7 @@ public class UnderwriterAuthorityRegisterProjectionTests(AuthorityAdministration
             var request = new RequestCellAuthorityIncreaseRequest(
                 underwriterId, UnderwriterScope(20_000_000), "Requesting more than the cell allows");
             var result = await RequestCellAuthorityIncreaseHandler.Handle(
-                cellAuthorityLimitId, request, session, CancellationToken.None);
+                cellAuthorityLimitId, request, session, NullLogger<RequestCellAuthorityIncreaseHandler>.Instance, CancellationToken.None);
             result.Result.ShouldBeOfType<Created<RequestCellAuthorityIncreaseResponse>>();
         }
 
@@ -105,14 +106,14 @@ public class UnderwriterAuthorityRegisterProjectionTests(AuthorityAdministration
         await using (var session = fixture.Store.LightweightSession())
         {
             var grantRequest = new GrantUnderwriterAuthorityLimitRequest(UnderwriterScope(5_000_000), "Cell Head");
-            await GrantUnderwriterAuthorityLimitHandler.Handle(cellId, underwriterId, grantRequest, session, CancellationToken.None);
+            await GrantUnderwriterAuthorityLimitHandler.Handle(cellId, underwriterId, grantRequest, session, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
         }
 
         await using (var session = fixture.Store.LightweightSession())
         {
             var increaseRequest = new RequestCellAuthorityIncreaseRequest(
                 underwriterId, UnderwriterScope(20_000_000), "Growing book requires higher line size");
-            await RequestCellAuthorityIncreaseHandler.Handle(cellAuthorityLimitId, increaseRequest, session, CancellationToken.None);
+            await RequestCellAuthorityIncreaseHandler.Handle(cellAuthorityLimitId, increaseRequest, session, NullLogger<RequestCellAuthorityIncreaseHandler>.Instance, CancellationToken.None);
         }
 
         await fixture.WaitForProjectionsAsync();
@@ -138,25 +139,25 @@ public class UnderwriterAuthorityRegisterProjectionTests(AuthorityAdministration
         await using (var session = fixture.Store.LightweightSession())
         {
             var grantRequest = new GrantUnderwriterAuthorityLimitRequest(UnderwriterScope(5_000_000), "Cell Head");
-            await GrantUnderwriterAuthorityLimitHandler.Handle(cellId, underwriterId, grantRequest, session, CancellationToken.None);
+            await GrantUnderwriterAuthorityLimitHandler.Handle(cellId, underwriterId, grantRequest, session, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
         }
 
         foreach (var justification in new[] { "First ask", "Second ask" })
         {
             await using var session = fixture.Store.LightweightSession();
             var increaseRequest = new RequestCellAuthorityIncreaseRequest(underwriterId, UnderwriterScope(20_000_000), justification);
-            await RequestCellAuthorityIncreaseHandler.Handle(cellAuthorityLimitId, increaseRequest, session, CancellationToken.None);
+            await RequestCellAuthorityIncreaseHandler.Handle(cellAuthorityLimitId, increaseRequest, session, NullLogger<RequestCellAuthorityIncreaseHandler>.Instance, CancellationToken.None);
         }
 
         await fixture.WaitForProjectionsAsync();
 
         await using var query = fixture.Store.QuerySession();
-        var firstPage = await GetUnderwriterAuthorityRegister.Handle(underwriterId, page: 1, pageSize: 2, query, CancellationToken.None);
+        var firstPage = await GetUnderwriterAuthorityRegister.Handle(underwriterId, page: 1, pageSize: 2, query, NullLogger<GetUnderwriterAuthorityRegister>.Instance, CancellationToken.None);
         var firstOk = firstPage.Result.ShouldBeOfType<Ok<UnderwriterAuthorityRegisterResponse>>();
         firstOk.Value!.History.Count.ShouldBe(2);
         firstOk.Value.TotalCount.ShouldBe(3); // 1 grant + 2 increase requests
 
-        var secondPage = await GetUnderwriterAuthorityRegister.Handle(underwriterId, page: 2, pageSize: 2, query, CancellationToken.None);
+        var secondPage = await GetUnderwriterAuthorityRegister.Handle(underwriterId, page: 2, pageSize: 2, query, NullLogger<GetUnderwriterAuthorityRegister>.Instance, CancellationToken.None);
         var secondOk = secondPage.Result.ShouldBeOfType<Ok<UnderwriterAuthorityRegisterResponse>>();
         secondOk.Value!.History.Count.ShouldBe(1);
     }
@@ -167,7 +168,7 @@ public class UnderwriterAuthorityRegisterProjectionTests(AuthorityAdministration
         await using var query = fixture.Store.QuerySession();
 
         var result = await GetUnderwriterAuthorityRegister.Handle(
-            $"UW-{Guid.NewGuid():N}", page: null, pageSize: null, query, CancellationToken.None);
+            $"UW-{Guid.NewGuid():N}", page: null, pageSize: null, query, NullLogger<GetUnderwriterAuthorityRegister>.Instance, CancellationToken.None);
 
         result.Result.ShouldBeOfType<NotFound>();
     }

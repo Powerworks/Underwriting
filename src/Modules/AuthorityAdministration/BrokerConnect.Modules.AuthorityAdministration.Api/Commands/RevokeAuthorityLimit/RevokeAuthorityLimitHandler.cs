@@ -4,12 +4,13 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain.Events;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.Commands.RevokeAuthorityLimit;
 
-public static class RevokeAuthorityLimitHandler
+public class RevokeAuthorityLimitHandler
 {
     [WolverinePost("/api/v1/authority/limits/{authorityLimitId}/revocation")]
     public static async Task<Results<Ok<RevokeAuthorityLimitResponse>, NotFound>> Handle(
@@ -17,11 +18,15 @@ public static class RevokeAuthorityLimitHandler
         RevokeAuthorityLimitRequest request,
         IDocumentSession session,
         IMessageBus bus,
+        ILogger<RevokeAuthorityLimitHandler> logger,
         CancellationToken cancellationToken)
     {
         var stream = await session.Events.FetchForWriting<AuthorityLimit>(authorityLimitId, cancellationToken);
         if (stream.Aggregate is null)
+        {
+            logger.LogInformation("Revoke authority limit {AuthorityLimitId} failed: record not found", authorityLimitId);
             return TypedResults.NotFound();
+        }
 
         var entity = stream.Aggregate;
 
@@ -43,6 +48,8 @@ public static class RevokeAuthorityLimitHandler
             authorityLimitId, ChangeType: "Revoked", entity.CellId, entity.UnderwriterId, revoked.RevokedAt));
 
         await session.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation("Authority limit {AuthorityLimitId} revoked", authorityLimitId);
 
         return TypedResults.Ok(new RevokeAuthorityLimitResponse(authorityLimitId, revoked.RevokedAt));
     }

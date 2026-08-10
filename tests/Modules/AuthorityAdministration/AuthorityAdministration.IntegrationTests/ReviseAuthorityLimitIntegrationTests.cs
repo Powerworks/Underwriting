@@ -5,6 +5,7 @@ using BrokerConnect.Modules.AuthorityAdministration.Api.Commands.RevokeAuthority
 using BrokerConnect.Modules.AuthorityAdministration.Api.IntegrationEvents.Published;
 using BrokerConnect.Modules.AuthorityAdministration.Domain;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Shouldly;
 using Wolverine;
@@ -33,7 +34,7 @@ public class ReviseAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         var request = new GrantCellAuthorityLimitRequest(
             "Underwriting Governance", "TFP-CELL-2026", CellScope(maxLineSize), "USD",
             DateOnly.FromDateTime(DateTime.UtcNow));
-        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, CancellationToken.None);
+        var result = await GrantCellAuthorityLimitHandler.Handle(cellId, request, session, NullLogger<GrantCellAuthorityLimitHandler>.Instance, CancellationToken.None);
         return result.Result.ShouldBeOfType<Created<GrantCellAuthorityLimitResponse>>().Value!.AuthorityLimitId;
     }
 
@@ -48,7 +49,7 @@ public class ReviseAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         await using var session = fixture.Store.LightweightSession();
         var request = new ReviseAuthorityLimitRequest(20_000_000, 4_000_000, "Treaty renewal adjustment");
 
-        var result = await ReviseAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, CancellationToken.None);
+        var result = await ReviseAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, NullLogger<ReviseAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var ok = result.Result.ShouldBeOfType<Ok<ReviseAuthorityLimitResponse>>();
         ok.Value!.AuthorityLimitId.ShouldBe(authorityLimitId);
@@ -67,7 +68,7 @@ public class ReviseAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
             var revokeBus = Substitute.For<IMessageBus>();
             var revokeResult = await RevokeAuthorityLimitHandler.Handle(
                 authorityLimitId, new RevokeAuthorityLimitRequest("Cell exited the class", "Immediate"),
-                revokeSession, revokeBus, CancellationToken.None);
+                revokeSession, revokeBus, NullLogger<RevokeAuthorityLimitHandler>.Instance, CancellationToken.None);
             revokeResult.Result.ShouldBeOfType<Ok<RevokeAuthorityLimitResponse>>();
         }
 
@@ -75,7 +76,7 @@ public class ReviseAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         var bus = Substitute.For<IMessageBus>();
         var request = new ReviseAuthorityLimitRequest(20_000_000, 4_000_000, "Attempted post-revocation edit");
 
-        var result = await ReviseAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, CancellationToken.None);
+        var result = await ReviseAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, NullLogger<ReviseAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var problem = result.Result.ShouldBeOfType<ProblemHttpResult>();
         problem.ProblemDetails.Status.ShouldBe(409);
@@ -96,7 +97,7 @@ public class ReviseAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         {
             var grantRequest = new GrantUnderwriterAuthorityLimitRequest(UnderwriterScope(5_000_000), "Cell Head");
             var grantResult = await GrantUnderwriterAuthorityLimitHandler.Handle(
-                cellId, underwriterId, grantRequest, grantSession, CancellationToken.None);
+                cellId, underwriterId, grantRequest, grantSession, NullLogger<GrantUnderwriterAuthorityLimitHandler>.Instance, CancellationToken.None);
             underwriterAuthorityLimitId = grantResult.Result
                 .ShouldBeOfType<Created<GrantUnderwriterAuthorityLimitResponse>>().Value!.AuthorityLimitId;
         }
@@ -106,7 +107,7 @@ public class ReviseAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         var request = new ReviseAuthorityLimitRequest(20_000_000, 2_000_000, "Requesting more than the cell allows");
 
         var result = await ReviseAuthorityLimitHandler.Handle(
-            underwriterAuthorityLimitId, request, session, bus, CancellationToken.None);
+            underwriterAuthorityLimitId, request, session, bus, NullLogger<ReviseAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         var problem = result.Result.ShouldBeOfType<ProblemHttpResult>();
         problem.ProblemDetails.Status.ShouldBe(409);
@@ -124,7 +125,7 @@ public class ReviseAuthorityLimitIntegrationTests(AuthorityAdministrationPostgre
         await using var session = fixture.Store.LightweightSession();
         var request = new ReviseAuthorityLimitRequest(20_000_000, 4_000_000, "Treaty renewal adjustment");
 
-        await ReviseAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, CancellationToken.None);
+        await ReviseAuthorityLimitHandler.Handle(authorityLimitId, request, session, bus, NullLogger<ReviseAuthorityLimitHandler>.Instance, CancellationToken.None);
 
         await bus.Received(1).PublishAsync(Arg.Is<AuthorityLimitChangedV1>(e =>
             e.AuthorityLimitId == authorityLimitId && e.ChangeType == "Revised" && e.CellId == cellId));

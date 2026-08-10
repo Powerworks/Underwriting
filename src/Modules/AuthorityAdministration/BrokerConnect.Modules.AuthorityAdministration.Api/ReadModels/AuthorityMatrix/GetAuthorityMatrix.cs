@@ -2,11 +2,12 @@ using BrokerConnect.Modules.AuthorityAdministration.Domain.Aggregates;
 using Marten;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using Wolverine.Http;
 
 namespace BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.AuthorityMatrix;
 
-public static class GetAuthorityMatrix
+public class GetAuthorityMatrix
 {
     // T046/T047 (US2, Clarified 2026-08-09 / SC-001): reads the Inline snapshot
     // registered in Module.cs — same-session read-after-write is what makes
@@ -17,11 +18,15 @@ public static class GetAuthorityMatrix
     public static async Task<Results<Ok<AuthorityMatrixResponse>, NotFound>> Handle(
         Guid authorityLimitId,
         IQuerySession session,
+        ILogger<GetAuthorityMatrix> logger,
         CancellationToken cancellationToken)
     {
         var entity = await session.LoadAsync<AuthorityLimit>(authorityLimitId, cancellationToken);
         if (entity is null)
+        {
+            logger.LogDebug("AuthorityMatrix not found for {AuthorityLimitId}", authorityLimitId);
             return TypedResults.NotFound();
+        }
 
         return TypedResults.Ok(new AuthorityMatrixResponse(
             entity.AuthorityLimitId,
