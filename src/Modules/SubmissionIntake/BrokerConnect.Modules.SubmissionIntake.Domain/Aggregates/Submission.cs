@@ -108,4 +108,20 @@ public sealed class Submission
         suspectedOriginalSubmissionId: null, supersededBySubmissionId: null,
         isConfirmedDistinct: false, baselinePremium: null, riskFactorSummary: null,
         modelVersion: null);
+
+    public void Apply(SubmissionNormalized @event)
+    {
+        ClassOfBusiness = @event.ClassOfBusiness;
+        Territory = @event.Territory;
+        NamedInsured = @event.NamedInsured;
+        LineSizeSought = @event.LineSizeSought;
+        KeyTerms = @event.KeyTerms;
+        EffectiveDateRequested = @event.EffectiveDateRequested;
+        NormalizationStatus = @event.NormalizationStatus;
+    }
+
+    public void Apply(SubmissionNormalizationFailed @event)
+    {
+        NormalizationStatus = "Failed";
+    }
 }

@@ -226,7 +226,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - Submission.Apply normalization events`
   - _Requirements: FR-3, FR-4, AC-3.1, AC-4.1_
 
-- [ ] 4.3 `Submission.Apply(SubmissionNormalized)`/`Apply(SubmissionNormalizationFailed)` impl
+- [x] 4.3 `Submission.Apply(SubmissionNormalized)`/`Apply(SubmissionNormalizationFailed)` impl
   - **Do**: Add both `Apply` overloads to `Submission` (mutates unconditionally, per Principle I — no guards here).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/Submission.cs`
   - **Done when**: 4.2's tests pass
