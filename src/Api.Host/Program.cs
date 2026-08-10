@@ -1,6 +1,7 @@
 using BrokerConnect.BuildingBlocks.Domain;
 using BrokerConnect.Modules.AuthorityAdministration.Api;
 using JasperFx;
+using JasperFx.Events.Daemon;
 using Marten;
 using Wolverine;
 using Wolverine.Http;
@@ -34,7 +35,14 @@ builder.Services.AddMarten(opts =>
 {
     opts.Connection(postgresConnectionString);
     foreach (var module in modules) module.Configure(opts);
-}).IntegrateWithWolverine();
+})
+    .IntegrateWithWolverine()
+    // Required for any Async-lifecycle projection (e.g. CellAuthorityRegister,
+    // T050) to ever actually run — registering a projection with
+    // ProjectionLifecycle.Async in a module's Configure() only declares it; without
+    // the daemon nothing processes events into documents. Solo mode: single
+    // instance, no distributed leader election needed at this stage.
+    .AddAsyncDaemon(DaemonMode.Solo);
 
 builder.Services.AddWolverineHttp();
 

@@ -28,6 +28,7 @@ public static class RevokeAuthorityLimitHandler
         var revoked = new AuthorityLimitRevoked(
             authorityLimitId,
             Target: entity.Tier,
+            entity.CellId,
             PriorLimit: entity.Scope,
             request.Reason,
             RevokedBy: "system", // TODO(ADR-010): populate from the authenticated caller once identity lands

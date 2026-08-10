@@ -89,7 +89,7 @@ public class AuthorityLimitTests
             DateOnly.FromDateTime(DateTime.UtcNow), 0, DateTimeOffset.UtcNow));
 
         entity.Apply(new AuthorityLimitRevoked(
-            authorityLimitId, "Cell", entity.Scope, "Provider ended relationship", "Gov",
+            authorityLimitId, "Cell", "CELL-04", entity.Scope, "Provider ended relationship", "Gov",
             "Immediate", DateTimeOffset.UtcNow));
 
         entity.Status.ShouldBe("Revoked");

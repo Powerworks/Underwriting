@@ -1,4 +1,5 @@
 using BrokerConnect.BuildingBlocks.Domain;
+using BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.CellAuthorityRegister;
 using BrokerConnect.Modules.AuthorityAdministration.Domain.Aggregates;
 using JasperFx.Events.Projections;
 using Marten;
@@ -22,6 +23,13 @@ public sealed class AuthorityAdministrationModule : IMartenModuleConfiguration
         // against an unregistered snapshot type silently returns nothing, which
         // would make the duplicate/cascade checks pass when they should reject.
         options.Projections.Snapshot<AuthorityLimit>(SnapshotLifecycle.Inline);
+
+        // T050/US6 (plan.md Architecture Constraints check): plain async projection —
+        // no same-request read-after-write requirement, unlike AuthorityMatrix above.
+        // Requires the async daemon to actually run (Program.cs's AddAsyncDaemon /
+        // the test fixture's BuildProjectionDaemonAsync) — registering it here alone
+        // is not enough for documents to ever get produced.
+        options.Projections.Add<CellAuthorityRegisterProjector>(ProjectionLifecycle.Async);
     }
 
     // No IntegrationEventQueueName override — this module only publishes
