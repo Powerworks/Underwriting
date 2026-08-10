@@ -5,6 +5,12 @@
     <ProjectReference Include="..\BrokerConnect.Modules.SubmissionIntake.Infrastructure\BrokerConnect.Modules.SubmissionIntake.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Marten" Version="9.19.0" />
+    <PackageReference Include="WolverineFx.Http" Version="6.22.0" />
+    <PackageReference Include="WolverineFx.Marten" Version="6.22.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

@@ -55,7 +55,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet sln src/BrokerConnect.slnx list | grep -c SubmissionIntake | grep -q 7 && echo PASS`
   - **Commit**: `chore(submission-intake): add module projects to solution`
 
-- [ ] 1.4 [P] Add package references (`WolverineFx.Http`/`WolverineFx.Marten`/`Marten` to Api; `Polly` to Infrastructure; `xunit`/`Shouldly`/`NSubstitute` to both `.Tests` projects; `Testcontainers.PostgreSql` to `.IntegrationTests`)
+- [x] 1.4 [P] Add package references (`WolverineFx.Http`/`WolverineFx.Marten`/`Marten` to Api; `Polly` to Infrastructure; `xunit`/`Shouldly`/`NSubstitute` to both `.Tests` projects; `Testcontainers.PostgreSql` to `.IntegrationTests`)
   - **Do**: 1. Pin the same validated versions as 001 (`WolverineFx*`/`Marten` 6.22.0/9.19.0, constitution Technology Constraints — re-verify still resolve). 2. Add `Polly` to Infrastructure. 3. Add `xunit`/`Shouldly`/`NSubstitute` (MIT, per Principle IV) to both unit test projects. 4. Add `Testcontainers.PostgreSql` to IntegrationTests.
   - **Files**: the 7 `.csproj` files from 1.1/1.2
   - **Done when**: `dotnet restore src/BrokerConnect.slnx` succeeds
