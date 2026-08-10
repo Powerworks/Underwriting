@@ -141,7 +141,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - ReceiveBrokerSubmission always succeeds`
   - _Requirements: FR-1, AC-1.1_
 
-- [ ] 3.2 `ReceiveBrokerSubmission` request/response records + `[WolverinePost]` handler
+- [x] 3.2 `ReceiveBrokerSubmission` request/response records + `[WolverinePost]` handler
   - **Do**: 1. `ReceiveBrokerSubmissionRequest`/`Response` records per `design.md` Interfaces section. 2. `[WolverinePost("/api/v1/submission-intake/submissions")]` handler: `StartStream<Submission>(BrokerSubmissionReceived)`, no validation beyond DataAnnotations. 3. Structured `ILogger` success log (Principle X).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Commands/ReceiveBrokerSubmission/ReceiveBrokerSubmission.cs`, `.../ReceiveBrokerSubmissionHandler.cs`
   - **Done when**: 3.1's test passes

@@ -39,13 +39,17 @@ public class ReceiveBrokerSubmissionHandlerTests
 
         events.Received(1).StartStream<Submission>(
             created.Value.SubmissionId,
+            // Pattern-matching with a declared variable ("is T received") is
+            // illegal inside an expression tree (CS8122) — Arg.Is<T> takes
+            // Expression<Predicate<T>>, so the type check and field reads are
+            // split into a type test plus repeated casts instead.
             Arg.Is<object[]>(appended =>
                 appended.Length == 1 &&
-                appended[0] is BrokerSubmissionReceived received &&
-                received.SubmissionId == created.Value.SubmissionId &&
-                received.BrokerFirmId == request.BrokerFirmId &&
-                received.SubmittingContact == request.SubmittingContact &&
-                received.SourceChannel == request.SourceChannel));
+                appended[0] is BrokerSubmissionReceived &&
+                ((BrokerSubmissionReceived)appended[0]).SubmissionId == created.Value.SubmissionId &&
+                ((BrokerSubmissionReceived)appended[0]).BrokerFirmId == request.BrokerFirmId &&
+                ((BrokerSubmissionReceived)appended[0]).SubmittingContact == request.SubmittingContact &&
+                ((BrokerSubmissionReceived)appended[0]).SourceChannel == request.SourceChannel));
 
         await session.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
