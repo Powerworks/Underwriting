@@ -1,0 +1,323 @@
+{
+  "slices": [
+    {
+      "id": "bind-policy",
+      "title": "Bind Policy",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Broker Connect",
+      "context": "Binding",
+      "commands": [
+        {
+          "id": "bind-policy-cmd",
+          "title": "BindPolicy",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "submissionId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "cellId",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "type": "Date",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "grossPremium",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "quotaShareSplits",
+              "type": "Custom",
+              "cardinality": "List",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": [
+                {
+                  "name": "provider",
+                  "type": "String",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                },
+                {
+                  "name": "percentage",
+                  "type": "Decimal",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                }
+              ]
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Binding",
+          "lane": "Interaction",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Bind Policy",
+          "description": "Binding is the moment a policy transaction is written to the immutable ledger. A single bind can span multiple capacity providers, split by quota share.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": true,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "policy-bound",
+          "title": "PolicyBound",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "policyId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "submissionId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "grossPremium",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "brokerageDeducted",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "mgaFeeDeducted",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "netPremiumPerProvider",
+              "type": "Custom",
+              "cardinality": "List",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": [
+                {
+                  "name": "provider",
+                  "type": "String",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                },
+                {
+                  "name": "amount",
+                  "type": "Decimal",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                }
+              ]
+            },
+            {
+              "name": "quotaShareSplits",
+              "type": "Custom",
+              "cardinality": "List",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": [
+                {
+                  "name": "provider",
+                  "type": "String",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                },
+                {
+                  "name": "percentage",
+                  "type": "Decimal",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                }
+              ]
+            },
+            {
+              "name": "boundAt",
+              "type": "DateTime",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Binding",
+          "lane": "Swimlane",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Bind Policy",
+          "description": "Immutable ledger entry for a new bind, with per-provider financial breakdown (gross, brokerage, MGA fee, net premium).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

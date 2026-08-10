@@ -1,0 +1,164 @@
+{
+  "slices": [
+    {
+      "id": "revoke-authority-limit",
+      "title": "Revoke Authority Limit",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Broker Connect",
+      "context": "Authority Administration",
+      "commands": [
+        {
+          "id": "revoke-authority-limit-cmd",
+          "title": "RevokeAuthorityLimit",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "revokedBy",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Authority Administration",
+          "lane": "Interaction",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Revoke Authority Limit",
+          "description": "Either tier's authority record is revoked outright - e.g. an underwriter leaves the cell, or a Provider ends a Cell relationship for a class of business.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "authority-limit-revoked",
+          "title": "AuthorityLimitRevoked",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "revokedBy",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "revokedAt",
+              "type": "DateTime",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Authority Administration",
+          "lane": "Swimlane",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Revoke Authority Limit",
+          "description": "Authority record's status becomes Revoked in authority-limit-view - kept as history, not deleted.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

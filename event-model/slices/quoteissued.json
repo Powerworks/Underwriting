@@ -1,0 +1,401 @@
+{
+  "slices": [
+    {
+      "id": "d83e5c49-a4ef-4d72-85d0-8c84fa1dcd16",
+      "title": "QuoteIssued",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [
+        {
+          "id": "9074bb54-8297-4170-a4fd-9af167de2fa7",
+          "title": "IssueQuote",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "grossPremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "limit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "terms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "validUntil",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "09d9affa-11a5-4478-a4df-313e2ab535d0",
+              "type": "OUTBOUND",
+              "title": "QuoteIssued",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "8c28ebd0-b1b5-42c0-90ac-a1770b9c4a58",
+              "type": "INBOUND",
+              "title": "QuoteView",
+              "elementType": "SCREEN"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Interaction",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteIssued",
+          "description": "Once terms are within authority (directly or via approved referral), the underwriter issues a formal quote back to the broker. Not yet a bind.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "09d9affa-11a5-4478-a4df-313e2ab535d0",
+          "title": "QuoteIssued",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "quoteId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "terms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "pricing",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "conditions",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "validityPeriodDays",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "expiryDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "issuedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "issuedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "9074bb54-8297-4170-a4fd-9af167de2fa7",
+              "type": "INBOUND",
+              "title": "IssueQuote",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteIssued",
+          "description": "S2.7: this is also the exact point S1e.2's freeze-block check applies - issuing a quote is the 'attempted action' intercepted if a freeze is active.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [
+        {
+          "id": "8c28ebd0-b1b5-42c0-90ac-a1770b9c4a58",
+          "title": "QuoteView",
+          "type": "SCREEN",
+          "fields": [],
+          "dependencies": [
+            {
+              "id": "9074bb54-8297-4170-a4fd-9af167de2fa7",
+              "type": "OUTBOUND",
+              "title": "IssueQuote",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "c2a3859a-1e48-41d9-8a39-f25b953dc74e",
+              "type": "OUTBOUND",
+              "title": "AcceptQuote",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Actor",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteIssued",
+          "description": "Broker's Quote screen: violet header 'Quote QT-2026-0912 - Howden'. A central light-violet card shows the insured (Acme Aviation Leasing Ltd), class (Aircraft Non-Payment Credit), line size (\\$10,000,000), a large premium figure (\\$185,000), and a validity note ('Valid until 2026-09-15, 14 days'). Three buttons below the card: green 'Accept Quote', yellow 'Request Amendment', and light-red 'Decline'.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "7b07d7da-0902-4ec3-8491-c8252e17d068",
+          "title": "S2.7 Quote issued",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteIssued",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "9074bb54-8297-4170-a4fd-9af167de2fa7",
+              "title": "IssueQuote",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "09d9affa-11a5-4478-a4df-313e2ab535d0",
+              "title": "QuoteIssued",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S2.7-err-declined",
+          "title": "S2.7-err Quote issuance attempted on a declined submission",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteIssued",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "e0262010-7666-4bfd-bd18-c7aaede3a760",
+              "title": "SubmissionDeclined",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "9074bb54-8297-4170-a4fd-9af167de2fa7",
+              "title": "IssueQuote",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "53d0a3b2-e39f-45ba-972e-614ba5db1203",
+              "title": "S2.7-err Quote issuance attempted on a declined submission",
+              "description": "Submission has been declined; a quote cannot be issued against a declined submission.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

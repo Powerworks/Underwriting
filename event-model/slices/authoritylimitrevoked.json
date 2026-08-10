@@ -1,0 +1,298 @@
+{
+  "slices": [
+    {
+      "id": "5ea7eefa-2114-4655-af38-76f5b1f5b626",
+      "title": "AuthorityLimitRevoked",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Authority Administration",
+      "context": "Authority Administration",
+      "commands": [
+        {
+          "id": "a5b22189-aba5-43ef-b761-98a938c7a417",
+          "title": "RevokeAuthorityLimit",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "revokedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "c05ac25c-d24d-46cd-9841-be0fe777cfc7",
+              "type": "OUTBOUND",
+              "title": "AuthorityLimitRevoked",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Interaction",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "AuthorityLimitRevoked",
+          "description": "Either tier's authority record is revoked outright - e.g. an underwriter leaves the cell, or a Provider ends a Cell relationship for a class of business.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "c05ac25c-d24d-46cd-9841-be0fe777cfc7",
+          "title": "AuthorityLimitRevoked",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "target",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "priorLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "revokedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "immediacy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "revokedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "a5b22189-aba5-43ef-b761-98a938c7a417",
+              "type": "INBOUND",
+              "title": "RevokeAuthorityLimit",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "894b712c-89d4-4b15-bbc3-0d67e1eb58ef",
+              "type": "OUTBOUND",
+              "title": "CellAuthorityRegister",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Authority",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "AuthorityLimitRevoked",
+          "description": "S0.5: an underwriter with zero authority cannot have any submission proceed under their name, referral cascade or not - same in-flight question as S0.4 with sharper urgency, triggers ReassessInFlightSubmissionsOnRuleChange immediately. OPEN QUESTION: does revocation trigger a review flag on their recently bound business, similar to a thematic file review trigger? Not modeled as its own event yet - flagged for confirmation.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "dc406d91-bf47-462d-b3c5-a3f5a5159d67",
+          "title": "S0.5 Authority revoked entirely",
+          "chapter": "Authority Administration",
+          "sliceName": "AuthorityLimitRevoked",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "a5b22189-aba5-43ef-b761-98a938c7a417",
+              "title": "RevokeAuthorityLimit",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "c05ac25c-d24d-46cd-9841-be0fe777cfc7",
+              "title": "AuthorityLimitRevoked",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S0.5-err-dup",
+          "title": "S0.5-err Revoke attempted on an already-revoked authority",
+          "chapter": "Authority Administration",
+          "sliceName": "AuthorityLimitRevoked",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "c05ac25c-d24d-46cd-9841-be0fe777cfc7",
+              "title": "AuthorityLimitRevoked",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "a5b22189-aba5-43ef-b761-98a938c7a417",
+              "title": "RevokeAuthorityLimit",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "32fc2e40-e693-4e34-a609-5a8014f7fdfd",
+              "title": "S0.5-err Revoke attempted on an already-revoked authority",
+              "description": "Authority limit has already been revoked; a duplicate revocation is rejected.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

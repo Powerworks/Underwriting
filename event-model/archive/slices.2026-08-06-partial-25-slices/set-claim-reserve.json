@@ -1,0 +1,177 @@
+{
+  "slices": [
+    {
+      "id": "set-claim-reserve",
+      "title": "Set Claim Reserve",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Broker Connect",
+      "context": "Claims",
+      "commands": [
+        {
+          "id": "set-claim-reserve-cmd",
+          "title": "SetClaimReserve",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "claimId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "reserveAmount",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "currency",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Claims",
+          "lane": "Interaction",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Set Claim Reserve",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "claim-reserve-set",
+          "title": "ClaimReserveSet",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "previousReserve",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": true,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "newReserve",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "currency",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "setAt",
+              "type": "DateTime",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Claims",
+          "lane": "Swimlane",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Set Claim Reserve",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

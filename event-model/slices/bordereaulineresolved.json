@@ -1,0 +1,185 @@
+{
+  "slices": [
+    {
+      "id": "d343a675-35a7-4336-bc94-b88a174f2f38",
+      "title": "BordereauLineResolved",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Bordereaux Settlement",
+      "context": "Bordereaux Settlement",
+      "commands": [
+        {
+          "id": "a5239e2f-e152-4d57-82c7-69730e9ed444",
+          "title": "ResolveBordereauQuery",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "queryId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "resolution",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "7bece8ea-a51e-4850-9fc4-3d8ea26b5ed1",
+              "type": "OUTBOUND",
+              "title": "BordereauLineResolved",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauLineResolved",
+          "description": "Underwriter/Operations resolves a previously raised query.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "7bece8ea-a51e-4850-9fc4-3d8ea26b5ed1",
+          "title": "BordereauLineResolved",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "queryId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "resolution",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "resolvedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "a5239e2f-e152-4d57-82c7-69730e9ed444",
+              "type": "INBOUND",
+              "title": "ResolveBordereauQuery",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Bordereau",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauLineResolved",
+          "description": "Line status moves out of Queried. A single disputed line can span multiple periods before resolution.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "4e9a8d65-7bf0-43ab-9971-ecd83b1dd7af",
+          "title": "S4.2 Query resolved, agreement can proceed",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauLineResolved",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "a5239e2f-e152-4d57-82c7-69730e9ed444",
+              "title": "ResolveBordereauQuery",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "7bece8ea-a51e-4850-9fc4-3d8ea26b5ed1",
+              "title": "BordereauLineResolved",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

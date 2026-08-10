@@ -1,0 +1,293 @@
+{
+  "slices": [
+    {
+      "id": "1327986f-6bc0-4386-bf21-4747fe5154ef",
+      "title": "ClaimNotified",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Claims",
+      "context": "Claims",
+      "commands": [
+        {
+          "id": "76ea9ece-aef7-4ee7-bf9b-8ca29e5ebb85",
+          "title": "NotifyClaim",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "policyReference",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "lossDescription",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "dateOfLoss",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "notifyingParty",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "02c0843e-667e-4b46-b4f1-18e1f330a3e8",
+              "type": "INBOUND",
+              "title": "ClaimHandling",
+              "elementType": "SCREEN"
+            },
+            {
+              "id": "b68db8b1-058e-454e-856d-270ac90ec68a",
+              "type": "OUTBOUND",
+              "title": "ClaimNotified",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Interaction",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimNotified",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "b68db8b1-058e-454e-856d-270ac90ec68a",
+          "title": "ClaimNotified",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "policyReference",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "dateOfLoss",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "dateNotified",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "notifyingParty",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "initialLossDescription",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "76ea9ece-aef7-4ee7-bf9b-8ca29e5ebb85",
+              "type": "INBOUND",
+              "title": "NotifyClaim",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Claim",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimNotified",
+          "description": "S5.1: notification may originate from broker/insured, but processing is the claims team's. References the original bind (and transitively the whole submission/decisioning lineage) via policyReference - a claims handler pulling up a claim gets the full PolicyOriginationView designed back in Search & Retrieval (1b.2).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [
+        {
+          "id": "02c0843e-667e-4b46-b4f1-18e1f330a3e8",
+          "title": "ClaimHandling",
+          "type": "SCREEN",
+          "fields": [],
+          "dependencies": [
+            {
+              "id": "76ea9ece-aef7-4ee7-bf9b-8ca29e5ebb85",
+              "type": "OUTBOUND",
+              "title": "NotifyClaim",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "0a6caaff-a90b-4e6f-aae3-e03f215d4a11",
+              "type": "OUTBOUND",
+              "title": "SetClaimReserve",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Actor",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimNotified",
+          "description": "Claims handler screen: violet header 'Claim CL-2026-0447'. A light-blue Policy Origination Lineage panel at top (pulled from Search & Retrieval) shows the submission-to-bind chain and the original bind terms (\\$10,000,000 limit / \\$185,000 premium). Below, claim details show date of loss and a loss description. A reserve-amount field shows \\$4,500,000 next to a green checkmark reading 'Validated against bind terms'. Three buttons at the bottom: light-blue 'Set Reserve', green 'Pay Claim', and grey 'Close Claim'.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "3d88b168-4ceb-435f-b281-78c0163c969e",
+          "title": "S5.1 Claim notified against a bound policy",
+          "chapter": "Claims",
+          "sliceName": "ClaimNotified",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "76ea9ece-aef7-4ee7-bf9b-8ca29e5ebb85",
+              "title": "NotifyClaim",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "b68db8b1-058e-454e-856d-270ac90ec68a",
+              "title": "ClaimNotified",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

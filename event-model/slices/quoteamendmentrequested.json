@@ -1,0 +1,304 @@
+{
+  "slices": [
+    {
+      "id": "ff3b9020-82a4-44a6-ade3-56ce7997c402",
+      "title": "QuoteAmendmentRequested",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [
+        {
+          "id": "c28c6f1e-c38e-46ca-821d-571382b527d4",
+          "title": "RequestQuoteAmendment",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "quoteId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedChanges",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "pricing",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "conditions",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "brokerContact",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "c6038043-0101-4f51-8c22-2b58002a6f59",
+              "type": "OUTBOUND",
+              "title": "QuoteAmendmentRequested",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Interaction",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteAmendmentRequested",
+          "description": "Broker-initiated.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "c6038043-0101-4f51-8c22-2b58002a6f59",
+          "title": "QuoteAmendmentRequested",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "quoteId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedChanges",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "pricing",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "conditions",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "brokerContact",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "c28c6f1e-c38e-46ca-821d-571382b527d4",
+              "type": "INBOUND",
+              "title": "RequestQuoteAmendment",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteAmendmentRequested",
+          "description": "S2.10: triggers a fresh AssessSubmission pass against the amended terms - not a lightweight negotiation sub-flow. Amended terms could push the submission outside the underwriter's authority (e.g. higher line size requested), so it must go through the same Context 0/1e gate checks as any other assessment; a casual in-context negotiation would silently bypass both gates. Produces a fresh SubmissionWithinAuthority or SubmissionReferred, chained back to this event as prior context.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "9f30862a-2ed9-46d5-bf46-9fc7aafac75c",
+          "title": "S2.10 Broker requests amended terms on an issued quote",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteAmendmentRequested",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "c28c6f1e-c38e-46ca-821d-571382b527d4",
+              "title": "RequestQuoteAmendment",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "c6038043-0101-4f51-8c22-2b58002a6f59",
+              "title": "QuoteAmendmentRequested",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "slices": [
+    {
+      "id": "endorse-policy",
+      "title": "Endorse Policy",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Broker Connect",
+      "context": "Binding",
+      "commands": [
+        {
+          "id": "endorse-policy-cmd",
+          "title": "EndorsePolicy",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "policyId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "changeDescription",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "premiumAdjustment",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "type": "Date",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Binding",
+          "lane": "Interaction",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Endorse Policy",
+          "description": "A mid-term change to a bound policy (extended limit, additional insured, corrected term). A new ledger entry, not an edit to the original bind.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "policy-endorsed",
+          "title": "PolicyEndorsed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "policyId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "endorsementId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "changeDescription",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "premiumAdjustment",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "type": "Date",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Binding",
+          "lane": "Swimlane",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Endorse Policy",
+          "description": "Appended endorsement record - original bind's ledger line is untouched.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

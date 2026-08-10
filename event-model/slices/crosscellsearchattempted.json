@@ -1,0 +1,514 @@
+{
+  "slices": [
+    {
+      "id": "727c0f78-ecaa-4129-b940-c1b60e3a58da",
+      "title": "CrossCellSearchAttempted",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Search & Retrieval",
+      "context": "Search & Retrieval",
+      "commands": [],
+      "events": [
+        {
+          "id": "82b14e31-b8c9-47ef-8fb3-4114332eead6",
+          "title": "CrossCellSearchAttempted",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "searcherId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "searcherRole",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedScope",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "searchCriteria",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "classOfBusiness",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "territory",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "brokerFirmId",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "namedInsured",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "dateRangeStart",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "dateRangeEnd",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "freeText",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "permitted",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Boolean",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "deniedReason",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "attemptedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "65488c76-9271-45be-9855-4396da244af7",
+              "type": "OUTBOUND",
+              "title": "BrokerActivityView",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Search & Retrieval",
+          "lane": "Submission Search",
+          "aggregate": "SearchActivityLog",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "CrossCellSearchAttempted",
+          "description": "1b.4 permission-boundary design decision: default to cell-scoped visibility for underwriters (an underwriter in Aviation cannot by default see a submission that went to Energy for the same named insured), with cross-cell visibility as an explicit, logged, elevated permission for ops/governance (1b.3). Same audit-value reasoning as SubmissionRoutingRejected in Submission Intake - kept visible for whoever manages access policy, not just silently enforced. Possible middle ground worth exploring: a narrower 'same named insured, cross-cell' flag visible to underwriters without exposing full submission/pricing detail.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "65488c76-9271-45be-9855-4396da244af7",
+          "title": "BrokerActivityView",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cellBreakdown",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "List",
+              "subfields": [
+                {
+                  "name": "cellId",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "submissionCount",
+                  "type": "Integer",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "boundCount",
+                  "type": "Integer",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "declinedCount",
+                  "type": "Integer",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "expiredCount",
+                  "type": "Integer",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "inFlightCount",
+                  "type": "Integer",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "periodStart",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "periodEnd",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "generatedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "82b14e31-b8c9-47ef-8fb3-4114332eead6",
+              "type": "INBOUND",
+              "title": "CrossCellSearchAttempted",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "30a66da8-0b2f-4f6a-b910-d8d695b03a25",
+              "type": "INBOUND",
+              "title": "SubmissionHistorySearchPerformed",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "848e1c78-44b6-489d-aaa2-aaed3b7ab4d6",
+              "type": "OUTBOUND",
+              "title": "RetrieveSubmissionLineageOnClaimNotified",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "modelContext": "Search & Retrieval",
+          "lane": "Interaction",
+          "aggregate": "SearchActivityLog",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "CrossCellSearchAttempted",
+          "description": "1b.3: all submissions from a given broker across all cells they're authorized for, with status breakdown - a cross-cell view ops needs for reconciliation even though individual underwriters don't for day-to-day work. Confirms Search & Retrieval needs at least two permission tiers baked in from day one (cell-scoped vs cross-cell), not a generic search with permission filtering bolted on afterward.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "23e7b4b9-8cae-4e76-ae50-3e80b1131ab5",
+          "title": "S1b.3 Operations searches a broker's history for reconciliation, cross-cell",
+          "chapter": "Search & Retrieval",
+          "sliceName": "CrossCellSearchAttempted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "76be35e2-f967-4c57-ba37-20876f22f040",
+              "title": "SearchSubmissionHistory",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "82b14e31-b8c9-47ef-8fb3-4114332eead6",
+              "title": "CrossCellSearchAttempted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "3bb2ec96-f1dd-4fbe-8e95-04784f225120",
+          "title": "S1b.4/1b.3 BrokerActivityView reflects the cross-cell search",
+          "chapter": "Search & Retrieval",
+          "sliceName": "CrossCellSearchAttempted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "82b14e31-b8c9-47ef-8fb3-4114332eead6",
+              "title": "CrossCellSearchAttempted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "65488c76-9271-45be-9855-4396da244af7",
+              "title": "BrokerActivityView",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S1b.3-empty",
+          "title": "S1b.3-empty No cross-cell activity found for broker in period",
+          "chapter": "Search & Retrieval",
+          "sliceName": "CrossCellSearchAttempted",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "65488c76-9271-45be-9855-4396da244af7",
+              "title": "BrokerActivityView",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "slices": [
+    {
+      "id": "b3609363-d20f-4a7d-90bb-524e11062c9c",
+      "title": "ClaimClosed",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Claims",
+      "context": "Claims",
+      "commands": [
+        {
+          "id": "ec894cc3-fd6d-437f-9e15-a8e1f5cafad5",
+          "title": "CloseClaim",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "closureReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "f608b157-407e-4ac4-adea-5b09c9d909d7",
+              "type": "OUTBOUND",
+              "title": "ClaimClosed",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Interaction",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimClosed",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "f608b157-407e-4ac4-adea-5b09c9d909d7",
+          "title": "ClaimClosed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "closureReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "finalTotalPaid",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "closedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "closedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "ec894cc3-fd6d-437f-9e15-a8e1f5cafad5",
+              "type": "INBOUND",
+              "title": "CloseClaim",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Claim",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimClosed",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "22e89a0c-b052-4d6f-984e-25067bdd86b4",
+          "title": "S5.1 Claim closed",
+          "chapter": "Claims",
+          "sliceName": "ClaimClosed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "ec894cc3-fd6d-437f-9e15-a8e1f5cafad5",
+              "title": "CloseClaim",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "f608b157-407e-4ac4-adea-5b09c9d909d7",
+              "title": "ClaimClosed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S5.1-err-dupclose",
+          "title": "S5.1-err Close attempted on an already-closed claim",
+          "chapter": "Claims",
+          "sliceName": "ClaimClosed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "f608b157-407e-4ac4-adea-5b09c9d909d7",
+              "title": "ClaimClosed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "ec894cc3-fd6d-437f-9e15-a8e1f5cafad5",
+              "title": "CloseClaim",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "ea5fefe6-765f-44fa-8860-fda700048a33",
+              "title": "S5.1-err Close attempted on an already-closed claim",
+              "description": "Claim has already been closed; a duplicate closure is rejected.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

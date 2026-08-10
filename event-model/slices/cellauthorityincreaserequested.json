@@ -1,0 +1,279 @@
+{
+  "slices": [
+    {
+      "id": "a0c8b6f6-a13b-4828-97e3-3baccd8db6f0",
+      "title": "CellAuthorityIncreaseRequested",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Authority Administration",
+      "context": "Authority Administration",
+      "commands": [
+        {
+          "id": "7228fcc8-105e-4b0b-866a-2d183cd09fe2",
+          "title": "RequestCellAuthorityIncrease",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currentLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "justification",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "e2f73fd5-5d5f-4daf-9c94-7fb329622674",
+              "type": "OUTBOUND",
+              "title": "CellAuthorityIncreaseRequested",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Interaction",
+          "aggregate": "CellAuthorityIncreaseRequest",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "CellAuthorityIncreaseRequested",
+          "description": "Escalation path from S0.3's rejection - modeled explicitly rather than a pure dead end, since in practice someone needs to know 'how do we actually get this underwriter the authority they need.'",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "e2f73fd5-5d5f-4daf-9c94-7fb329622674",
+          "title": "CellAuthorityIncreaseRequested",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currentLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "justification",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "7228fcc8-105e-4b0b-866a-2d183cd09fe2",
+              "type": "INBOUND",
+              "title": "RequestCellAuthorityIncrease",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "d18458a0-3066-431a-8fd6-de2bea50824c",
+              "type": "OUTBOUND",
+              "title": "UnderwriterAuthorityRegister",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Authority",
+          "aggregate": "CellAuthorityIncreaseRequest",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "CellAuthorityIncreaseRequested",
+          "description": "S0.3 follow-on: loops back into a variant of S0.1 (GrantCellAuthorityLimit / AuthorityLimitRevised) if approved by the capacity provider/governance - the request itself is the auditable fact, distinct from whatever decision follows.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "462aded2-f906-4b75-a880-5090186b4eca",
+          "title": "S0.3 follow-on: cell authority increase requested after rejection",
+          "chapter": "Authority Administration",
+          "sliceName": "CellAuthorityIncreaseRequested",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "90fd73e6-2a78-46c9-999e-19c6f9c9aa18",
+              "title": "UnderwriterAuthorityLimitRejected",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [
+            {
+              "id": "7228fcc8-105e-4b0b-866a-2d183cd09fe2",
+              "title": "RequestCellAuthorityIncrease",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "e2f73fd5-5d5f-4daf-9c94-7fb329622674",
+              "title": "CellAuthorityIncreaseRequested",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

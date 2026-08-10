@@ -1,0 +1,9 @@
+**/.eventmodelers/config.json
+node_modules/
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+[Ll]og/

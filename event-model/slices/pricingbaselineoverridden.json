@@ -1,0 +1,148 @@
+{
+  "slices": [
+    {
+      "id": "4f0f9a6b-479c-4686-b703-55b1531aec94",
+      "title": "PricingBaselineOverridden",
+      "status": "Created",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "06397ac6-cb22-409b-8c75-fb5392541e92",
+          "title": "PricingBaselineOverridden",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "baselinePremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "proposedPremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "variance",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "overriddenAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PricingBaselineOverridden",
+          "description": "Fires alongside AssessSubmission when the underwriter's proposedTerms diverge from the baseline. Same model-feedback rationale as PricingBaselineAccepted.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "5cdf9c93-2f7c-484d-9657-907530a81f33",
+          "title": "S1a.5 Underwriter overrides the AI baseline",
+          "chapter": "Submission Intake",
+          "sliceName": "PricingBaselineOverridden",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "06397ac6-cb22-409b-8c75-fb5392541e92",
+              "title": "PricingBaselineOverridden",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

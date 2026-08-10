@@ -1,0 +1,138 @@
+{
+  "slices": [
+    {
+      "id": "renew-policy",
+      "title": "Renew Policy",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Broker Connect",
+      "context": "Binding",
+      "commands": [
+        {
+          "id": "renew-policy-cmd",
+          "title": "RenewPolicy",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "expiringPolicyId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "newSubmissionId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Binding",
+          "lane": "Interaction",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Renew Policy",
+          "description": "Renewal is modeled as a fresh submission/assessment/bind cycle referencing the expiring policy, not a mutation of it.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": true,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "policy-renewed",
+          "title": "PolicyRenewed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "newPolicyId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "expiringPolicyId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "renewedAt",
+              "type": "DateTime",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Binding",
+          "lane": "Swimlane",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Renew Policy",
+          "description": "Links a new policy back to the one it renews.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

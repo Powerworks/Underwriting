@@ -1,0 +1,391 @@
+{
+  "slices": [
+    {
+      "id": "7e3099b4-c3ee-4fab-8a3e-19331b449bfe",
+      "title": "CellAuthorityLimitGranted",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Authority Administration",
+      "context": "Authority Administration",
+      "commands": [],
+      "events": [
+        {
+          "id": "6394d2de-60e1-444a-9300-8ea5c7698016",
+          "title": "CellAuthorityLimitGranted",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "version",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "894b712c-89d4-4b15-bbc3-0d67e1eb58ef",
+              "type": "OUTBOUND",
+              "title": "CellAuthorityRegister",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Authority",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "CellAuthorityLimitGranted",
+          "description": "Second instance of the same event type, paired here with the register projection it feeds.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "894b712c-89d4-4b15-bbc3-0d67e1eb58ef",
+          "title": "CellAuthorityRegister",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currentScope",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "classesOfBusiness",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "List",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "territory",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "maxLineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "maxAggregate",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "currentVersion",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "history",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "List",
+              "subfields": [
+                {
+                  "name": "version",
+                  "type": "Integer",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "scope",
+                  "type": "Custom",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "effectiveDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "supersededAt",
+                  "type": "DateTime",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "6394d2de-60e1-444a-9300-8ea5c7698016",
+              "type": "INBOUND",
+              "title": "CellAuthorityLimitGranted",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "c05ac25c-d24d-46cd-9841-be0fe777cfc7",
+              "type": "INBOUND",
+              "title": "AuthorityLimitRevoked",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Interaction",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "CellAuthorityLimitGranted",
+          "description": "S0.1: current and historical authority limits per cell, queryable at any point in time.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "82492f7e-8274-45f7-9422-14a9bc2853f2",
+          "title": "S0.1 CellAuthorityRegister reflects the granted limit",
+          "chapter": "Authority Administration",
+          "sliceName": "CellAuthorityLimitGranted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "6394d2de-60e1-444a-9300-8ea5c7698016",
+              "title": "CellAuthorityLimitGranted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "894b712c-89d4-4b15-bbc3-0d67e1eb58ef",
+              "title": "CellAuthorityRegister",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "9126ab21-8f16-4cdb-9a85-ea6c4671abd3",
+          "title": "S0.1 Cell granted a new authority limit",
+          "chapter": "Authority Administration",
+          "sliceName": "CellAuthorityLimitGranted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "f62b101a-5b93-4fdc-84bf-d006494f974d",
+              "title": "GrantCellAuthorityLimit",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "40a4a21f-506e-408c-a2c9-82f4ec943eba",
+              "title": "CellAuthorityLimitGranted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S0.1-empty",
+          "title": "S0.1-empty No cells granted authority yet",
+          "chapter": "Authority Administration",
+          "sliceName": "CellAuthorityLimitGranted",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "894b712c-89d4-4b15-bbc3-0d67e1eb58ef",
+              "title": "CellAuthorityRegister",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

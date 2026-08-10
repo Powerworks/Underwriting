@@ -1,0 +1,502 @@
+{
+  "slices": [
+    {
+      "id": "3193140f-a140-4e8f-83ee-32d4ebc9ee46",
+      "title": "SubmissionNormalized",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "aee58f84-8eab-4642-991b-b63cb4e8d0d6",
+          "title": "SubmissionNormalized",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "classOfBusiness",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "territory",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "lineSizeSought",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "keyTerms",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "namedInsured",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "effectiveDateRequested",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "normalizationStatus",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "normalizedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "1482bc8d-feaf-4f27-8a3b-759b936a6e0e",
+              "type": "OUTBOUND",
+              "title": "SubmissionQueue",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionNormalized",
+          "description": "ADEPT normalization succeeded - structured fields extracted from the raw payload. OPEN QUESTION (flagged by BA): is this genuinely a separate async event from BrokerSubmissionReceived, or should they collapse into one atomic event if normalization is synchronous/fast? Depends on actual ADEPT integration latency - revisit once that's known.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "1482bc8d-feaf-4f27-8a3b-759b936a6e0e",
+          "title": "SubmissionQueue",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "classOfBusiness",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "territory",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "lineSizeSought",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "receivedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "status",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "isPossibleDuplicate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Boolean",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "suspectedOriginalSubmissionId",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "aee58f84-8eab-4642-991b-b63cb4e8d0d6",
+              "type": "INBOUND",
+              "title": "SubmissionNormalized",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "dc1e9bec-a64d-49b3-b0ef-e7bf28866adf",
+              "type": "OUTBOUND",
+              "title": "SubmissionQueue",
+              "elementType": "SCREEN"
+            },
+            {
+              "id": "41e10e7a-dcb8-46fe-a7a0-692453a07e8b",
+              "type": "INBOUND",
+              "title": "SubmissionRoutingRejected",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Interaction",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionNormalized",
+          "description": "Underwriter's main worklist. Possible-duplicate submissions stay in this normal flow with a badge (rather than a separate queue) since resolving them needs underwriter domain judgment, not just ops triage.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [
+        {
+          "id": "dc1e9bec-a64d-49b3-b0ef-e7bf28866adf",
+          "title": "SubmissionQueue",
+          "type": "SCREEN",
+          "fields": [],
+          "dependencies": [
+            {
+              "id": "1482bc8d-feaf-4f27-8a3b-759b936a6e0e",
+              "type": "INBOUND",
+              "title": "SubmissionQueue",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Actor",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionNormalized",
+          "description": "Underwriter's Submission Queue screen: a violet header bar reads 'Submission Queue - itasca-mga' with a search input top-right. Below is a column-header row (Insured, Class, Line Size, Received, Status) over a divider line, followed by three submission rows: Acme Aviation Leasing Ltd (\\$10.0M, Aircraft Non-Payment Credit) with a green 'Ready' badge; Meridian Port Holdings (\\$25.0M, cat-exposed Property) with an orange 'Possible Dup' badge; and Blackstone Grid Energy LLC (\\$8.5M, Energy Liability) with a green 'Ready' badge. A light-violet footer bar summarizes '3 submissions - 1 flagged as possible duplicate'.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "028a8741-e5cf-4445-94b5-80d06c13e5db",
+          "title": "Clean broker submission received and normalized",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionNormalized",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "62463707-86df-4058-9131-c52ddad00f86",
+              "title": "ReceiveBrokerSubmission",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+              "title": "BrokerSubmissionReceived",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            },
+            {
+              "id": "aee58f84-8eab-4642-991b-b63cb4e8d0d6",
+              "title": "SubmissionNormalized",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "40fdca8b-ddda-4ecc-838f-798c4d0f8048",
+          "title": "S1a.1 SubmissionQueue reflects the normalized submission",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionNormalized",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "aee58f84-8eab-4642-991b-b63cb4e8d0d6",
+              "title": "SubmissionNormalized",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "1482bc8d-feaf-4f27-8a3b-759b936a6e0e",
+              "title": "SubmissionQueue",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "395c96f1-ebfa-4a79-8796-56f5b0284b14",
+          "title": "S1a.1 Clean broker submission received and normalized",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionNormalized",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "62463707-86df-4058-9131-c52ddad00f86",
+              "title": "ReceiveBrokerSubmission",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+              "title": "BrokerSubmissionReceived",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            },
+            {
+              "id": "aee58f84-8eab-4642-991b-b63cb4e8d0d6",
+              "title": "SubmissionNormalized",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S1a.1-empty",
+          "title": "S1a.1-empty No submissions currently queued",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionNormalized",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "1482bc8d-feaf-4f27-8a3b-759b936a6e0e",
+              "title": "SubmissionQueue",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,323 @@
+{
+  "slices": [
+    {
+      "id": "cb9a918d-aecd-4be9-a372-107891330a7d",
+      "title": "PolicyBound",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Binding",
+      "context": "Binding",
+      "commands": [],
+      "events": [
+        {
+          "id": "78f64ca6-f0fa-4331-8a00-4e532b911a5e",
+          "title": "PolicyBound",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "policyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "b2cc3ae4-cfae-40ee-bd28-483fd83837bc",
+              "type": "OUTBOUND",
+              "title": "PolicyRegister",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "ea8fc289-52e6-4954-9cb9-5a3f350121af",
+              "type": "OUTBOUND",
+              "title": "ActiveBookOfBusiness",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Policy",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyBound",
+          "description": "Second instance of the same event type, paired here with the register projection it feeds.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "b2cc3ae4-cfae-40ee-bd28-483fd83837bc",
+          "title": "PolicyRegister",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "policyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "classOfBusiness",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "namedInsured",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currentTerms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "premium",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "effectiveDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "expiryDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "capacityProviderAllocation",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "List",
+              "subfields": [
+                {
+                  "name": "providerId",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "quotaSharePercent",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "status",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "endorsementCount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "78f64ca6-f0fa-4331-8a00-4e532b911a5e",
+              "type": "INBOUND",
+              "title": "PolicyBound",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Interaction",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyBound",
+          "description": "S3.1: the canonical current-state view of every bound policy.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "4a82a667-2bce-4885-8e78-4d6dba5bf323",
+          "title": "S3.1 PolicyRegister reflects the bound policy",
+          "chapter": "Binding",
+          "sliceName": "PolicyBound",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "78f64ca6-f0fa-4331-8a00-4e532b911a5e",
+              "title": "PolicyBound",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "b2cc3ae4-cfae-40ee-bd28-483fd83837bc",
+              "title": "PolicyRegister",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "slices": [
+    {
+      "id": "186ce08a-2b3b-4edd-960e-69cec62407fb",
+      "title": "PolicyBound",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Binding",
+      "context": "Binding",
+      "commands": [],
+      "events": [
+        {
+          "id": "0b33eb30-3069-4b58-8c71-cdf1b950b736",
+          "title": "PolicyBound",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "policyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "ea8fc289-52e6-4954-9cb9-5a3f350121af",
+              "type": "OUTBOUND",
+              "title": "ActiveBookOfBusiness",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Policy",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyBound",
+          "description": "Third instance of the same event type, paired here with the per-cell book-of-business projection it feeds.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "ea8fc289-52e6-4954-9cb9-5a3f350121af",
+          "title": "ActiveBookOfBusiness",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "policyCount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "totalPremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "totalLineSize",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "policies",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "List",
+              "subfields": [
+                {
+                  "name": "policyId",
+                  "type": "UUID",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "namedInsured",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "premium",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "0b33eb30-3069-4b58-8c71-cdf1b950b736",
+              "type": "INBOUND",
+              "title": "PolicyBound",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "78f64ca6-f0fa-4331-8a00-4e532b911a5e",
+              "type": "INBOUND",
+              "title": "PolicyBound",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Interaction",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyBound",
+          "description": "S3.1: per-cell view of currently active bound business.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "ae65b39e-8e28-4992-8d1a-1ad20fbaf2ce",
+          "title": "S3.1 ActiveBookOfBusiness reflects the bound policy",
+          "chapter": "Binding",
+          "sliceName": "PolicyBound",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "0b33eb30-3069-4b58-8c71-cdf1b950b736",
+              "title": "PolicyBound",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "ea8fc289-52e6-4954-9cb9-5a3f350121af",
+              "title": "ActiveBookOfBusiness",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S3.1-empty",
+          "title": "S3.1-empty No bound policies yet for this cell",
+          "chapter": "Binding",
+          "sliceName": "PolicyBound",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "ea8fc289-52e6-4954-9cb9-5a3f350121af",
+              "title": "ActiveBookOfBusiness",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

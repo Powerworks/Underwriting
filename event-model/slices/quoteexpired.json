@@ -1,0 +1,184 @@
+{
+  "slices": [
+    {
+      "id": "89d450b4-b525-4f2b-9daf-490ca81e7da9",
+      "title": "QuoteExpired",
+      "status": "Created",
+      "sliceType": "AUTOMATION",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [],
+      "events": [
+        {
+          "id": "78dfec6d-f4cb-456f-9b4b-ed5d9e797ec2",
+          "title": "QuoteExpired",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "quoteId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "terms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "pricing",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "conditions",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "expiredAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteExpired",
+          "description": "S2.8: submission moves to a closed/lapsed state distinct from decline - no one said no, it just wasn't taken up.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [
+        {
+          "id": "d1aad284-c596-4945-8f92-ec1601ff20f1",
+          "title": "ExpireStaleQuotes",
+          "type": "AUTOMATION",
+          "fields": [],
+          "dependencies": [],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Actor",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteExpired",
+          "description": "Scheduled/time-triggered policy, not a human command - runs when a quote's validity period elapses with no QuoteAccepted.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "1b2f2b0c-0b7c-4f01-adcf-22f96c873d8b",
+          "title": "S2.8 Quote expires unaccepted",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteExpired",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "09d9affa-11a5-4478-a4df-313e2ab535d0",
+              "title": "QuoteIssued",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "78dfec6d-f4cb-456f-9b4b-ed5d9e797ec2",
+              "title": "QuoteExpired",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

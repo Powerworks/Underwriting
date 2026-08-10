@@ -1,0 +1,290 @@
+{
+  "slices": [
+    {
+      "id": "013ae3ab-4e48-4bd2-9aa9-863dffbf8cbb",
+      "title": "UnderwriterAuthorityLimitRejected",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Authority Administration",
+      "context": "Authority Administration",
+      "commands": [
+        {
+          "id": "3a6196cc-ed64-4c66-b8f8-a4b9139e5bdf",
+          "title": "GrantUnderwriterAuthorityLimit",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedScope",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "classesOfBusiness",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "List",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "territory",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "maxLineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "grantingAuthority",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "90fd73e6-2a78-46c9-999e-19c6f9c9aa18",
+              "type": "OUTBOUND",
+              "title": "UnderwriterAuthorityLimitRejected",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Interaction",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "UnderwriterAuthorityLimitRejected",
+          "description": "S0.2/S0.3: Cell CUO granting authority to an individual underwriter, validated against the cell's own limit (S0.1). OPEN QUESTION: does validation need to account for other underwriters' existing grants - an aggregate pool per cell (sum of all underwriters can't exceed the cell's limit) vs. each underwriter's limit being independent (a per-transaction ceiling, not a shared pool)? Real domain question for governance stakeholders, not a technicality.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "90fd73e6-2a78-46c9-999e-19c6f9c9aa18",
+          "title": "UnderwriterAuthorityLimitRejected",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedScope",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rejectionReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "attemptedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rejectedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "3a6196cc-ed64-4c66-b8f8-a4b9139e5bdf",
+              "type": "INBOUND",
+              "title": "GrantUnderwriterAuthorityLimit",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Authority",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "UnderwriterAuthorityLimitRejected",
+          "description": "S0.3: requested delegation would exceed the cell's own limit. OPEN QUESTION: does rejection trigger escalation (a request to increase the cell's own overall limit, see CellAuthorityIncreaseRequested) or dead-end requiring the Cell CUO to reallocate existing underwriters' authority instead? Modeled the escalation path explicitly rather than leaving a pure dead end - see CellAuthorityIncreaseRequested.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "cd7c390d-d200-4962-a6d7-29422088ef51",
+          "title": "S0.3 Underwriter authority request rejected - exceeds cell limit",
+          "chapter": "Authority Administration",
+          "sliceName": "UnderwriterAuthorityLimitRejected",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "3a6196cc-ed64-4c66-b8f8-a4b9139e5bdf",
+              "title": "GrantUnderwriterAuthorityLimit",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "90fd73e6-2a78-46c9-999e-19c6f9c9aa18",
+              "title": "UnderwriterAuthorityLimitRejected",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "slices": [
+    {
+      "id": "69f0d3b4-7a22-4623-bb83-a7720c8dfc02",
+      "title": "BaselinePremiumGenerated",
+      "status": "Created",
+      "sliceType": "AUTOMATION",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "572cf336-11cf-44df-8a55-7f8c2049adbd",
+          "title": "BaselinePremiumGenerated",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "baselinePremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "riskFactorSummary",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "modelVersion",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "generatedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "221f7b05-3a95-49a5-bd71-516527ceafaa",
+              "type": "OUTBOUND",
+              "title": "PricedSubmissionView",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BaselinePremiumGenerated",
+          "description": "S1a.5: fires only on successful SubmissionNormalized - an incomplete/failed normalization shouldn't get a baseline price against partial data. Rating computation (EBM segmentation, satellite/weather cross-referencing) is a specialist capability this system requests and displays, never computes - same boundary discipline as ExportExposureExtract (1c.5) and PMLRecalculated (1d.2).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "221f7b05-3a95-49a5-bd71-516527ceafaa",
+          "title": "PricedSubmissionView",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "brokerRequestedTerms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "baselinePremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "riskFactorSummary",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "modelVersion",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "572cf336-11cf-44df-8a55-7f8c2049adbd",
+              "type": "INBOUND",
+              "title": "BaselinePremiumGenerated",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "8c0b207b-cb39-4704-9b83-e0bccb07f577",
+              "type": "OUTBOUND",
+              "title": "GenerateBaselinePremiumOnNormalization",
+              "elementType": "AUTOMATION"
+            },
+            {
+              "id": "3d1dc042-b6d6-43db-a269-8b02f3591984",
+              "type": "INBOUND",
+              "title": "SubmissionConfirmedDistinct",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Interaction",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BaselinePremiumGenerated",
+          "description": "The broker's ask alongside the AI baseline, side by side, before the underwriter opens the file - this is what makes assessment 'auditing the AI-generated model' rather than pricing from scratch.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [
+        {
+          "id": "8c0b207b-cb39-4704-9b83-e0bccb07f577",
+          "title": "GenerateBaselinePremiumOnNormalization",
+          "type": "AUTOMATION",
+          "fields": [],
+          "dependencies": [
+            {
+              "id": "221f7b05-3a95-49a5-bd71-516527ceafaa",
+              "type": "INBOUND",
+              "title": "PricedSubmissionView",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Actor",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BaselinePremiumGenerated",
+          "description": "Trigger: SubmissionNormalized (success only).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "9ea222b5-9fe1-4c51-93d2-245cfef5aad7",
+          "title": "S1a.5 Baseline premium generated after successful normalization",
+          "chapter": "Submission Intake",
+          "sliceName": "BaselinePremiumGenerated",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "aee58f84-8eab-4642-991b-b63cb4e8d0d6",
+              "title": "SubmissionNormalized",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "572cf336-11cf-44df-8a55-7f8c2049adbd",
+              "title": "BaselinePremiumGenerated",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "75b48460-7c71-47c7-9e8b-da5811e25a52",
+          "title": "S1a.5 PricedSubmissionView reflects the baseline alongside the broker's ask",
+          "chapter": "Submission Intake",
+          "sliceName": "BaselinePremiumGenerated",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "572cf336-11cf-44df-8a55-7f8c2049adbd",
+              "title": "BaselinePremiumGenerated",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "221f7b05-3a95-49a5-bd71-516527ceafaa",
+              "title": "PricedSubmissionView",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

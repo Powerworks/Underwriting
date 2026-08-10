@@ -1,0 +1,231 @@
+{
+  "slices": [
+    {
+      "id": "pay-claim",
+      "title": "Pay Claim",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Broker Connect",
+      "context": "Claims",
+      "commands": [
+        {
+          "id": "pay-claim-cmd",
+          "title": "PayClaim",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "claimId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "paymentAmount",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "providerShares",
+              "type": "Custom",
+              "cardinality": "List",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": [
+                {
+                  "name": "provider",
+                  "type": "String",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                },
+                {
+                  "name": "amount",
+                  "type": "Decimal",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                }
+              ]
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Claims",
+          "lane": "Interaction",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Pay Claim",
+          "description": "Like premium, a claim payment splits by each capacity provider's quota share.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "claim-paid",
+          "title": "ClaimPaid",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "paymentId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "paymentAmount",
+              "type": "Decimal",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "providerShares",
+              "type": "Custom",
+              "cardinality": "List",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": [
+                {
+                  "name": "provider",
+                  "type": "String",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                },
+                {
+                  "name": "amount",
+                  "type": "Decimal",
+                  "cardinality": "Single",
+                  "optional": false,
+                  "idAttribute": false,
+                  "generated": false,
+                  "edited": true,
+                  "query": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false,
+                  "subfields": []
+                }
+              ]
+            },
+            {
+              "name": "paidAt",
+              "type": "DateTime",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Claims",
+          "lane": "Swimlane",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Pay Claim",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "slices": [
+    {
+      "id": "72117f92-ea38-4ef6-ab4a-be316862c68f",
+      "title": "SubmissionHistorySearchPerformed",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Search & Retrieval",
+      "context": "Search & Retrieval",
+      "commands": [],
+      "events": [
+        {
+          "id": "30a66da8-0b2f-4f6a-b910-d8d695b03a25",
+          "title": "SubmissionHistorySearchPerformed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "searchId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "resultCount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "c0a974ae-3b8b-4a4a-a1bb-abe361d9c7e6",
+              "type": "OUTBOUND",
+              "title": "SubmissionSearchResults",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "65488c76-9271-45be-9855-4396da244af7",
+              "type": "OUTBOUND",
+              "title": "BrokerActivityView",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Search & Retrieval",
+          "lane": "Submission Search",
+          "aggregate": "SearchActivityLog",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionHistorySearchPerformed",
+          "description": "Second instance of the same event type, paired here with the SubmissionSearchResults projection it feeds.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "c0a974ae-3b8b-4a4a-a1bb-abe361d9c7e6",
+          "title": "SubmissionSearchResults",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "namedInsured",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "classOfBusiness",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "territory",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "status",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "receivedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "30a66da8-0b2f-4f6a-b910-d8d695b03a25",
+              "type": "INBOUND",
+              "title": "SubmissionHistorySearchPerformed",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "41576cb0-ebc9-41af-bfed-abfc0c527565",
+              "type": "INBOUND",
+              "title": "SubmissionHistorySearchPerformed",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Search & Retrieval",
+          "lane": "Interaction",
+          "aggregate": "SearchActivityLog",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionHistorySearchPerformed",
+          "description": "Ranked/filtered list of matching historic submissions, each linking back to the full submission record including downstream decisioning/bind/claims history if it progressed that far.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "74fa6b4f-ef86-44a1-a7fe-68ce60449aa6",
+          "title": "S1b.1 SubmissionSearchResults reflects the search",
+          "chapter": "Search & Retrieval",
+          "sliceName": "SubmissionHistorySearchPerformed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "30a66da8-0b2f-4f6a-b910-d8d695b03a25",
+              "title": "SubmissionHistorySearchPerformed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "c0a974ae-3b8b-4a4a-a1bb-abe361d9c7e6",
+              "title": "SubmissionSearchResults",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S1b.1-empty",
+          "title": "S1b.1-empty Search finds no matching submissions",
+          "chapter": "Search & Retrieval",
+          "sliceName": "SubmissionHistorySearchPerformed",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "c0a974ae-3b8b-4a4a-a1bb-abe361d9c7e6",
+              "title": "SubmissionSearchResults",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

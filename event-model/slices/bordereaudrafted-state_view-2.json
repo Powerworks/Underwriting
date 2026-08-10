@@ -1,0 +1,267 @@
+{
+  "slices": [
+    {
+      "id": "6b2a9cf5-e44c-47fd-b832-f433ebadaf1e",
+      "title": "BordereauDrafted",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Bordereaux Settlement",
+      "context": "Bordereaux Settlement",
+      "commands": [],
+      "events": [
+        {
+          "id": "94bd52ba-ea00-415c-8a5b-588a73a5aae7",
+          "title": "BordereauDrafted",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "1a5c048b-6573-46b8-a667-3da0ada3d75a",
+              "type": "OUTBOUND",
+              "title": "UnbilledTransactionsForPeriod",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Bordereau",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauDrafted",
+          "description": "Second instance of the same event type, paired here with the read model that determines what's swept into it.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "1a5c048b-6573-46b8-a667-3da0ada3d75a",
+          "title": "UnbilledTransactionsForPeriod",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "providerId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "period",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "transactions",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "List",
+              "subfields": [
+                {
+                  "name": "transactionReference",
+                  "type": "UUID",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "transactionType",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "premiumAmount",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "includedInBordereauId",
+                  "type": "UUID",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "209a92fc-4d9b-4b9e-b7c3-95e8376a38bb",
+              "type": "OUTBOUND",
+              "title": "DeferQueriedLineAtPeriodClose",
+              "elementType": "AUTOMATION"
+            },
+            {
+              "id": "94bd52ba-ea00-415c-8a5b-588a73a5aae7",
+              "type": "INBOUND",
+              "title": "BordereauDrafted",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauDrafted",
+          "description": "S4.1: explicit link from each transaction to at most one bordereau (or none) - answers 'how does the system know a transaction hasn't already been included' as a queryable read model concern rather than an assumed fact.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "41d4f0ed-7930-4824-8b66-efcf83259269",
+          "title": "S4.1 UnbilledTransactionsForPeriod reflects what's swept in",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauDrafted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "94bd52ba-ea00-415c-8a5b-588a73a5aae7",
+              "title": "BordereauDrafted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "1a5c048b-6573-46b8-a667-3da0ada3d75a",
+              "title": "UnbilledTransactionsForPeriod",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S4.1-empty",
+          "title": "S4.1-empty No unbilled transactions for the period",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauDrafted",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "1a5c048b-6573-46b8-a667-3da0ada3d75a",
+              "title": "UnbilledTransactionsForPeriod",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

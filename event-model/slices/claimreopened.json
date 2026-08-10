@@ -1,0 +1,227 @@
+{
+  "slices": [
+    {
+      "id": "ced882f8-5643-4cf4-b5bb-aaed3024d518",
+      "title": "ClaimReopened",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Claims",
+      "context": "Claims",
+      "commands": [
+        {
+          "id": "afb40732-c3b4-42e4-a1f3-8d421611e250",
+          "title": "ReopenClaim",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "a2480670-b8c5-4a49-ac2a-ae08feddac23",
+              "type": "OUTBOUND",
+              "title": "ClaimReopened",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Interaction",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimReopened",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "a2480670-b8c5-4a49-ac2a-ae08feddac23",
+          "title": "ClaimReopened",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reopenReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "newInformation",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reopenedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reopenedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "afb40732-c3b4-42e4-a1f3-8d421611e250",
+              "type": "INBOUND",
+              "title": "ReopenClaim",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "85d97ffb-0796-4c0a-86fa-095ea7f86c51",
+              "type": "OUTBOUND",
+              "title": "ClaimRegister",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Claim",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimReopened",
+          "description": "S5.4: appended after ClaimClosed, doesn't erase it - the same append-only 'corrections are new entries, not edits' principle used for Bordereaux (AdjustmentLineRaised) and Binding (PolicyEndorsed) applies here too, one architectural principle consistently applied rather than three separate decisions. Typically followed by a fresh ClaimReserveSet cycle. Reopen-limit/repeated-reopening-as-a-governance-signal not modeled yet - flagged as a natural extension, not essential day one.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "b6705bdf-7fdf-4368-8133-d43a964f87a3",
+          "title": "S5.4 Claim closed then reopened",
+          "chapter": "Claims",
+          "sliceName": "ClaimReopened",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "f608b157-407e-4ac4-adea-5b09c9d909d7",
+              "title": "ClaimClosed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [
+            {
+              "id": "afb40732-c3b4-42e4-a1f3-8d421611e250",
+              "title": "ReopenClaim",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "a2480670-b8c5-4a49-ac2a-ae08feddac23",
+              "title": "ClaimReopened",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

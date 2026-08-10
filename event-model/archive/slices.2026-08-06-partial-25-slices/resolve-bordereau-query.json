@@ -1,0 +1,138 @@
+{
+  "slices": [
+    {
+      "id": "resolve-bordereau-query",
+      "title": "Resolve Bordereau Query",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Broker Connect",
+      "context": "Bordereaux Settlement",
+      "commands": [
+        {
+          "id": "resolve-bordereau-query-cmd",
+          "title": "ResolveBordereauQuery",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "queryId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "resolution",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Resolve Bordereau Query",
+          "description": "Underwriter/Operations resolves a previously raised query.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "bordereau-line-resolved",
+          "title": "BordereauLineResolved",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "queryId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": true,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "resolution",
+              "type": "String",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": false,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            },
+            {
+              "name": "resolvedAt",
+              "type": "DateTime",
+              "cardinality": "Single",
+              "optional": false,
+              "idAttribute": false,
+              "generated": true,
+              "edited": true,
+              "query": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Swimlane",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "Resolve Bordereau Query",
+          "description": "Line status moves out of Queried. A single disputed line can span multiple periods before resolution.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

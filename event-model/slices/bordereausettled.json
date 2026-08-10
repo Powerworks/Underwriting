@@ -1,0 +1,315 @@
+{
+  "slices": [
+    {
+      "id": "7da6c491-d2a4-4feb-9a85-b5a5e3f3e355",
+      "title": "BordereauSettled",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Bordereaux Settlement",
+      "context": "Bordereaux Settlement",
+      "commands": [
+        {
+          "id": "916fc824-8f4f-4019-a159-efa5abb26f16",
+          "title": "SettleBordereau",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "settledAmount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "settlementDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currency",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "fxRate",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "a906519d-df7f-44f5-94f0-ec59804da92e",
+              "type": "OUTBOUND",
+              "title": "BordereauSettled",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauSettled",
+          "description": "Cash actually moves - net premium cell to provider (or claims float top-up provider to cell). Multi-currency: cell writes premium in local currency, providers may need it reported in USD, so FX rate at settlement is captured.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "a906519d-df7f-44f5-94f0-ec59804da92e",
+          "title": "BordereauSettled",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "settledAmount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "settlementDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currency",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "fxRate",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "settledAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "916fc824-8f4f-4019-a159-efa5abb26f16",
+              "type": "INBOUND",
+              "title": "SettleBordereau",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Bordereau",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauSettled",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "aa50abaf-30f5-4054-ab24-6b54d4ffaf57",
+          "title": "S4.1 Bordereau settled, cash moves",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauSettled",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "19748a2d-950c-4b4c-9668-f511201aa0a1",
+              "title": "BordereauAgreed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [
+            {
+              "id": "916fc824-8f4f-4019-a159-efa5abb26f16",
+              "title": "SettleBordereau",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "a906519d-df7f-44f5-94f0-ec59804da92e",
+              "title": "BordereauSettled",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S4.1-err-notagreed",
+          "title": "S4.1-err Settlement attempted before bordereau is agreed",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauSettled",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "94bd52ba-ea00-415c-8a5b-588a73a5aae7",
+              "title": "BordereauDrafted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "916fc824-8f4f-4019-a159-efa5abb26f16",
+              "title": "SettleBordereau",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "3b210367-64ff-4df7-9cab-b213c215c301",
+              "title": "S4.1-err Settlement attempted before bordereau is agreed",
+              "description": "Bordereau has not yet been agreed by both provider and TFP; settlement cannot proceed before agreement.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

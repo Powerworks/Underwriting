@@ -1,0 +1,172 @@
+{
+  "slices": [
+    {
+      "id": "279e4f19-761f-4784-8576-aee4ae8df29a",
+      "title": "BordereauSubmittedForAgreement",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Bordereaux Settlement",
+      "context": "Bordereaux Settlement",
+      "commands": [
+        {
+          "id": "361f9a6c-5243-4f05-913d-c09d2d7e0a97",
+          "title": "SubmitBordereauForAgreement",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "6896defc-5417-4505-a1fa-429ad3606538",
+              "type": "OUTBOUND",
+              "title": "BordereauSubmittedForAgreement",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauSubmittedForAgreement",
+          "description": "TFP finance/ops signals internal readiness - distinct from the provider's own confirmation (BordereauAgreed).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "6896defc-5417-4505-a1fa-429ad3606538",
+          "title": "BordereauSubmittedForAgreement",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submittedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submittedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "361f9a6c-5243-4f05-913d-c09d2d7e0a97",
+              "type": "INBOUND",
+              "title": "SubmitBordereauForAgreement",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Bordereau",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauSubmittedForAgreement",
+          "description": "S4.1: two-party agreement modeled as two events (BordereauSubmittedForAgreement -> BordereauAgreed) rather than one - TFP's internal sign-off is not the same fact as the provider's actual confirmation, and bordereaux are literally how money moves.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "9f9cad4f-2875-471d-8302-90f8e487ef60",
+          "title": "S4.1 Bordereau submitted for provider agreement",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauSubmittedForAgreement",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "361f9a6c-5243-4f05-913d-c09d2d7e0a97",
+              "title": "SubmitBordereauForAgreement",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "6896defc-5417-4505-a1fa-429ad3606538",
+              "title": "BordereauSubmittedForAgreement",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

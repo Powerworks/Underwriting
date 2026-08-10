@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="BuildingBlocks/BrokerConnect.BuildingBlocks.Domain/BrokerConnect.BuildingBlocks.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Modules/" />
+  <Folder Name="/Modules/AuthorityAdministration/">
+    <Project Path="Modules/AuthorityAdministration/BrokerConnect.Modules.AuthorityAdministration.Api/BrokerConnect.Modules.AuthorityAdministration.Api.csproj" />
+    <Project Path="Modules/AuthorityAdministration/BrokerConnect.Modules.AuthorityAdministration.Contracts/BrokerConnect.Modules.AuthorityAdministration.Contracts.csproj" />
+    <Project Path="Modules/AuthorityAdministration/BrokerConnect.Modules.AuthorityAdministration.Domain/BrokerConnect.Modules.AuthorityAdministration.Domain.csproj" />
+  </Folder>
+  <Project Path="../tests/Modules/AuthorityAdministration/AuthorityAdministration.Api.Tests/AuthorityAdministration.Api.Tests.csproj" />
+  <Project Path="../tests/Modules/AuthorityAdministration/AuthorityAdministration.Domain.Tests/AuthorityAdministration.Domain.Tests.csproj" />
+  <Project Path="../tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/AuthorityAdministration.IntegrationTests.csproj" />
+  <Project Path="Api.Host/Api.Host.csproj" />
+</Solution>

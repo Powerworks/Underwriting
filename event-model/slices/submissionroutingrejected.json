@@ -1,0 +1,336 @@
+{
+  "slices": [
+    {
+      "id": "e1fc8e36-328f-4c5a-bd50-19dfb41d7499",
+      "title": "SubmissionRoutingRejected",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "41e10e7a-dcb8-46fe-a7a0-692453a07e8b",
+          "title": "SubmissionRoutingRejected",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedCellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedClassOfBusiness",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rejectionReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rejectedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "0723e966-26ba-412a-a067-1f800fc45d3a",
+              "type": "OUTBOUND",
+              "title": "BrokerAuthorizationExceptionLog",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "1482bc8d-feaf-4f27-8a3b-759b936a6e0e",
+              "type": "OUTBOUND",
+              "title": "SubmissionQueue",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionRoutingRejected",
+          "description": "Broker's panel authorization doesn't cover the requested cell/class. Attempt is still recorded for broker relationship management - never silently dropped.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "0723e966-26ba-412a-a067-1f800fc45d3a",
+          "title": "BrokerAuthorizationExceptionLog",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedCellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedClassOfBusiness",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rejectionReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rejectedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reviewStatus",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "41e10e7a-dcb8-46fe-a7a0-692453a07e8b",
+              "type": "INBOUND",
+              "title": "SubmissionRoutingRejected",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Interaction",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionRoutingRejected",
+          "description": "Never appears in any underwriter's queue. Visible to whoever manages broker/cell panel relationships (ops or business development) - may represent a legitimate request to extend the broker's panel, not just an error.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "704553d5-465c-43cc-a5d2-8c49ef266552",
+          "title": "S1a.3 Submission for a cell/class the broker isn't authorized for",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionRoutingRejected",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "62463707-86df-4058-9131-c52ddad00f86",
+              "title": "ReceiveBrokerSubmission",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+              "title": "BrokerSubmissionReceived",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            },
+            {
+              "id": "41e10e7a-dcb8-46fe-a7a0-692453a07e8b",
+              "title": "SubmissionRoutingRejected",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "4942fa8f-3bb6-43e5-ab02-f56ff8b67407",
+          "title": "S1a.3 BrokerAuthorizationExceptionLog reflects the routing rejection",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionRoutingRejected",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "41e10e7a-dcb8-46fe-a7a0-692453a07e8b",
+              "title": "SubmissionRoutingRejected",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "0723e966-26ba-412a-a067-1f800fc45d3a",
+              "title": "BrokerAuthorizationExceptionLog",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

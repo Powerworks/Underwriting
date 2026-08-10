@@ -1,0 +1,344 @@
+{
+  "slices": [
+    {
+      "id": "118aec35-6676-4ad0-8f4b-baadc4baf6ae",
+      "title": "AuthorityLimitRevised",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Authority Administration",
+      "context": "Authority Administration",
+      "commands": [
+        {
+          "id": "80a71127-fccd-4ceb-977a-87e35029bea7",
+          "title": "ReviseAuthorityLimit",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "newMaxGrossPremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "newMaxLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "revisedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "e17d213c-4261-4c18-bf40-f6a45fe173fc",
+              "type": "OUTBOUND",
+              "title": "AuthorityLimitRevised",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Interaction",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "AuthorityLimitRevised",
+          "description": "Either tier's authority record is revised - e.g. an annual treaty renewal resets the Cell's limit, or a Cell Head Underwriter adjusts an individual underwriter's delegation.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "e17d213c-4261-4c18-bf40-f6a45fe173fc",
+          "title": "AuthorityLimitRevised",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "target",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "previousLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "newLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "revisedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "version",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "revisedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "80a71127-fccd-4ceb-977a-87e35029bea7",
+              "type": "INBOUND",
+              "title": "ReviseAuthorityLimit",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Authority",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "AuthorityLimitRevised",
+          "description": "S0.4: sharpest open question in this context - a submission already in-flight (post-1a, pre-bind), assessed against the old limit, when the revision drops below what it needs. Grandfather (evaluate against authority in effect when it entered decisioning) vs re-evaluate (immediately re-check, force referral if it now breaches) are both defensible; leaning toward re-evaluation as the safer default for a governance-critical system, but this is a business decision, not an architecture default. Either way, always triggers ReassessInFlightSubmissionsOnRuleChange producing InFlightSubmissionReassessed, so the decision and its trigger are visible in the audit trail regardless of which policy stance is chosen. Same underlying 'rules changed mid-flight' problem as S1e.2's freeze-during-decisioning - solved with the same mechanism, not two bespoke ones.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "b09b26c0-9ff1-4284-ab34-36cba39da270",
+          "title": "S0.4 Authority limit revised downward mid-cycle",
+          "chapter": "Authority Administration",
+          "sliceName": "AuthorityLimitRevised",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "80a71127-fccd-4ceb-977a-87e35029bea7",
+              "title": "ReviseAuthorityLimit",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "e17d213c-4261-4c18-bf40-f6a45fe173fc",
+              "title": "AuthorityLimitRevised",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S0.4-err-revoked",
+          "title": "S0.4-err Revision attempted on a revoked authority",
+          "chapter": "Authority Administration",
+          "sliceName": "AuthorityLimitRevised",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "c05ac25c-d24d-46cd-9841-be0fe777cfc7",
+              "title": "AuthorityLimitRevoked",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "80a71127-fccd-4ceb-977a-87e35029bea7",
+              "title": "ReviseAuthorityLimit",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "778afafa-ff17-444b-9707-16fd35d46d06",
+              "title": "S0.4-err Revision attempted on a revoked authority",
+              "description": "Authority limit has been revoked; it must be re-granted rather than revised.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

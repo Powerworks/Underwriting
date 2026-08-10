@@ -1,0 +1,122 @@
+{
+  "slices": [
+    {
+      "id": "c8ea745d-c494-4d36-9dad-887b5b88956d",
+      "title": "PricingBaselineAccepted",
+      "status": "Created",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "fd60dce0-7875-49f2-bd36-19e837f02552",
+          "title": "PricingBaselineAccepted",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "baselinePremium",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "acceptedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PricingBaselineAccepted",
+          "description": "Fires alongside AssessSubmission (S2.1) when the underwriter's proposedTerms match BaselinePremiumGenerated exactly. Actuarial needs to measure how often/how much underwriters deviate from the model to evaluate model performance - invisible unless captured explicitly, so this and PricingBaselineOverridden are modeled even though they add no new business decision by themselves.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "447bc181-94d0-400e-b0ba-f83d461d9cf9",
+          "title": "S1a.5 Underwriter accepts the AI baseline as proposed",
+          "chapter": "Submission Intake",
+          "sliceName": "PricingBaselineAccepted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "fd60dce0-7875-49f2-bd36-19e837f02552",
+              "title": "PricingBaselineAccepted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

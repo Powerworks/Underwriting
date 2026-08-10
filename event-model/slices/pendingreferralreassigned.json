@@ -1,0 +1,132 @@
+{
+  "slices": [
+    {
+      "id": "60066237-b32b-43f5-ae40-9fa3d26d6237",
+      "title": "PendingReferralReassigned",
+      "status": "Created",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [],
+      "events": [
+        {
+          "id": "78991795-e97a-473b-ba7e-ab9ce2fa349d",
+          "title": "PendingReferralReassigned",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "referralId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "previousResolvingParty",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "newResolvingParty",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reassignedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PendingReferralReassigned",
+          "description": "S2.5: fires when AuthorityLimitRevoked (or Revised) removes the pending referral's resolving party's ability to act on it - rerouted to whoever now holds equivalent authority, rather than sitting unresolved against someone who can no longer act. Produced by ReassessInFlightSubmissionsOnRuleChange (Context 0) - same mechanism, third trigger.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "b4a28906-d80f-436e-98b0-07dbb8ea2013",
+          "title": "S2.5 Pending referral reassigned after referee's authority revoked",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "PendingReferralReassigned",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "f597069b-ec96-4af6-a2b7-4b58ec069a4a",
+              "title": "SubmissionReferred",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "78991795-e97a-473b-ba7e-ab9ce2fa349d",
+              "title": "PendingReferralReassigned",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

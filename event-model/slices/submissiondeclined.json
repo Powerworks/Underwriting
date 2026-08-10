@@ -1,0 +1,224 @@
+{
+  "slices": [
+    {
+      "id": "2eda6cdd-9b8c-4470-8dd5-e73fa12238ea",
+      "title": "SubmissionDeclined",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [
+        {
+          "id": "edd0689d-f9eb-42d7-a081-3c9f1397fc1b",
+          "title": "DeclineSubmission",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "e0262010-7666-4bfd-bd18-c7aaede3a760",
+              "type": "OUTBOUND",
+              "title": "SubmissionDeclined",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Interaction",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionDeclined",
+          "description": "Underwriter declines a submission outright - off-appetite class, sanctioned territory, or incomplete information beyond a reasonable follow-up window.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "e0262010-7666-4bfd-bd18-c7aaede3a760",
+          "title": "SubmissionDeclined",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declineReasonCode",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declineReasonDetail",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declinedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "edd0689d-f9eb-42d7-a081-3c9f1397fc1b",
+              "type": "INBOUND",
+              "title": "DeclineSubmission",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionDeclined",
+          "description": "S2.6: at any point in assessment, doesn't require a referral attempt first. Sanctioned-territory declines trigger ComplianceNotifiedOfSanctionsDecline - a mandatory downstream notification given the regulatory seriousness versus an ordinary off-appetite decline.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "eaf6d2f4-5e88-4a6f-854f-5ba83f5f168a",
+          "title": "S2.6 Submission declined outright, off-appetite/sanctioned",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "SubmissionDeclined",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "edd0689d-f9eb-42d7-a081-3c9f1397fc1b",
+              "title": "DeclineSubmission",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "e0262010-7666-4bfd-bd18-c7aaede3a760",
+              "title": "SubmissionDeclined",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

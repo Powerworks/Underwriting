@@ -1,0 +1,285 @@
+{
+  "slices": [
+    {
+      "id": "f8ecf1d4-bd90-45bf-8674-5f983b9ee4ea",
+      "title": "ClaimReserveSet",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Claims",
+      "context": "Claims",
+      "commands": [
+        {
+          "id": "0a6caaff-a90b-4e6f-aae3-e03f215d4a11",
+          "title": "SetClaimReserve",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reserveAmount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "basisRationale",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "b02be6d2-6ec8-48e2-907b-10ac1f717f47",
+              "type": "OUTBOUND",
+              "title": "ClaimReserveSet",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "02c0843e-667e-4b46-b4f1-18e1f330a3e8",
+              "type": "INBOUND",
+              "title": "ClaimHandling",
+              "elementType": "SCREEN"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Interaction",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimReserveSet",
+          "description": "",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "b02be6d2-6ec8-48e2-907b-10ac1f717f47",
+          "title": "ClaimReserveSet",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reserveAmount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "setBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "basis",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "sequenceNumber",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "setAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "0a6caaff-a90b-4e6f-aae3-e03f215d4a11",
+              "type": "INBOUND",
+              "title": "SetClaimReserve",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Claim",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimReserveSet",
+          "description": "S5.2: explicitly recurring - fires again whenever new information changes the loss estimate. A material increase crossing the claims handler's own authority threshold instead produces ReserveRevisionReferred - the authority/governance pattern from Context 0 isn't scoped only to underwriting decisioning, it applies here too.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "db4fc8e9-2ca5-43b6-be9d-154c7910749f",
+          "title": "S5.1/S5.2 Claim reserve set (recurring)",
+          "chapter": "Claims",
+          "sliceName": "ClaimReserveSet",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "0a6caaff-a90b-4e6f-aae3-e03f215d4a11",
+              "title": "SetClaimReserve",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "b02be6d2-6ec8-48e2-907b-10ac1f717f47",
+              "title": "ClaimReserveSet",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S5.2-err-closed",
+          "title": "S5.2-err Reserve change attempted on a closed claim",
+          "chapter": "Claims",
+          "sliceName": "ClaimReserveSet",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "f608b157-407e-4ac4-adea-5b09c9d909d7",
+              "title": "ClaimClosed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "0a6caaff-a90b-4e6f-aae3-e03f215d4a11",
+              "title": "SetClaimReserve",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "2d2e72b3-5437-4d2e-a782-27426cbafdde",
+              "title": "S5.2-err Reserve change attempted on a closed claim",
+              "description": "Claim is closed; reserve cannot be revised without first reopening the claim.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

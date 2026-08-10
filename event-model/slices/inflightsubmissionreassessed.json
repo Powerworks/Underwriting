@@ -1,0 +1,216 @@
+{
+  "slices": [
+    {
+      "id": "c6877dbc-349f-4df2-9777-9f34f5b86146",
+      "title": "InFlightSubmissionReassessed",
+      "status": "Created",
+      "sliceType": "AUTOMATION",
+      "chapter": "Authority Administration",
+      "context": "Authority Administration",
+      "commands": [],
+      "events": [
+        {
+          "id": "1ac3b9d6-7054-4279-84ff-7c97bd0a05b7",
+          "title": "InFlightSubmissionReassessed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "triggerType",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "triggerReference",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "previousBasis",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "newBasis",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "policyApplied",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reassessmentResult",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reassessedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Authority Administration",
+          "lane": "Authority",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "InFlightSubmissionReassessed",
+          "description": "S0.4/S0.5's sharpest open question, generalized: what happens to a submission already in-flight when the rules it's being evaluated against change underneath it. Leaning toward re-evaluation as the safer default for a governance-critical system, but this is a business decision (policyApplied), not an architecture default. Revocation (S0.5) pushes for the stricter, immediate interpretation given it correlates with higher-risk situations; routine revisions (S0.4) may be more relaxed (checked at next decision point).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [
+        {
+          "id": "71d42826-935c-4d80-ac29-fbacad53e33f",
+          "title": "ReassessInFlightSubmissionsOnRuleChange",
+          "type": "AUTOMATION",
+          "fields": [],
+          "dependencies": [
+            {
+              "id": "d18458a0-3066-431a-8fd6-de2bea50824c",
+              "type": "INBOUND",
+              "title": "UnderwriterAuthorityRegister",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Actor",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "InFlightSubmissionReassessed",
+          "description": "Triggered by AuthorityLimitRevised, AuthorityLimitRevoked (Context 0), and TerritoryUnderwritingFrozen (Context 1e) - one shared policy for 'rules changed mid-flight', not three separate reactive processes solving the same problem differently.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "b46124b4-3ebc-4ea2-aa18-64f7cb03b003",
+          "title": "S0.4/S0.5 in-flight submission reassessed on authority change",
+          "chapter": "Authority Administration",
+          "sliceName": "InFlightSubmissionReassessed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "e17d213c-4261-4c18-bf40-f6a45fe173fc",
+              "title": "AuthorityLimitRevised",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "1ac3b9d6-7054-4279-84ff-7c97bd0a05b7",
+              "title": "InFlightSubmissionReassessed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "slices": [
+    {
+      "id": "7f339999-19a1-4cc8-ac73-ecfb8dab5a7e",
+      "title": "UnderwriterAuthorityLimitGranted",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Authority Administration",
+      "context": "Authority Administration",
+      "commands": [],
+      "events": [
+        {
+          "id": "1495da8a-8392-4c92-aceb-e3f75308358a",
+          "title": "UnderwriterAuthorityLimitGranted",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "authorityLimitId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "version",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "d18458a0-3066-431a-8fd6-de2bea50824c",
+              "type": "OUTBOUND",
+              "title": "UnderwriterAuthorityRegister",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Authority",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "UnderwriterAuthorityLimitGranted",
+          "description": "Second instance of the same event type, paired here with the register projection it feeds (distinct from AuthorityMatrix, which is what Context 2 queries at decision time - this is the underwriter-facing historical register).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "d18458a0-3066-431a-8fd6-de2bea50824c",
+          "title": "UnderwriterAuthorityRegister",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "underwriterId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cellId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currentScope",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currentVersion",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Integer",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "history",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "List",
+              "subfields": [
+                {
+                  "name": "version",
+                  "type": "Integer",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "scope",
+                  "type": "Custom",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "effectiveDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "supersededAt",
+                  "type": "DateTime",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "1495da8a-8392-4c92-aceb-e3f75308358a",
+              "type": "INBOUND",
+              "title": "UnderwriterAuthorityLimitGranted",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "e2f73fd5-5d5f-4daf-9c94-7fb329622674",
+              "type": "INBOUND",
+              "title": "CellAuthorityIncreaseRequested",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "71d42826-935c-4d80-ac29-fbacad53e33f",
+              "type": "OUTBOUND",
+              "title": "ReassessInFlightSubmissionsOnRuleChange",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "modelContext": "Authority Administration",
+          "lane": "Interaction",
+          "aggregate": "AuthorityLimit",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "UnderwriterAuthorityLimitGranted",
+          "description": "S0.2: current authority per underwriter, with full history - distinct from AuthorityMatrix (the decision-time query view).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "65b8cc7f-57a4-44fe-acd7-6e018fc30ea4",
+          "title": "S0.2 UnderwriterAuthorityRegister reflects the grant",
+          "chapter": "Authority Administration",
+          "sliceName": "UnderwriterAuthorityLimitGranted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "1495da8a-8392-4c92-aceb-e3f75308358a",
+              "title": "UnderwriterAuthorityLimitGranted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "d18458a0-3066-431a-8fd6-de2bea50824c",
+              "title": "UnderwriterAuthorityRegister",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

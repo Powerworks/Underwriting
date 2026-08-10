@@ -1,0 +1,208 @@
+{
+  "slices": [
+    {
+      "id": "ea6063ed-fd19-48fd-b97b-c60b6f359b19",
+      "title": "ClaimPeriodValidated",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Claims",
+      "context": "Claims",
+      "commands": [
+        {
+          "id": "ffc1e09b-133c-4471-9ab5-3f9386cc2451",
+          "title": "ValidateClaimPeriod",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "determination",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "243f77f6-84f3-43b3-b93a-3d7b8782149a",
+              "type": "OUTBOUND",
+              "title": "ClaimPeriodValidated",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Interaction",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimPeriodValidated",
+          "description": "Explicit human confirmation, not an automated pass/fail - date-of-loss-vs-active-period disputes (was the policy actually in force at the exact moment of loss, retroactive date issues) are exactly the kind of determination that ends up in coverage disputes and shouldn't be silently auto-decided.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "243f77f6-84f3-43b3-b93a-3d7b8782149a",
+          "title": "ClaimPeriodValidated",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "determination",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "validatedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "validatedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "ffc1e09b-133c-4471-9ab5-3f9386cc2451",
+              "type": "INBOUND",
+              "title": "ValidateClaimPeriod",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Claims",
+          "lane": "Claim",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimPeriodValidated",
+          "description": "S5.5: only required when ClaimNotifiedAgainstInactivePolicy has fired - a claims handler manually confirms the loss falls within the period on cover before reserve/payment proceeds.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "8156c151-f610-48a8-9c4c-468d533e9a60",
+          "title": "S5.5 Claim period validated against date of loss",
+          "chapter": "Claims",
+          "sliceName": "ClaimPeriodValidated",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "38da8315-a12b-44ee-9a07-356f0bda91ab",
+              "title": "ClaimNotifiedAgainstInactivePolicy",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [
+            {
+              "id": "ffc1e09b-133c-4471-9ab5-3f9386cc2451",
+              "title": "ValidateClaimPeriod",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "243f77f6-84f3-43b3-b93a-3d7b8782149a",
+              "title": "ClaimPeriodValidated",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

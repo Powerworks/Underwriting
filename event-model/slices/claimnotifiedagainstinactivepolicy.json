@@ -1,0 +1,154 @@
+{
+  "slices": [
+    {
+      "id": "36714763-c499-4636-ba28-f6ea16e6b3bf",
+      "title": "ClaimNotifiedAgainstInactivePolicy",
+      "status": "Created",
+      "chapter": "Claims",
+      "context": "Claims",
+      "commands": [],
+      "events": [
+        {
+          "id": "38da8315-a12b-44ee-9a07-356f0bda91ab",
+          "title": "ClaimNotifiedAgainstInactivePolicy",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "policyReference",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "policyStatusAtNotification",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "dateOfLoss",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "flaggedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Claims",
+          "lane": "Claim",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ClaimNotifiedAgainstInactivePolicy",
+          "description": "S5.5: fires when NotifyClaim references a policy whose current PolicyRegister state shows Cancelled or lapsed/non-renewed. Does NOT reject the notification - the loss may have occurred while cover was active. A flag, not a block.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "a0679610-7b52-4cf7-a973-26360a71800d",
+          "title": "S5.5 Claim notified against an inactive policy",
+          "chapter": "Claims",
+          "sliceName": "ClaimNotifiedAgainstInactivePolicy",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "76ea9ece-aef7-4ee7-bf9b-8ca29e5ebb85",
+              "title": "NotifyClaim",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "b68db8b1-058e-454e-856d-270ac90ec68a",
+              "title": "ClaimNotified",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            },
+            {
+              "id": "38da8315-a12b-44ee-9a07-356f0bda91ab",
+              "title": "ClaimNotifiedAgainstInactivePolicy",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

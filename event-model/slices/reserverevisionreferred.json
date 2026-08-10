@@ -1,0 +1,158 @@
+{
+  "slices": [
+    {
+      "id": "a04db400-0c7a-4be3-940c-fd3ce5914e33",
+      "title": "ReserveRevisionReferred",
+      "status": "Created",
+      "chapter": "Claims",
+      "context": "Claims",
+      "commands": [],
+      "events": [
+        {
+          "id": "a97072d5-92e5-40a8-b2e6-e0ed31566c19",
+          "title": "ReserveRevisionReferred",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "claimId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "claimsHandlerId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requestedReserveAmount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "currentAuthorityLimit",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "referredTo",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "referredAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Claims",
+          "lane": "Claim",
+          "aggregate": "Claim",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ReserveRevisionReferred",
+          "description": "S5.2: a material reserve increase crossing the claims handler's own authority threshold - genuine parallel to S3.3's endorsement/referral resolution. Suggests Context 0's authority engine is a cross-cutting capability (decisioning, endorsements, AND claims reserve authority), not something scoped only to Context 2 - worth reframing Context 0 as a general authority/governance engine rather than 'underwriting authority' specifically. Reuses the same DecideReferral resolution path as Context 2/Context 3's EndorsementReferred.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "d2538779-441b-4a11-af06-db2cba13d544",
+          "title": "S5.2 Material reserve increase referred for authority check",
+          "chapter": "Claims",
+          "sliceName": "ReserveRevisionReferred",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "b02be6d2-6ec8-48e2-907b-10ac1f717f47",
+              "title": "ClaimReserveSet",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "a97072d5-92e5-40a8-b2e6-e0ed31566c19",
+              "title": "ReserveRevisionReferred",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

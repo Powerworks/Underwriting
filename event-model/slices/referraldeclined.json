@@ -1,0 +1,132 @@
+{
+  "slices": [
+    {
+      "id": "d967263d-6885-46b5-8d2b-a5a607429301",
+      "title": "ReferralDeclined",
+      "status": "Created",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [],
+      "events": [
+        {
+          "id": "0e73f5a2-dbd4-45ad-8ab4-0bba31b50cb2",
+          "title": "ReferralDeclined",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "referralId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "resolvingPartyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declineReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "decidedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ReferralDeclined",
+          "description": "S2.3: dead end for these specific terms, by this specific referee, for this specific authority reason - distinct from SubmissionDeclined (off-appetite entirely). Loops back to a fresh AssessSubmission with revised terms, not a hard stop - same submissionId persists (a revised assessment of the same underlying risk, same pattern as PolicyEndorsed being a new ledger entry on the same policy rather than a new one).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "fcaf086a-2404-439d-b17e-5575ac729227",
+          "title": "S2.3 Referral declined at next tier",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "ReferralDeclined",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "e025428a-5770-4852-8d5f-4353f19a848f",
+              "title": "DecideReferral",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "0e73f5a2-dbd4-45ad-8ab4-0bba31b50cb2",
+              "title": "ReferralDeclined",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

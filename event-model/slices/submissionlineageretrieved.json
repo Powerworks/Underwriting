@@ -1,0 +1,456 @@
+{
+  "slices": [
+    {
+      "id": "681560c2-146b-4005-9137-cbb246e33012",
+      "title": "SubmissionLineageRetrieved",
+      "status": "Created",
+      "sliceType": "AUTOMATION",
+      "chapter": "Search & Retrieval",
+      "context": "Search & Retrieval",
+      "commands": [],
+      "events": [
+        {
+          "id": "91aa46fa-45ed-453c-ba61-75e572a714b6",
+          "title": "SubmissionLineageRetrieved",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "policyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "lineageChain",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "originalSubmissionId",
+                  "type": "UUID",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "decisioningPath",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "referredTo",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "quoteId",
+                  "type": "UUID",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "boundAt",
+                  "type": "DateTime",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "retrievedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "0d027666-f0f4-45e0-a1de-e129937798c8",
+              "type": "OUTBOUND",
+              "title": "PolicyOriginationView",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Search & Retrieval",
+          "lane": "Submission Search",
+          "aggregate": "SearchActivityLog",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionLineageRetrieved",
+          "description": "1b.2, modeled deliberately as its own capability rather than folded into generic search (BA judgment call, agreed): a claims handler needing to verify a claim against original bind terms is a direct traversal by policy/bind reference, not a search over criteria. Likely one of the highest-value pieces of the whole 'AI-assisted search' capability described in the press coverage - solves exactly the 'days of manual reconstruction' problem.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "0d027666-f0f4-45e0-a1de-e129937798c8",
+          "title": "PolicyOriginationView",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "policyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "namedInsured",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "classOfBusiness",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "originalSubmissionReceivedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "decisioningPath",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "referredTo",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "quoteTerms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "boundTerms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "boundAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "91aa46fa-45ed-453c-ba61-75e572a714b6",
+              "type": "INBOUND",
+              "title": "SubmissionLineageRetrieved",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "848e1c78-44b6-489d-aaa2-aaed3b7ab4d6",
+              "type": "OUTBOUND",
+              "title": "RetrieveSubmissionLineageOnClaimNotified",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "modelContext": "Search & Retrieval",
+          "lane": "Interaction",
+          "aggregate": "SearchActivityLog",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionLineageRetrieved",
+          "description": "Given a bound policy reference from a claim, the full chain: original submission -> decisioning path -> quote -> bind terms, without constructing a search query. Retrieved by policy/bind reference, not free-text search.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [
+        {
+          "id": "848e1c78-44b6-489d-aaa2-aaed3b7ab4d6",
+          "title": "RetrieveSubmissionLineageOnClaimNotified",
+          "type": "AUTOMATION",
+          "fields": [],
+          "dependencies": [
+            {
+              "id": "0d027666-f0f4-45e0-a1de-e129937798c8",
+              "type": "INBOUND",
+              "title": "PolicyOriginationView",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "65488c76-9271-45be-9855-4396da244af7",
+              "type": "INBOUND",
+              "title": "BrokerActivityView",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Search & Retrieval",
+          "lane": "Actor",
+          "aggregate": "SearchActivityLog",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionLineageRetrieved",
+          "description": "Triggered automatically whenever ClaimNotified fires (Context 5), not a manual search action - matches how claims handlers actually work.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "0f4b4f26-21aa-4c14-bfcd-896f35804857",
+          "title": "S1b.2 Claims handler retrieves submission lineage for a bound policy",
+          "chapter": "Search & Retrieval",
+          "sliceName": "SubmissionLineageRetrieved",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "91aa46fa-45ed-453c-ba61-75e572a714b6",
+              "title": "SubmissionLineageRetrieved",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "715afb2e-923c-487a-aa12-5ec59f071825",
+          "title": "S1b.2 PolicyOriginationView reflects the retrieved lineage",
+          "chapter": "Search & Retrieval",
+          "sliceName": "SubmissionLineageRetrieved",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "91aa46fa-45ed-453c-ba61-75e572a714b6",
+              "title": "SubmissionLineageRetrieved",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "0d027666-f0f4-45e0-a1de-e129937798c8",
+              "title": "PolicyOriginationView",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S1b.2-empty",
+          "title": "S1b.2-empty No lineage found for an unbound submission",
+          "chapter": "Search & Retrieval",
+          "sliceName": "SubmissionLineageRetrieved",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "0d027666-f0f4-45e0-a1de-e129937798c8",
+              "title": "PolicyOriginationView",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

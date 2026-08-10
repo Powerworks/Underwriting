@@ -1,0 +1,292 @@
+{
+  "slices": [
+    {
+      "id": "60181785-1bc3-4140-b27e-46d2cf09edf0",
+      "title": "PolicyCancelled",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Binding",
+      "context": "Binding",
+      "commands": [
+        {
+          "id": "72015568-3a12-4387-97a1-523deb543818",
+          "title": "CancelPolicy",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "policyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cancellationReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "initiatedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "ba10d1f5-1812-41c5-a1eb-9c974bd86492",
+              "type": "OUTBOUND",
+              "title": "PolicyCancelled",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Interaction",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyCancelled",
+          "description": "S3.4",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "ba10d1f5-1812-41c5-a1eb-9c974bd86492",
+          "title": "PolicyCancelled",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "policyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "effectiveDate",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Date",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "initiatedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "returnPremiumBasis",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cancelledAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "72015568-3a12-4387-97a1-523deb543818",
+              "type": "INBOUND",
+              "title": "CancelPolicy",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Policy",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyCancelled",
+          "description": "S3.4: routine broker-requested or underwriter-initiated cancellation. Triggers the exposure reduction already modeled in S1c.4 - return premium calculation itself feeds Bordereaux/Settlement (Context 4), not computed here. For-cause cancellations use the separate PolicyCancelledForCause event instead, given the compliance/dispute implications of material misrepresentation.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "9d3c5627-885e-408a-80b1-7c53faa3a8b6",
+          "title": "S3.4 Routine policy cancellation",
+          "chapter": "Binding",
+          "sliceName": "PolicyCancelled",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "72015568-3a12-4387-97a1-523deb543818",
+              "title": "CancelPolicy",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "ba10d1f5-1812-41c5-a1eb-9c974bd86492",
+              "title": "PolicyCancelled",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S3.4-err-dup",
+          "title": "S3.4-err Cancellation attempted on an already-cancelled policy",
+          "chapter": "Binding",
+          "sliceName": "PolicyCancelled",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "ba10d1f5-1812-41c5-a1eb-9c974bd86492",
+              "title": "PolicyCancelled",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "72015568-3a12-4387-97a1-523deb543818",
+              "title": "CancelPolicy",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "b3a906ba-9dd4-40a8-8206-600ca6ad838c",
+              "title": "S3.4-err Cancellation attempted on an already-cancelled policy",
+              "description": "Policy has already been cancelled; a duplicate cancellation is rejected.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

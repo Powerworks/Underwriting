@@ -1,0 +1,119 @@
+{
+  "slices": [
+    {
+      "id": "f3e6ec95-113a-4525-bebf-f46cd9ce942a",
+      "title": "PendingReferralHeld",
+      "status": "Created",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [],
+      "events": [
+        {
+          "id": "929a0bce-4e51-4a2b-8812-06d0b93af136",
+          "title": "PendingReferralHeld",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "referralId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "heldAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PendingReferralHeld",
+          "description": "S2.5: flagged for governance attention when no automatic reroute can be safely inferred (e.g. no clear equivalent-authority holder).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "45847a27-6062-49ed-9cb5-8e647ae1d1e8",
+          "title": "S2.5 Pending referral held for governance attention",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "PendingReferralHeld",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "f597069b-ec96-4af6-a2b7-4b58ec069a4a",
+              "title": "SubmissionReferred",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "929a0bce-4e51-4a2b-8812-06d0b93af136",
+              "title": "PendingReferralHeld",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "slices": [
+    {
+      "id": "1a638cc6-e2be-4403-815a-3067d3d22b83",
+      "title": "PotentialDuplicateSubmissionDetected",
+      "status": "Created",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "d2066894-0f37-4237-934b-0027da71b0ca",
+          "title": "PotentialDuplicateSubmissionDetected",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "suspectedOriginalSubmissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "matchBasis",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "confidenceLevel",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "detectedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PotentialDuplicateSubmissionDetected",
+          "description": "New submission is always recorded regardless (never silently dropped) - this event flags it as a possible resubmission alongside an existing open submission. OPEN QUESTION (flagged by BA): exact matching heuristic (exact-field vs fuzzy/probabilistic) materially affects false-positive rate and needs a real answer, not a placeholder.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "5d457436-35b5-48e9-a66d-718109beb1f1",
+          "title": "S1a.4 Duplicate submission received",
+          "chapter": "Submission Intake",
+          "sliceName": "PotentialDuplicateSubmissionDetected",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+              "title": "BrokerSubmissionReceived",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [
+            {
+              "id": "62463707-86df-4058-9131-c52ddad00f86",
+              "title": "ReceiveBrokerSubmission",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+              "title": "BrokerSubmissionReceived",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            },
+            {
+              "id": "d2066894-0f37-4237-934b-0027da71b0ca",
+              "title": "PotentialDuplicateSubmissionDetected",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

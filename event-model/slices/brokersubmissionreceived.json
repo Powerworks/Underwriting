@@ -1,0 +1,275 @@
+{
+  "slices": [
+    {
+      "id": "8b6e908b-6bed-4af5-a482-c6682147ab61",
+      "title": "BrokerSubmissionReceived",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [
+        {
+          "id": "62463707-86df-4058-9131-c52ddad00f86",
+          "title": "ReceiveBrokerSubmission",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submittingContact",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "cellIdHint",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "classOfBusinessHint",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rawPayload",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "sourceChannel",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+              "type": "OUTBOUND",
+              "title": "BrokerSubmissionReceived",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Interaction",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BrokerSubmissionReceived",
+          "description": "Renamed from SubmitBrokerSubmission - actor is the broker's system or Broker Connect's own ingestion service acting on the broker's behalf, not necessarily a direct user action. rawPayload is mapped to the ACORD standard schema (ADEPT) specifically - this is what enables automated data exchange across global broker systems generally, not a Howden-specific format, eliminating manual translation/mapping into internal databases.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+          "title": "BrokerSubmissionReceived",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "submittingContact",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rawPayloadRef",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "sourceChannel",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "receivedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "62463707-86df-4058-9131-c52ddad00f86",
+              "type": "INBOUND",
+              "title": "ReceiveBrokerSubmission",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BrokerSubmissionReceived",
+          "description": "The raw receipt always succeeds if the payload arrives at all - always recorded regardless of what normalization/routing/duplicate-checking finds downstream. Class of business, territory, and other risk detail move to SubmissionNormalized once extraction succeeds.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "SCN-S1a.1-err-malformed",
+          "title": "S1a.1-err Submission received with no cell or class hint",
+          "chapter": "Submission Intake",
+          "sliceName": "BrokerSubmissionReceived",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "62463707-86df-4058-9131-c52ddad00f86",
+              "title": "ReceiveBrokerSubmission",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "7af34236-f3e8-4c15-9a26-fa8337a1a7d5",
+              "title": "S1a.1-err Submission received with no cell or class hint",
+              "description": "Both cellIdHint and classOfBusinessHint are missing; submission cannot be routed for normalization without at least one.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

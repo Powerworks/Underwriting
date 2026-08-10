@@ -1,0 +1,289 @@
+{
+  "slices": [
+    {
+      "id": "323a5e11-2a90-4625-a4d6-05b68b5fd95a",
+      "title": "AdjustmentLineRaised",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Bordereaux Settlement",
+      "context": "Bordereaux Settlement",
+      "commands": [
+        {
+          "id": "a5f872b5-e37a-4c35-a742-82e9004c40f4",
+          "title": "RaisePriorPeriodAdjustment",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "originalBordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "originalLineId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "adjustmentAmount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "d1f5b340-1a8f-4dad-8f05-07c3e3edd27a",
+              "type": "OUTBOUND",
+              "title": "AdjustmentLineRaised",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "AdjustmentLineRaised",
+          "description": "An error found after a bordereau was already agreed is corrected via a new adjustment line in a future period - never by editing history. Bordereaux are an append-only ledger, mirroring the underlying policy transactions.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "d1f5b340-1a8f-4dad-8f05-07c3e3edd27a",
+          "title": "AdjustmentLineRaised",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "adjustmentId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "originalBordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "originalLineReference",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "correctionAmount",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "raisedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "targetSettlementPeriod",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "requiresSeparateAgreement",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Boolean",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "raisedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "a5f872b5-e37a-4c35-a742-82e9004c40f4",
+              "type": "INBOUND",
+              "title": "RaisePriorPeriodAdjustment",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Bordereau",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "AdjustmentLineRaised",
+          "description": "S4.4: the correction flows into next period's BordereauDrafted sweep as a new line - the original historical bordereau remains untouched, consistent with the immutable-ledger principle running through the whole model.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "f0f905ea-67a2-4f41-9d0b-9ae860bc2260",
+          "title": "S4.4 Post-agreement correction via adjustment line",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "AdjustmentLineRaised",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "a5f872b5-e37a-4c35-a742-82e9004c40f4",
+              "title": "RaisePriorPeriodAdjustment",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "d1f5b340-1a8f-4dad-8f05-07c3e3edd27a",
+              "title": "AdjustmentLineRaised",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

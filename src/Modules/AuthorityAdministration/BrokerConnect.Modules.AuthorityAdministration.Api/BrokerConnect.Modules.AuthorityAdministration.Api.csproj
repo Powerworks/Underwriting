@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\BrokerConnect.Modules.AuthorityAdministration.Domain\BrokerConnect.Modules.AuthorityAdministration.Domain.csproj" />
+    <ProjectReference Include="..\BrokerConnect.Modules.AuthorityAdministration.Contracts\BrokerConnect.Modules.AuthorityAdministration.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\BrokerConnect.BuildingBlocks.Domain\BrokerConnect.BuildingBlocks.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Marten" Version="9.19.0" />
+    <PackageReference Include="WolverineFx.Http" Version="6.22.0" />
+    <PackageReference Include="WolverineFx.Marten" Version="6.22.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

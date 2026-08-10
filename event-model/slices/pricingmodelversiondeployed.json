@@ -1,0 +1,122 @@
+{
+  "slices": [
+    {
+      "id": "924d3801-6847-4059-b26d-fe00f334b56b",
+      "title": "PricingModelVersionDeployed",
+      "status": "Created",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "b790038e-ba27-4347-bfb8-41a3292c819b",
+          "title": "PricingModelVersionDeployed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "modelVersion",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "deployedBy",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "deployedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "changeSummary",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "PricingModel",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PricingModelVersionDeployed",
+          "description": "Rapid model deployment ('quarters to hours' per TFP's own materials) means BaselinePremiumGenerated.modelVersion needs a real referent - this is that referent, audit reference data only.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "85073dfa-6098-476b-a3f6-a1ef886f5944",
+          "title": "S1a.5 New pricing model version deployed",
+          "chapter": "Submission Intake",
+          "sliceName": "PricingModelVersionDeployed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "b790038e-ba27-4347-bfb8-41a3292c819b",
+              "title": "PricingModelVersionDeployed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

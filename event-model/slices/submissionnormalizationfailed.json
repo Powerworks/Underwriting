@@ -1,0 +1,301 @@
+{
+  "slices": [
+    {
+      "id": "21e05979-88d6-4900-b793-ff9801ce1707",
+      "title": "SubmissionNormalizationFailed",
+      "status": "Created",
+      "sliceType": "STATE_VIEW",
+      "chapter": "Submission Intake",
+      "context": "Submission Intake",
+      "commands": [],
+      "events": [
+        {
+          "id": "77a810d6-3146-4012-b78c-bcbf64c696c2",
+          "title": "SubmissionNormalizationFailed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "failureReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "rawPayloadRef",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "attemptedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "ac0209b1-39ac-4c41-994a-d658cdb64ea6",
+              "type": "OUTBOUND",
+              "title": "SubmissionExceptionQueue",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Submission",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionNormalizationFailed",
+          "description": "Missing required field, malformed data, unrecognized class code, or schema validation error. Raw payload is always preserved, never discarded. OPEN QUESTIONS (flagged by BA): (1) does the broker get an automatic notification, or is chasing manual - silent failure risks brokers bypassing the platform entirely; (2) is there a retry limit / timeout before a failed submission is considered abandoned?",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [
+        {
+          "id": "ac0209b1-39ac-4c41-994a-d658cdb64ea6",
+          "title": "SubmissionExceptionQueue",
+          "type": "READMODEL",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "brokerFirmId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "failureReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "attemptedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "status",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "77a810d6-3146-4012-b78c-bcbf64c696c2",
+              "type": "INBOUND",
+              "title": "SubmissionNormalizationFailed",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Submission Intake",
+          "lane": "Interaction",
+          "aggregate": "Submission",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "SubmissionNormalizationFailed",
+          "description": "Separate from the underwriter's main queue - submissions stuck in a failed normalization state, for operations to chase the broker or manually intervene.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "3825cecf-245f-467e-83cb-899e6450c4ae",
+          "title": "S1a.2 Submission received but fails ADEPT normalization",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionNormalizationFailed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "62463707-86df-4058-9131-c52ddad00f86",
+              "title": "ReceiveBrokerSubmission",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "4162ded2-de9d-4ade-808f-7f873168f48f",
+              "title": "BrokerSubmissionReceived",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            },
+            {
+              "id": "77a810d6-3146-4012-b78c-bcbf64c696c2",
+              "title": "SubmissionNormalizationFailed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "f91c1857-4f55-4a2a-bfaf-7466e09970a5",
+          "title": "S1a.2 SubmissionExceptionQueue reflects the failed normalization",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionNormalizationFailed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "77a810d6-3146-4012-b78c-bcbf64c696c2",
+              "title": "SubmissionNormalizationFailed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "ac0209b1-39ac-4c41-994a-d658cdb64ea6",
+              "title": "SubmissionExceptionQueue",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S1a.2-empty",
+          "title": "S1a.2-empty No failed normalizations outstanding",
+          "chapter": "Submission Intake",
+          "sliceName": "SubmissionNormalizationFailed",
+          "vertical": false,
+          "expectEmptyList": true,
+          "examples": [],
+          "given": [],
+          "when": [],
+          "then": [
+            {
+              "id": "ac0209b1-39ac-4c41-994a-d658cdb64ea6",
+              "title": "SubmissionExceptionQueue",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "READMODEL",
+              "fields": [],
+              "expectEmptyList": true
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

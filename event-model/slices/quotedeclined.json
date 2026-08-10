@@ -1,0 +1,227 @@
+{
+  "slices": [
+    {
+      "id": "77190303-8428-42ce-b298-3ea38903e3ce",
+      "title": "QuoteDeclined",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [
+        {
+          "id": "7f8d4fd3-e5ec-4d4f-8708-34e32b66f2fd",
+          "title": "DeclineQuote",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "quoteId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declineReason",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "68b016ac-bfab-443c-950f-bfaa0c38ef57",
+              "type": "OUTBOUND",
+              "title": "QuoteDeclined",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Interaction",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteDeclined",
+          "description": "Broker-initiated, active decline rather than passive expiry.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "68b016ac-bfab-443c-950f-bfaa0c38ef57",
+          "title": "QuoteDeclined",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "quoteId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declineReason",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declinedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "7f8d4fd3-e5ec-4d4f-8708-34e32b66f2fd",
+              "type": "INBOUND",
+              "title": "DeclineQuote",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteDeclined",
+          "description": "S2.9: kept distinct from QuoteExpired - an active decline (especially 'placed elsewhere') is genuinely useful competitive-intelligence data that passive expiry isn't.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "24a456dd-32a4-4204-be49-e3fb01601c28",
+          "title": "S2.9 Broker explicitly declines the quote",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteDeclined",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "7f8d4fd3-e5ec-4d4f-8708-34e32b66f2fd",
+              "title": "DeclineQuote",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "68b016ac-bfab-443c-950f-bfaa0c38ef57",
+              "title": "QuoteDeclined",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S2.9-err-accepted",
+          "title": "S2.9-err Decline attempted on an already-accepted quote",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteDeclined",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "30962c6e-fba0-4ad5-ac13-323a6d455e79",
+              "title": "QuoteAccepted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "7f8d4fd3-e5ec-4d4f-8708-34e32b66f2fd",
+              "title": "DeclineQuote",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "012742b3-69f6-4390-822b-27eee6aea45d",
+              "title": "S2.9-err Decline attempted on an already-accepted quote",
+              "description": "Quote has already been accepted by the broker; a decline can no longer be recorded against it.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

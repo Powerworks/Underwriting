@@ -1,0 +1,250 @@
+{
+  "slices": [
+    {
+      "id": "ca6ec27b-82fb-4514-b2ed-5636ae857a33",
+      "title": "BordereauAgreed",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Bordereaux Settlement",
+      "context": "Bordereaux Settlement",
+      "commands": [
+        {
+          "id": "d3f17a34-1e48-4f91-b728-c98cfc4e9b7c",
+          "title": "AgreeBordereau",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "19748a2d-950c-4b4c-9668-f511201aa0a1",
+              "type": "OUTBOUND",
+              "title": "BordereauAgreed",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauAgreed",
+          "description": "Once every queried line is resolved, the capacity provider agrees the bordereau - this is the point it becomes a real financial obligation, not just a draft.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "19748a2d-950c-4b4c-9668-f511201aa0a1",
+          "title": "BordereauAgreed",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "agreedByTFP",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "agreedByProvider",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "finalAgreedTotal",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Decimal",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "agreedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "d3f17a34-1e48-4f91-b728-c98cfc4e9b7c",
+              "type": "INBOUND",
+              "title": "AgreeBordereau",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Bordereau",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauAgreed",
+          "description": "S4.1/S4.2: only fires once BordereauSubmittedForAgreement has been confirmed by the provider AND zero queries remain open on the bordereau - by construction, since any query still open at period-close is resolved via BordereauLineResolved or excluded via BordereauLineDeferred before this point. No bordereau is ever agreed with a genuinely unresolved query still attached.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "fc1f34c2-94e6-496a-81d5-ef8103da613f",
+          "title": "S4.1 Bordereau agreed by provider",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauAgreed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "6896defc-5417-4505-a1fa-429ad3606538",
+              "title": "BordereauSubmittedForAgreement",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [
+            {
+              "id": "d3f17a34-1e48-4f91-b728-c98cfc4e9b7c",
+              "title": "AgreeBordereau",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "19748a2d-950c-4b4c-9668-f511201aa0a1",
+              "title": "BordereauAgreed",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S4.2-err-openquery",
+          "title": "S4.2-err Agreement attempted with an unresolved line query open",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauAgreed",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "94bd52ba-ea00-415c-8a5b-588a73a5aae7",
+              "title": "BordereauDrafted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "d3f17a34-1e48-4f91-b728-c98cfc4e9b7c",
+              "title": "AgreeBordereau",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "cf2500f6-0c63-4afe-b5f0-103477456bf6",
+              "title": "S4.2-err Agreement attempted with an unresolved line query open",
+              "description": "One or more lines on this bordereau have an unresolved query; the bordereau cannot be agreed until every query is resolved or deferred.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

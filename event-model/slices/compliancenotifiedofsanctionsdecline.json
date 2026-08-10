@@ -1,0 +1,119 @@
+{
+  "slices": [
+    {
+      "id": "d8de5239-9507-4338-9830-2935c7e7a4be",
+      "title": "ComplianceNotifiedOfSanctionsDecline",
+      "status": "Created",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [],
+      "events": [
+        {
+          "id": "327597ac-c41a-43a7-ab19-7dd76ca82160",
+          "title": "ComplianceNotifiedOfSanctionsDecline",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "declineReasonDetail",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "notifiedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "SubmissionAssessment",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "ComplianceNotifiedOfSanctionsDecline",
+          "description": "S2.6: mandatory downstream notification specifically for declineReasonCode=sanctioned-territory, given the regulatory seriousness versus an ordinary off-appetite decline.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "8dddd95c-bedf-4008-a272-d6a8a055159b",
+          "title": "S2.6 Compliance notified of sanctions-related decline",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "ComplianceNotifiedOfSanctionsDecline",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "e0262010-7666-4bfd-bd18-c7aaede3a760",
+              "title": "SubmissionDeclined",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "327597ac-c41a-43a7-ab19-7dd76ca82160",
+              "title": "ComplianceNotifiedOfSanctionsDecline",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

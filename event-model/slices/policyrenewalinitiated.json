@@ -1,0 +1,369 @@
+{
+  "slices": [
+    {
+      "id": "66b5af58-5973-4f0a-a19c-060b90510525",
+      "title": "PolicyRenewalInitiated",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Binding",
+      "context": "Binding",
+      "commands": [
+        {
+          "id": "5e56127f-2d16-4c56-9e55-d29472a79aa5",
+          "title": "InitiateRenewal",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "expiringPolicyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "proposedRenewalTerms",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "premium",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "effectiveDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "expiryDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "0e5e2851-8bb6-42f5-b225-57953d4450d0",
+              "type": "OUTBOUND",
+              "title": "PolicyRenewalInitiated",
+              "elementType": "EVENT"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Interaction",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyRenewalInitiated",
+          "description": "S3.5: broker-initiated or system-prompted ahead of expiry. Renamed from RenewPolicy for clarity that this only initiates the loop, it doesn't itself bind anything.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "0e5e2851-8bb6-42f5-b225-57953d4450d0",
+          "title": "PolicyRenewalInitiated",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "expiringPolicyId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "newSubmissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "proposedRenewalTerms",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "premium",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "effectiveDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "expiryDate",
+                  "type": "Date",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "unconditionalReassessment",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Boolean",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "initiatedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "5e56127f-2d16-4c56-9e55-d29472a79aa5",
+              "type": "INBOUND",
+              "title": "InitiateRenewal",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Binding",
+          "lane": "Policy",
+          "aggregate": "Policy",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "PolicyRenewalInitiated",
+          "description": "S3.5: 'loops back into a fresh submission/bind cycle, not shown as a literal loop on this timeline' - genuinely re-enters Context 1a/2 rather than a special renewal path. OPEN QUESTIONS (unresolved): does the new submission carry forward exposure/PML context from the expiring policy automatically, given Context 1c/1d/1e's exploratory status - flagged for later, but the linkage should exist even before those contexts are built. What happens if renewal is initiated but the broker doesn't respond before original expiry - lapse vs. grace/held-covered period is a real contractual question for underwriting stakeholders, not an architecture default.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "f020a854-27fe-49c6-8f66-45c6349fa549",
+          "title": "S3.5 Renewal initiated ahead of expiry",
+          "chapter": "Binding",
+          "sliceName": "PolicyRenewalInitiated",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "0111a7c6-81c5-4209-a3c2-3940cecdf72a",
+              "title": "PolicyBound",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [
+            {
+              "id": "5e56127f-2d16-4c56-9e55-d29472a79aa5",
+              "title": "InitiateRenewal",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "0e5e2851-8bb6-42f5-b225-57953d4450d0",
+              "title": "PolicyRenewalInitiated",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S3.5-err-cancelled",
+          "title": "S3.5-err Renewal attempted on a cancelled policy",
+          "chapter": "Binding",
+          "sliceName": "PolicyRenewalInitiated",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "ba10d1f5-1812-41c5-a1eb-9c974bd86492",
+              "title": "PolicyCancelled",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "5e56127f-2d16-4c56-9e55-d29472a79aa5",
+              "title": "InitiateRenewal",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "c38d6f3f-55ec-415b-b9f3-8226d6e820ba",
+              "title": "S3.5-err Renewal attempted on a cancelled policy",
+              "description": "Expiring policy has already been cancelled; there is nothing to renew.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "slices": [
+    {
+      "id": "ab5fdad8-bb29-418d-beb5-57b8f6214dc1",
+      "title": "QuoteAccepted",
+      "status": "Created",
+      "sliceType": "STATE_CHANGE",
+      "chapter": "Underwriting Decisioning",
+      "context": "Underwriting Decisioning",
+      "commands": [
+        {
+          "id": "c2a3859a-1e48-41d9-8a39-f25b953dc74e",
+          "title": "AcceptQuote",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "submissionId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "acceptedAt",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "30962c6e-fba0-4ad5-ac13-323a6d455e79",
+              "type": "OUTBOUND",
+              "title": "QuoteAccepted",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "8c28ebd0-b1b5-42c0-90ac-a1770b9c4a58",
+              "type": "INBOUND",
+              "title": "QuoteView",
+              "elementType": "SCREEN"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Interaction",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteAccepted",
+          "description": "Broker accepts the quote - this is what makes the submission eligible to bind. Modeled as its own event because a quote can also expire or be declined without binding.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "30962c6e-fba0-4ad5-ac13-323a6d455e79",
+          "title": "QuoteAccepted",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "quoteId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "acceptedTerms",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "Custom",
+              "cardinality": "Single",
+              "subfields": [
+                {
+                  "name": "lineSize",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "pricing",
+                  "type": "Decimal",
+                  "query": false,
+                  "edited": true,
+                  "optional": false,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                },
+                {
+                  "name": "conditions",
+                  "type": "String",
+                  "query": false,
+                  "edited": true,
+                  "optional": true,
+                  "generated": false,
+                  "subfields": [],
+                  "cardinality": "Single",
+                  "idAttribute": false,
+                  "showAttributes": false,
+                  "technicalAttribute": false
+                }
+              ]
+            },
+            {
+              "name": "brokerContact",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "acceptedAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "c2a3859a-1e48-41d9-8a39-f25b953dc74e",
+              "type": "INBOUND",
+              "title": "AcceptQuote",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Underwriting Decisioning",
+          "lane": "Submission Decision",
+          "aggregate": "Quote",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "QuoteAccepted",
+          "description": "Submission is now eligible to bind.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "9b93d03b-79d5-4529-b290-06d39ed43478",
+          "title": "S2.7 Quote accepted promptly",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteAccepted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [],
+          "when": [
+            {
+              "id": "c2a3859a-1e48-41d9-8a39-f25b953dc74e",
+              "title": "AcceptQuote",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": []
+            }
+          ],
+          "then": [
+            {
+              "id": "30962c6e-fba0-4ad5-ac13-323a6d455e79",
+              "title": "QuoteAccepted",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        },
+        {
+          "id": "SCN-S2.7-err-expired",
+          "title": "S2.7-err Accept attempted on an expired quote",
+          "chapter": "Underwriting Decisioning",
+          "sliceName": "QuoteAccepted",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "09d9affa-11a5-4478-a4df-313e2ab535d0",
+              "title": "QuoteIssued",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "when": [
+            {
+              "id": "c2a3859a-1e48-41d9-8a39-f25b953dc74e",
+              "title": "AcceptQuote",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "COMMAND",
+              "fields": [],
+              "expectEmptyList": false
+            }
+          ],
+          "then": [
+            {
+              "id": "4f0d1603-2ac5-47f7-82b1-a9191abd0c2a",
+              "title": "S2.7-err Accept attempted on an expired quote",
+              "description": "Quote's validity period has elapsed (QuoteExpired already recorded); acceptance after expiry is rejected.",
+              "type": "SPEC_ERROR",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}

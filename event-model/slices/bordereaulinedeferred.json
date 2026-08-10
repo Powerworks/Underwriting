@@ -1,0 +1,267 @@
+{
+  "slices": [
+    {
+      "id": "48f45bf9-4e30-42b2-8c25-fbec783f40d4",
+      "title": "BordereauLineDeferred",
+      "status": "Created",
+      "sliceType": "AUTOMATION",
+      "chapter": "Bordereaux Settlement",
+      "context": "Bordereaux Settlement",
+      "commands": [
+        {
+          "id": "a047d9c8-14d3-4535-ab5d-163e6d336c0a",
+          "title": "RaiseBordereauQuery",
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "lineReference",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "queryReason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "9a49e4fc-6994-4265-83fd-7d7639cebc40",
+              "type": "OUTBOUND",
+              "title": "BordereauLineDeferred",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "209a92fc-4d9b-4b9e-b7c3-95e8376a38bb",
+              "type": "INBOUND",
+              "title": "DeferQueriedLineAtPeriodClose",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Interaction",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauLineDeferred",
+          "description": "Relocated here from its original column, where it had never actually landed on the grid due to the command/readmodel same-cell collision (BordereauDetail took the interaction cell there).",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "events": [
+        {
+          "id": "9a49e4fc-6994-4265-83fd-7d7639cebc40",
+          "title": "BordereauLineDeferred",
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bordereauId",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "lineReference",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "deferredToBordereauId",
+              "optional": true,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": false,
+              "edited": true,
+              "idAttribute": false,
+              "type": "String",
+              "cardinality": "Single",
+              "subfields": []
+            },
+            {
+              "name": "deferredAt",
+              "optional": false,
+              "showAttributes": false,
+              "technicalAttribute": false,
+              "query": false,
+              "generated": true,
+              "edited": true,
+              "idAttribute": false,
+              "type": "DateTime",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "dependencies": [
+            {
+              "id": "a047d9c8-14d3-4535-ab5d-163e6d336c0a",
+              "type": "INBOUND",
+              "title": "RaiseBordereauQuery",
+              "elementType": "COMMAND"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Bordereau",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauLineDeferred",
+          "description": "S4.3: recommended default over blocking the whole bordereau - a single disputed line shouldn't hold up cash movement on everything else in the period. Mirrors the AdjustmentLineRaised pattern (S4.4) already established: a line rolls into a future period's draft, never editing history. This is what makes BordereauAgreed's 'zero open queries' rule always achievable by period-close - open queries are always either resolved or deferred before agreement, never left dangling.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "processors": [
+        {
+          "id": "209a92fc-4d9b-4b9e-b7c3-95e8376a38bb",
+          "title": "DeferQueriedLineAtPeriodClose",
+          "type": "AUTOMATION",
+          "fields": [],
+          "dependencies": [
+            {
+              "id": "a047d9c8-14d3-4535-ab5d-163e6d336c0a",
+              "type": "OUTBOUND",
+              "title": "RaiseBordereauQuery",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "1a5c048b-6573-46b8-a667-3da0ada3d75a",
+              "type": "INBOUND",
+              "title": "UnbilledTransactionsForPeriod",
+              "elementType": "READMODEL"
+            }
+          ],
+          "modelContext": "Bordereaux Settlement",
+          "lane": "Actor",
+          "aggregate": "Bordereau",
+          "aggregateDependencies": [],
+          "triggers": [],
+          "tags": [],
+          "slice": "BordereauLineDeferred",
+          "description": "Trigger: a BordereauLineQueried remains open as the period's normal processing timeline elapses.",
+          "context": "INTERNAL",
+          "elementContext": "INTERNAL",
+          "listElement": false,
+          "todoList": false,
+          "createsAggregate": false,
+          "elementCopy": false,
+          "sketched": false,
+          "comments": []
+        }
+      ],
+      "tables": [],
+      "specifications": [
+        {
+          "id": "d1d3c408-2f60-480a-825b-609822c5a8ca",
+          "title": "S4.3 Unresolved line deferred to next period rather than blocking settlement",
+          "chapter": "Bordereaux Settlement",
+          "sliceName": "BordereauLineDeferred",
+          "vertical": false,
+          "expectEmptyList": false,
+          "examples": [],
+          "given": [
+            {
+              "id": "cf06c905-289e-4415-b1fd-4205ca8ec751",
+              "title": "BordereauLineQueried",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ],
+          "when": [],
+          "then": [
+            {
+              "id": "9a49e4fc-6994-4265-83fd-7d7639cebc40",
+              "title": "BordereauLineDeferred",
+              "tags": [],
+              "index": 0,
+              "specRow": 0,
+              "type": "EVENT",
+              "fields": []
+            }
+          ]
+        }
+      ],
+      "actors": [],
+      "aggregates": [],
+      "screenImages": [],
+      "comments": []
+    }
+  ]
+}
