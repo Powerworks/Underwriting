@@ -156,7 +156,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Done when**: No build/test errors
   - **Commit**: `chore(submission-intake): pass quality checkpoint` (if fixes needed)
 
-- [ ] 3.4 [VERIFY] VE1 E2E startup: launch `Api.Host` in Development, wait for `/health`
+- [x] 3.4 [VERIFY] VE1 E2E startup: launch `Api.Host` in Development, wait for `/health`
   - **Do**: 1. `ASPNETCORE_ENVIRONMENT=Development dotnet run --project src/Api.Host/Api.Host.csproj &`. 2. Record PID to `/tmp/ve-pids.txt`. 3. Poll `http://localhost:5132/health` up to 60s.
   - **Verify**: `curl -sf http://localhost:5132/health | grep -q '"status":"Healthy"' && echo PASS`
   - **Done when**: Server responding on 5132
