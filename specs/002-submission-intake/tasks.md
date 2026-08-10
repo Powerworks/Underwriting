@@ -41,7 +41,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `find src/Modules/SubmissionIntake -name "*.csproj" | wc -l | grep -q 4 && echo PASS`
   - **Commit**: `chore(submission-intake): scaffold module projects`
 
-- [ ] 1.2 [P] Create `SubmissionIntake.{Domain,Api}.Tests` and `SubmissionIntake.IntegrationTests` project stubs
+- [x] 1.2 [P] Create `SubmissionIntake.{Domain,Api}.Tests` and `SubmissionIntake.IntegrationTests` project stubs
   - **Do**: 1. `dotnet new xunit` for each of the 3 test projects under `tests/Modules/SubmissionIntake/`. 2. Reference the corresponding Api/Domain project(s) from each.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.{Domain,Api}.Tests/*.csproj`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/*.csproj`
   - **Done when**: All 3 test `.csproj` files exist and reference the module correctly
