@@ -150,7 +150,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - _Requirements: FR-1, AC-1.1_
   - _Design: Commands table, Interfaces, Security Considerations (system/service-to-service auth, `[Authorize]` TODO)_
 
-- [ ] 3.3 [VERIFY] Quality checkpoint: build + Layer 1/2 tests pass
+- [x] 3.3 [VERIFY] Quality checkpoint: build + Layer 1/2 tests pass
   - **Do**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests`
   - **Verify**: All commands exit 0
   - **Done when**: No build/test errors
