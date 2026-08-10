@@ -10,3 +10,4 @@ obj/
 specs/.current-spec
 specs/.index/
 **/.progress.md
+**/.ralph-state.json
