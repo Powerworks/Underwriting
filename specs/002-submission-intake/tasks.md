@@ -162,6 +162,16 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Done when**: Server responding on 5132
   - **Commit**: None
 
+- [x] 3.4.1 [FIX 3.4] Fix: Wolverine TypeLoadMode.Dynamic has no IAssemblyGenerator registered
+  - **Do**: Address the error: `Api.Host` crashes on startup before binding port 5132 with `System.InvalidOperationException: Wolverine is running in TypeLoadMode.Dynamic... but no IAssemblyGenerator (Roslyn) is registered`.
+    1. Add `<PackageReference Include="WolverineFx.RuntimeCompilation" Version="6.22.0" />` to `src/Api.Host/Api.Host.csproj` (pin the same 6.22.0 line as the other WolverineFx.* packages already referenced there).
+    2. Confirm `dotnet restore`/`dotnet build src/Api.Host/Api.Host.csproj` succeed with the new package.
+    3. Re-launch `Api.Host` and confirm it now binds port 5132 and serves `/health` — this is purely an `Api.Host`-level infrastructure gap (missing runtime-codegen compiler), not specific to the SubmissionIntake module; do not touch SubmissionIntake source files for this fix.
+  - **Files**: `src/Api.Host/Api.Host.csproj`
+  - **Done when**: `Api.Host` starts cleanly and `curl -sf http://localhost:5132/health` returns `{"status":"Healthy"}`
+  - **Verify**: `dotnet build src/Api.Host/Api.Host.csproj && echo PASS`
+  - **Commit**: `fix(api-host): add WolverineFx.RuntimeCompilation to fix TypeLoadMode.Dynamic startup crash`
+
 - [ ] 3.5 [VERIFY] VE2 E2E check: `POST /api/v1/submission-intake/submissions` returns `201` + `submissionId`
   - **Do**: `curl -s -X POST http://localhost:5132/api/v1/submission-intake/submissions -H "Content-Type: application/json" -d '{"brokerFirmId":"acme","submittingContact":"jane@acme.com","rawPayload":{},"sourceChannel":"api"}'` — assert response has a `submissionId` GUID field.
   - **Verify**: `curl -s -o /tmp/resp.json -w "%{http_code}" -X POST http://localhost:5132/api/v1/submission-intake/submissions -H "Content-Type: application/json" -d '{"brokerFirmId":"acme","submittingContact":"jane@acme.com","rawPayload":{},"sourceChannel":"api"}' | grep -q 201 && jq -e .submissionId /tmp/resp.json && echo PASS`
