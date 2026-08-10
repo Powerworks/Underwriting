@@ -7,3 +7,5 @@ obj/
 *.user
 *.suo
 [Ll]og/
+specs/.current-spec
+**/.progress.md
