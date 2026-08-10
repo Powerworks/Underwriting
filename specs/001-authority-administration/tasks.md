@@ -247,8 +247,8 @@ FR-009 is limited to **publishing** `AuthorityLimitChangedV1` — already done i
 T034/T040 (US4/US5). This phase is the explicit checkpoint confirming that
 narrowing, not new implementation.
 
-- [ ] T055 [US9] Confirm `AuthorityLimitChangedV1` is published on both `AuthorityLimitRevised` (T034) and `AuthorityLimitRevoked` (T040) — no new code, verification only
-- [ ] T056 [US9] Add a note to `004-underwriting-decisioning/plan.md` (when that feature reaches planning) that it must consume `AuthorityLimitChangedV1` and implement `ReassessInFlightSubmissionsOnRuleChange` against its own `SubmissionAssessment` aggregate — **do not implement that automation here**
+- [X] T055 [US9] Confirm `AuthorityLimitChangedV1` is published on both `AuthorityLimitRevised` (T034) and `AuthorityLimitRevoked` (T040) — no new code, verification only. Confirmed: `ReviseAuthorityLimitIntegrationTests.Revise_publishes_AuthorityLimitChangedV1` (T029) and `RevokeAuthorityLimitIntegrationTests.Revoke_publishes_AuthorityLimitChangedV1` (T036), both against a real Postgres session with the actual handler code path (not a hand-written assertion divorced from the handler), both passing.
+- [ ] T056 [US9] Add a note to `004-underwriting-decisioning/plan.md` (when that feature reaches planning) that it must consume `AuthorityLimitChangedV1` and implement `ReassessInFlightSubmissionsOnRuleChange` against its own `SubmissionAssessment` aggregate — **do not implement that automation here**. **Genuinely not actionable yet, not forgotten**: `004-underwriting-decisioning` has no `plan.md` — only `spec.md` exists, `/plan` hasn't been run for it. The substance this task wants recorded already lives in `research.md` Decision 4 (the cross-module boundary rationale) and in `ReviseAuthorityLimitHandler.cs`/`RevokeAuthorityLimitHandler.cs`'s own comments citing it — revisit this specific task (add the note to 004's actual `plan.md`) once 004 reaches `/plan`.
 
 **Checkpoint**: Feature complete except cross-module consumption (deferred to `004`).
 
