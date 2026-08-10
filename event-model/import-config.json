@@ -337,6 +337,12 @@
           ],
           "dependencies": [
             {
+              "id": "84fc097f-de83-4ae1-9a6f-77ee3c74422c",
+              "type": "OUTBOUND",
+              "title": "AuthorityMatrix",
+              "elementType": "READMODEL"
+            },
+            {
               "id": "f62b101a-5b93-4fdc-84bf-d006494f974d",
               "type": "INBOUND",
               "title": "GrantCellAuthorityLimit",
@@ -545,6 +551,12 @@
           ],
           "dependencies": [
             {
+              "id": "3a6196cc-ed64-4c66-b8f8-a4b9139e5bdf",
+              "type": "INBOUND",
+              "title": "GrantUnderwriterAuthorityLimit",
+              "elementType": "COMMAND"
+            },
+            {
               "id": "84fc097f-de83-4ae1-9a6f-77ee3c74422c",
               "type": "OUTBOUND",
               "title": "AuthorityMatrix",
@@ -747,6 +759,24 @@
           ],
           "dependencies": [
             {
+              "id": "40a4a21f-506e-408c-a2c9-82f4ec943eba",
+              "type": "INBOUND",
+              "title": "CellAuthorityLimitGranted",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "e17d213c-4261-4c18-bf40-f6a45fe173fc",
+              "type": "INBOUND",
+              "title": "AuthorityLimitRevised",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "c05ac25c-d24d-46cd-9841-be0fe777cfc7",
+              "type": "INBOUND",
+              "title": "AuthorityLimitRevoked",
+              "elementType": "EVENT"
+            },
+            {
               "id": "58f0f31f-341d-42b3-8e38-73b2ac562f0b",
               "type": "INBOUND",
               "title": "UnderwriterAuthorityLimitGranted",
@@ -930,6 +960,18 @@
             }
           ],
           "dependencies": [
+            {
+              "id": "58f0f31f-341d-42b3-8e38-73b2ac562f0b",
+              "type": "OUTBOUND",
+              "title": "UnderwriterAuthorityLimitGranted",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "1495da8a-8392-4c92-aceb-e3f75308358a",
+              "type": "OUTBOUND",
+              "title": "UnderwriterAuthorityLimitGranted",
+              "elementType": "EVENT"
+            },
             {
               "id": "90fd73e6-2a78-46c9-999e-19c6f9c9aa18",
               "type": "OUTBOUND",
@@ -1340,6 +1382,12 @@
           ],
           "dependencies": [
             {
+              "id": "84fc097f-de83-4ae1-9a6f-77ee3c74422c",
+              "type": "OUTBOUND",
+              "title": "AuthorityMatrix",
+              "elementType": "READMODEL"
+            },
+            {
               "id": "80a71127-fccd-4ceb-977a-87e35029bea7",
               "type": "INBOUND",
               "title": "ReviseAuthorityLimit",
@@ -1435,7 +1483,7 @@
           ],
           "then": [
             {
-              "id": "80601f4b-f067-4fec-816a-51f2f03b9504",
+              "id": "ee51acd4-2ab8-4611-a833-4e4e404e46f2",
               "title": "S0.4-err Revision attempted on a revoked authority",
               "description": "Authority limit has been revoked; it must be re-granted rather than revised.",
               "type": "SPEC_ERROR",
@@ -1628,6 +1676,12 @@
           ],
           "dependencies": [
             {
+              "id": "84fc097f-de83-4ae1-9a6f-77ee3c74422c",
+              "type": "OUTBOUND",
+              "title": "AuthorityMatrix",
+              "elementType": "READMODEL"
+            },
+            {
               "id": "a5b22189-aba5-43ef-b761-98a938c7a417",
               "type": "INBOUND",
               "title": "RevokeAuthorityLimit",
@@ -1729,7 +1783,7 @@
           ],
           "then": [
             {
-              "id": "f883dc6b-9238-4e28-94d7-a52471e8ce6e",
+              "id": "1251b47b-00e7-45bb-b350-81e106e043ca",
               "title": "S0.5-err Revoke attempted on an already-revoked authority",
               "description": "Authority limit has already been revoked; a duplicate revocation is rejected.",
               "type": "SPEC_ERROR",
@@ -2461,6 +2515,12 @@
           ],
           "dependencies": [
             {
+              "id": "3a6196cc-ed64-4c66-b8f8-a4b9139e5bdf",
+              "type": "INBOUND",
+              "title": "GrantUnderwriterAuthorityLimit",
+              "elementType": "COMMAND"
+            },
+            {
               "id": "d18458a0-3066-431a-8fd6-de2bea50824c",
               "type": "OUTBOUND",
               "title": "UnderwriterAuthorityRegister",
@@ -3172,7 +3232,7 @@
           ],
           "then": [
             {
-              "id": "adf36527-f92c-4d60-b82f-2351b0e7e118",
+              "id": "bfb65750-e674-4dba-beb1-8580144f863d",
               "title": "S1a.1-err Submission received with no cell or class hint",
               "description": "Both cellIdHint and classOfBusinessHint are missing; submission cannot be routed for normalization without at least one.",
               "type": "SPEC_ERROR",
@@ -7964,7 +8024,7 @@
           ],
           "then": [
             {
-              "id": "62ea6479-fa12-457e-9880-72206eee2c58",
+              "id": "16838b9f-283b-4760-b194-17ccddb23e6e",
               "title": "S2.2-err Assessment attempted on an already-declined submission",
               "description": "Submission has already been declined; it cannot be re-assessed without first being resubmitted.",
               "type": "SPEC_ERROR",
@@ -9035,7 +9095,7 @@
           ],
           "then": [
             {
-              "id": "4ce76b41-54c6-41a3-b67e-8c4304edd2ee",
+              "id": "ac5a5942-d325-4b72-bc49-419044c016a4",
               "title": "S2.7-err Quote issuance attempted on a declined submission",
               "description": "Submission has been declined; a quote cannot be issued against a declined submission.",
               "type": "SPEC_ERROR",
@@ -9317,7 +9377,7 @@
           ],
           "then": [
             {
-              "id": "ca895296-a766-4887-b687-990609c38138",
+              "id": "770e9d3b-5911-480e-ae2e-7db21c46f6cb",
               "title": "S2.7-err Accept attempted on an expired quote",
               "description": "Quote's validity period has elapsed (QuoteExpired already recorded); acceptance after expiry is rejected.",
               "type": "SPEC_ERROR",
@@ -10282,7 +10342,7 @@
           ],
           "then": [
             {
-              "id": "350f592b-3857-4d92-86c2-a31955166fd6",
+              "id": "694078c9-f5dd-464d-8e76-90c5633fc2ef",
               "title": "S2.9-err Decline attempted on an already-accepted quote",
               "description": "Quote has already been accepted by the broker; a decline can no longer be recorded against it.",
               "type": "SPEC_ERROR",
@@ -11381,7 +11441,7 @@
           ],
           "then": [
             {
-              "id": "52b4e4b5-982d-41aa-b0b8-c05bb92f92c6",
+              "id": "6624b72f-7961-4c80-876a-2724bcf8c850",
               "title": "S3.3-err Endorsement attempted on a cancelled policy",
               "description": "Policy has been cancelled; a cancelled policy cannot be endorsed.",
               "type": "SPEC_ERROR",
@@ -11669,7 +11729,7 @@
           ],
           "then": [
             {
-              "id": "ffde655e-f7b6-4fe5-8eeb-b2cd32937a6f",
+              "id": "d1bbbfb4-3400-466e-8f98-5a98a8046b1e",
               "title": "S3.4-err Cancellation attempted on an already-cancelled policy",
               "description": "Policy has already been cancelled; a duplicate cancellation is rejected.",
               "type": "SPEC_ERROR",
@@ -12034,7 +12094,7 @@
           ],
           "then": [
             {
-              "id": "44e4f5f3-9bea-48d9-bae9-af85d3adcd57",
+              "id": "8092caa7-ca74-445e-b445-6cd09bfc227b",
               "title": "S3.5-err Renewal attempted on a cancelled policy",
               "description": "Expiring policy has already been cancelled; there is nothing to renew.",
               "type": "SPEC_ERROR",
@@ -14178,7 +14238,7 @@
           ],
           "then": [
             {
-              "id": "9bce8498-404d-415a-bbf4-238d5ef0cb6d",
+              "id": "faa164e0-560e-4653-bcc7-5f7977ed0646",
               "title": "S4.2-err Agreement attempted with an unresolved line query open",
               "description": "One or more lines on this bordereau have an unresolved query; the bordereau cannot be agreed until every query is resolved or deferred.",
               "type": "SPEC_ERROR",
@@ -14489,7 +14549,7 @@
           ],
           "then": [
             {
-              "id": "0ea31b1f-4d37-4e44-8fde-66650a17f928",
+              "id": "eb6d6c64-1e1f-4e12-b19d-47318dcaff70",
               "title": "S4.1-err Settlement attempted before bordereau is agreed",
               "description": "Bordereau has not yet been agreed by both provider and TFP; settlement cannot proceed before agreement.",
               "type": "SPEC_ERROR",
@@ -16038,7 +16098,7 @@
           ],
           "then": [
             {
-              "id": "042b6a56-a4a4-464f-a0b9-11954105a6b9",
+              "id": "e66c5f9a-7f66-4b77-b8c0-78f328ced4a7",
               "title": "S5.2-err Reserve change attempted on a closed claim",
               "description": "Claim is closed; reserve cannot be revised without first reopening the claim.",
               "type": "SPEC_ERROR",
@@ -16367,7 +16427,7 @@
           ],
           "then": [
             {
-              "id": "35773496-8df7-46aa-88f2-2892e12ba65e",
+              "id": "d067a742-07cf-486f-8861-db0aed3ed954",
               "title": "S5.3-err Payment attempted on a closed claim",
               "description": "Claim is closed; payment must reopen the claim first before further amounts can be paid.",
               "type": "SPEC_ERROR",
@@ -16616,7 +16676,7 @@
           ],
           "then": [
             {
-              "id": "4c85a329-1994-4bb3-a02b-21cf8160f0b3",
+              "id": "30f93728-a2af-47b2-9599-b7c0533e8537",
               "title": "S5.1-err Close attempted on an already-closed claim",
               "description": "Claim has already been closed; a duplicate closure is rejected.",
               "type": "SPEC_ERROR",

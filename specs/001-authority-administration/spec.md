@@ -12,17 +12,6 @@
 
 ### Session 2026-08-09
 
-<!--
-  Reconstructed 2026-08-10: a re-run of gen_specs_from_slices.py against a refreshed
-  board pull overwrote this section (the generator has no knowledge of /speckit-clarify
-  output — see event-model-to-speckit-guide.md, "Regenerating after /speckit-clarify").
-  The 5 Q/A bullets below are rebuilt from the decisions already recorded downstream in
-  plan.md, data-model.md, quickstart.md, and research.md (all still intact and internally
-  consistent with each other) — the *resolutions* are trustworthy, but this is not a
-  verbatim recovery of the original question phrasing. Re-word if your memory of the
-  original session differs.
--->
-
 - Q: What read-consistency guarantee must `AuthorityMatrix` provide for `AssessSubmission`'s decision-time query? → A: Zero staleness — a caller's next read must reflect their own prior write in the same request (resolved as an `Inline` Marten snapshot; see SC-001).
 - Q: What values can `AuthorityLimit.status` take? → A: `Active` or `Revoked` only.
 - Q: What happens when `ReviseAuthorityLimit` targets a `Revoked` record? → A: Reject — append `AuthorityLimitRevisionRejected` (`rejectionReason: "RevokedRecord"`); no change to `status`/`version` (see FR-010).
@@ -49,9 +38,11 @@ As **GrantCellAuthorityLimit**, I want to cellAuthorityLimitGranted so that **Ce
 
 ### User Story 2 - UnderwriterAuthorityLimitGranted (Priority: P2)
 
-The system maintains **AuthorityMatrix**, projected from **UnderwriterAuthorityLimitGranted**.
+The system maintains **AuthorityMatrix**, projected from **UnderwriterAuthorityLimitGranted**, **CellAuthorityLimitGranted**, **AuthorityLimitRevised**, and **AuthorityLimitRevoked**.
 
 **Narrative** (verbatim from the board export): The view Context 2's AssessSubmission actually queries at decision time. Renamed from an earlier generic 'AuthorityLimit' readmodel to match the terminology used once Context 0 was detailed - same underlying projection.
+
+**Correction (2026-08-10)**: the story title/FR-002 originally credited only `UnderwriterAuthorityLimitGranted` — a board-authoring gap (this readmodel node was missing 3 of its 4 real inbound edges) fixed today; see the `AuthorityMatrix` entry's `Dependencies` line in the Event Model Detail appendix, now showing all 4. Without the other 3, a Cell-tier grant, a revision, or — most importantly — a **revocation** would never reach `AuthorityMatrix`, meaning `AssessSubmission` (004) could keep validating against a revoked authority limit. `plan.md`/`data-model.md`'s technical design (`Inline` snapshot of the whole `AuthorityLimit` aggregate, not a hand-rolled per-event async projection) already sidesteps this risk regardless of what this FR says — but the FR text itself needed correcting so it doesn't mislead a future reader.
 
 **Why this priority**: Read-side projection supporting other slices' decisions/queries — supporting infrastructure, not a primary user action in its own right.
 
@@ -60,6 +51,7 @@ The system maintains **AuthorityMatrix**, projected from **UnderwriterAuthorityL
 **Acceptance Scenarios**:
 
 1. **Given** S0.2: this is the record AssessSubmission (Context 2) checks against, via AuthorityMatrix., **When** UnderwriterAuthorityLimitGranted is appended, **Then** **AuthorityMatrix** reflects it
+2. **Given** a Cell-tier grant, a revision, or a revocation is appended to any `AuthorityLimit` stream, **When** the event is appended, **Then** **AuthorityMatrix** reflects it (see FR-002, corrected 2026-08-10)
 
 ---
 
@@ -73,9 +65,12 @@ As **GrantUnderwriterAuthorityLimit**, I want to underwriterAuthorityLimitReject
 
 **Independent Test**: Can be tested by invoking **GrantUnderwriterAuthorityLimit** under the right preconditions and asserting that **UnderwriterAuthorityLimitRejected** is the resulting domain event.
 
+**Correction (2026-08-10)**: this story's title and FR-003 describe only the rejection branch. `GrantUnderwriterAuthorityLimit` is a branching command — see the Event Model Detail appendix's `UnderwriterAuthorityLimitRejected` slice, whose `Dependencies` line now shows two outbound `UnderwriterAuthorityLimitGranted` edges alongside the rejected one (board edges fixed 2026-08-10; `gen_specs_from_slices.py` renders FRs per-slice and can't express this cross-slice fan-out on its own, so it's noted here by hand). Happy path: **UnderwriterAuthorityLimitGranted**. Rejection: **UnderwriterAuthorityLimitRejected** (`rejectionReason: "ExceedsCellLimit" | "DuplicateActiveGrant"`, see FR-011).
+
 **Acceptance Scenarios**:
 
 1. **Given** S0.3: requested delegation would exceed the cell's own limit. OPEN QUESTION: does rejection trigger escalation (a request to increase the cell's own overall limit, see CellAuthorityIncreaseRequested) or dead-end requiring the Cell CUO to reallocate existing underwriters' authority instead? Modeled the escalation path explicitly rather than leaving a pure dead end - see CellAuthorityIncreaseRequested., **When** GrantUnderwriterAuthorityLimit, **Then** UnderwriterAuthorityLimitRejected
+2. **Given** the requested delegation is within the cell's own limit and does not duplicate an existing Active grant for the same scope, **When** GrantUnderwriterAuthorityLimit, **Then** UnderwriterAuthorityLimitGranted
 
 ---
 
@@ -187,8 +182,8 @@ As a background policy in **Authority Administration**, the system reacts by exe
 ### Functional Requirements
 
 - **FR-001**: System MUST support **GrantCellAuthorityLimit**, producing the **CellAuthorityLimitGranted** domain event(s).
-- **FR-002**: System MUST project **AuthorityMatrix** from the **UnderwriterAuthorityLimitGranted** domain event(s).
-- **FR-003**: System MUST support **GrantUnderwriterAuthorityLimit**, producing the **UnderwriterAuthorityLimitRejected** domain event(s).
+- **FR-002**: System MUST project **AuthorityMatrix** from **CellAuthorityLimitGranted**, **UnderwriterAuthorityLimitGranted**, **AuthorityLimitRevised**, and **AuthorityLimitRevoked** (corrected 2026-08-10 — the generated text previously credited only `UnderwriterAuthorityLimitGranted`; see User Story 2's Correction note and `data-model.md`).
+- **FR-003**: System MUST support **GrantUnderwriterAuthorityLimit**, producing **UnderwriterAuthorityLimitGranted** (happy path) or **UnderwriterAuthorityLimitRejected** (`rejectionReason: "ExceedsCellLimit" | "DuplicateActiveGrant"`) (corrected 2026-08-10 — see User Story 3's Correction note).
 - **FR-004**: System MUST support **ReviseAuthorityLimit**, producing the **AuthorityLimitRevised** domain event(s).
 - **FR-005**: System MUST support **RevokeAuthorityLimit**, producing the **AuthorityLimitRevoked** domain event(s).
 - **FR-006**: System MUST project **CellAuthorityRegister** from the **CellAuthorityLimitGranted** domain event(s).
@@ -260,7 +255,7 @@ Dependencies: → CellAuthorityLimitGranted (EVENT)
 
 > S0.1: becomes the ceiling that all underwriter-level grants (S0.2) within that cell must fit inside.
 
-Dependencies: ← GrantCellAuthorityLimit (COMMAND)
+Dependencies: → AuthorityMatrix (READMODEL); ← GrantCellAuthorityLimit (COMMAND)
 
 | Field | Type | Cardinality | Flags |
 |---|---|---|---|
@@ -283,7 +278,7 @@ Dependencies: ← GrantCellAuthorityLimit (COMMAND)
 
 > S0.2: this is the record AssessSubmission (Context 2) checks against, via AuthorityMatrix.
 
-Dependencies: → AuthorityMatrix (READMODEL)
+Dependencies: ← GrantUnderwriterAuthorityLimit (COMMAND); → AuthorityMatrix (READMODEL)
 
 | Field | Type | Cardinality | Flags |
 |---|---|---|---|
@@ -304,7 +299,7 @@ Dependencies: → AuthorityMatrix (READMODEL)
 
 > The view Context 2's AssessSubmission actually queries at decision time. Renamed from an earlier generic 'AuthorityLimit' readmodel to match the terminology used once Context 0 was detailed - same underlying projection.
 
-Dependencies: ← UnderwriterAuthorityLimitGranted (EVENT)
+Dependencies: ← CellAuthorityLimitGranted (EVENT); ← AuthorityLimitRevised (EVENT); ← AuthorityLimitRevoked (EVENT); ← UnderwriterAuthorityLimitGranted (EVENT)
 
 | Field | Type | Cardinality | Flags |
 |---|---|---|---|
@@ -328,7 +323,7 @@ Dependencies: ← UnderwriterAuthorityLimitGranted (EVENT)
 
 > S0.2/S0.3: Cell CUO granting authority to an individual underwriter, validated against the cell's own limit (S0.1). OPEN QUESTION: does validation need to account for other underwriters' existing grants - an aggregate pool per cell (sum of all underwriters can't exceed the cell's limit) vs. each underwriter's limit being independent (a per-transaction ceiling, not a shared pool)? Real domain question for governance stakeholders, not a technicality.
 
-Dependencies: → UnderwriterAuthorityLimitRejected (EVENT)
+Dependencies: → UnderwriterAuthorityLimitGranted (EVENT); → UnderwriterAuthorityLimitGranted (EVENT); → UnderwriterAuthorityLimitRejected (EVENT)
 
 | Field | Type | Cardinality | Flags |
 |---|---|---|---|
@@ -375,7 +370,7 @@ Dependencies: → AuthorityLimitRevised (EVENT)
 
 > S0.4: sharpest open question in this context - a submission already in-flight (post-1a, pre-bind), assessed against the old limit, when the revision drops below what it needs. Grandfather (evaluate against authority in effect when it entered decisioning) vs re-evaluate (immediately re-check, force referral if it now breaches) are both defensible; leaning toward re-evaluation as the safer default for a governance-critical system, but this is a business decision, not an architecture default. Either way, always triggers ReassessInFlightSubmissionsOnRuleChange producing InFlightSubmissionReassessed, so the decision and its trigger are visible in the audit trail regardless of which policy stance is chosen. Same underlying 'rules changed mid-flight' problem as S1e.2's freeze-during-decisioning - solved with the same mechanism, not two bespoke ones.
 
-Dependencies: ← ReviseAuthorityLimit (COMMAND)
+Dependencies: → AuthorityMatrix (READMODEL); ← ReviseAuthorityLimit (COMMAND)
 
 | Field | Type | Cardinality | Flags |
 |---|---|---|---|
@@ -407,7 +402,7 @@ Dependencies: → AuthorityLimitRevoked (EVENT)
 
 > S0.5: an underwriter with zero authority cannot have any submission proceed under their name, referral cascade or not - same in-flight question as S0.4 with sharper urgency, triggers ReassessInFlightSubmissionsOnRuleChange immediately. OPEN QUESTION: does revocation trigger a review flag on their recently bound business, similar to a thematic file review trigger? Not modeled as its own event yet - flagged for confirmation.
 
-Dependencies: ← RevokeAuthorityLimit (COMMAND); → CellAuthorityRegister (READMODEL)
+Dependencies: → AuthorityMatrix (READMODEL); ← RevokeAuthorityLimit (COMMAND); → CellAuthorityRegister (READMODEL)
 
 | Field | Type | Cardinality | Flags |
 |---|---|---|---|
@@ -492,7 +487,7 @@ Dependencies: ← RequestCellAuthorityIncrease (COMMAND); → UnderwriterAuthori
 
 > Second instance of the same event type, paired here with the register projection it feeds (distinct from AuthorityMatrix, which is what Context 2 queries at decision time - this is the underwriter-facing historical register).
 
-Dependencies: → UnderwriterAuthorityRegister (READMODEL)
+Dependencies: ← GrantUnderwriterAuthorityLimit (COMMAND); → UnderwriterAuthorityRegister (READMODEL)
 
 | Field | Type | Cardinality | Flags |
 |---|---|---|---|
