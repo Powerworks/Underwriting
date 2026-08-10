@@ -103,7 +103,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): green - Submission aggregate skeleton and Create`
   - _Design: Components — `Submission` aggregate_
 
-- [ ] 2.4 [P] `PricingModel` aggregate skeleton (no `Apply` yet)
+- [x] 2.4 [P] `PricingModel` aggregate skeleton (no `Apply` yet)
   - **Do**: Create `PricingModel` class with a generated `Guid Id` (design's Unresolved Q3: generated id chosen over keying on `modelVersion` string, since the board marks no field `id`) and `[JsonInclude]`/`[JsonConstructor]`. `Create`/`Apply(PricingModelVersionDeployed)` deferred to Phase 9.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/PricingModel.cs`
   - **Done when**: Class compiles, no `Apply` logic yet
