@@ -2,9 +2,9 @@
   "source": "spec",
   "name": "002-submission-intake",
   "basePath": "specs/002-submission-intake",
-  "phase": "design",
+  "phase": "tasks",
   "taskIndex": 0,
-  "totalTasks": 0,
+  "totalTasks": 83,
   "taskIteration": 1,
   "maxTaskIterations": 5,
   "globalIteration": 1,
@@ -12,5 +12,6 @@
   "commitSpec": true,
   "quickMode": false,
   "awaitingApproval": true,
+  "granularity": "fine",
   "discoveredSkills": []
 }

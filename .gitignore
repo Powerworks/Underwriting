@@ -8,4 +8,5 @@ obj/
 *.suo
 [Ll]og/
 specs/.current-spec
+specs/.index/
 **/.progress.md
