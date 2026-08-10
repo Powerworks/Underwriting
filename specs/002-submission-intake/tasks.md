@@ -78,7 +78,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **⚠️ No later phase can begin until this phase is complete.**
 
-- [ ] 2.1 [P] `SubmissionIntakeEvents.cs` — all 12 event records, fields verbatim from `requirements.md`'s Event Model Detail
+- [x] 2.1 [P] `SubmissionIntakeEvents.cs` — all 12 event records, fields verbatim from `requirements.md`'s Event Model Detail
   - **Do**: Create one `sealed record` per board event (`BrokerSubmissionReceived`, `SubmissionRoutingRejected`, `SubmissionNormalized`, `SubmissionNormalizationFailed`, `SubmissionManuallyCorrected`, `PotentialDuplicateSubmissionDetected`, `SubmissionSuperseded`, `SubmissionConfirmedDistinct`, `BaselinePremiumGenerated`, `PricingBaselineAccepted`, `PricingBaselineOverridden`, `PricingModelVersionDeployed`), fields/types exactly as the Event Model Detail table lists — no invented fields (constitution Principle III).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Events/SubmissionIntakeEvents.cs`
   - **Done when**: 12 records exist, field-for-field matching the appendix
