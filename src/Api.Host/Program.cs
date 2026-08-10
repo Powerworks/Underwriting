@@ -1,5 +1,6 @@
 using BrokerConnect.BuildingBlocks.Domain;
 using BrokerConnect.Modules.AuthorityAdministration.Api;
+using BrokerConnect.Modules.SubmissionIntake.Api;
 using JasperFx;
 using JasperFx.Events.Daemon;
 using Marten;
@@ -25,7 +26,7 @@ builder.Logging.Configure(options =>
 
 // One entry per module — Api.Host composes all modules into a single deployable
 // (ADR-001). New modules register themselves here as their own feature lands.
-IMartenModuleConfiguration[] modules = [new AuthorityAdministrationModule()];
+IMartenModuleConfiguration[] modules = [new AuthorityAdministrationModule(), new SubmissionIntakeModule()];
 
 var postgresConnectionString = builder.Configuration.GetConnectionString("Postgres")
     ?? "Host=localhost;Database=brokerconnect;Username=postgres;Password=postgres";

@@ -111,7 +111,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): add PricingModel aggregate skeleton`
   - _Design: Components — `PricingModel` aggregate, Unresolved Questions (stream identity)_
 
-- [ ] 2.5 `Module.cs` (`SubmissionIntakeModule : IMartenModuleConfiguration`) + register in `Program.cs`
+- [x] 2.5 `Module.cs` (`SubmissionIntakeModule : IMartenModuleConfiguration`) + register in `Program.cs`
   - **Do**: 1. Create `SubmissionIntakeModule` setting `options.Events.DatabaseSchemaName = "submissionintake"` (no snapshot registration yet — Technical Decisions: `Submission` has no Inline snapshot, nothing queries it by id directly). 2. Add to `Api.Host/Program.cs`'s `modules` array alongside `AuthorityAdministrationModule`.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Module.cs`, `src/Api.Host/Program.cs`
   - **Done when**: `SubmissionIntakeModule` is discovered by `Api.Host` at startup

@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Modules\AuthorityAdministration\BrokerConnect.Modules.AuthorityAdministration.Api\BrokerConnect.Modules.AuthorityAdministration.Api.csproj" />
+    <ProjectReference Include="..\Modules\SubmissionIntake\BrokerConnect.Modules.SubmissionIntake.Api\BrokerConnect.Modules.SubmissionIntake.Api.csproj" />
     <ProjectReference Include="..\BuildingBlocks\BrokerConnect.BuildingBlocks.Domain\BrokerConnect.BuildingBlocks.Domain.csproj" />
   </ItemGroup>
 

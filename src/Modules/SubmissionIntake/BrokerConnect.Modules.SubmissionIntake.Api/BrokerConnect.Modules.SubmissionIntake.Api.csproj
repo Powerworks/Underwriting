@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BrokerConnect.Modules.SubmissionIntake.Domain\BrokerConnect.Modules.SubmissionIntake.Domain.csproj" />
     <ProjectReference Include="..\BrokerConnect.Modules.SubmissionIntake.Infrastructure\BrokerConnect.Modules.SubmissionIntake.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\BrokerConnect.BuildingBlocks.Domain\BrokerConnect.BuildingBlocks.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
