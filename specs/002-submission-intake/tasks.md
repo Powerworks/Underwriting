@@ -218,7 +218,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet build src/Api.Host/Api.Host.csproj && echo PASS`
   - **Commit**: `fix(submission-intake): remove redundant Api.Host to Infrastructure project reference`
 
-- [ ] 4.2 [P] Domain test: `Submission.Apply(SubmissionNormalized)` and `Apply(SubmissionNormalizationFailed)`
+- [x] 4.2 [P] Domain test: `Submission.Apply(SubmissionNormalized)` and `Apply(SubmissionNormalizationFailed)`
   - **Do**: Assert `Apply(SubmissionNormalized)` sets `ClassOfBusiness`/`Territory`/`NamedInsured`/`LineSizeSought`/`KeyTerms`/`EffectiveDateRequested`/`NormalizationStatus`; `Apply(SubmissionNormalizationFailed)` sets `NormalizationStatus` to the failure state, preserves `RawPayloadRef` (AC-4.1: never discarded). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
   - **Done when**: Tests exist and fail
