@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\BrokerConnect.Modules.SubmissionIntake.Domain\BrokerConnect.Modules.SubmissionIntake.Domain.csproj" />
+    <ProjectReference Include="..\BrokerConnect.Modules.SubmissionIntake.Infrastructure\BrokerConnect.Modules.SubmissionIntake.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

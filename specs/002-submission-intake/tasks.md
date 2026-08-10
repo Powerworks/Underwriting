@@ -34,7 +34,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Purpose**: Scaffold the module's four projects + three test projects, per `design.md`'s File Structure section. Mirrors `001`'s Phase 1, but the solution and `Api.Host` already exist — this phase only adds new projects to them.
 
-- [ ] 1.1 Create `BrokerConnect.Modules.SubmissionIntake.{Api,Domain,Infrastructure,Contracts}` project stubs
+- [x] 1.1 Create `BrokerConnect.Modules.SubmissionIntake.{Api,Domain,Infrastructure,Contracts}` project stubs
   - **Do**: 1. `dotnet new classlib` for each of the 4 projects under `src/Modules/SubmissionIntake/`. 2. Add project references: Api→Domain, Api→Infrastructure, Infrastructure→Domain, Contracts standalone. 3. Set `<TargetFramework>net10.0</TargetFramework>` in each `.csproj` (constitution Technology Constraints).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.{Api,Domain,Infrastructure,Contracts}/*.csproj`
   - **Done when**: All 4 `.csproj` files exist with correct references and TFM
