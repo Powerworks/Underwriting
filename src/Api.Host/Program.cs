@@ -1,6 +1,7 @@
 using BrokerConnect.BuildingBlocks.Domain;
 using BrokerConnect.Modules.AuthorityAdministration.Api;
 using BrokerConnect.Modules.SubmissionIntake.Api;
+using BrokerConnect.Modules.SubmissionIntake.Infrastructure;
 using JasperFx;
 using JasperFx.Events.Daemon;
 using Marten;
@@ -59,6 +60,12 @@ builder.Services.AddMarten(opts =>
     .AddAsyncDaemon(DaemonMode.Solo);
 
 builder.Services.AddWolverineHttp();
+
+// IR-001 anti-corruption-layer client (BrokerConnect.Modules.SubmissionIntake.Infrastructure).
+// IMartenModuleConfiguration has no hook for non-Marten DI services (only SchemaName/
+// Configure(StoreOptions)/IntegrationEventQueueName) — Program.cs registers infra clients
+// directly, same flat-list convention as AddMarten/AddWolverineHttp above.
+builder.Services.AddBrokerAdeptClient();
 
 var app = builder.Build();
 

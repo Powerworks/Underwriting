@@ -200,7 +200,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): add BrokerAdeptClient (IR-001)`
   - _Design: Interfaces, Dependencies (IR-001)_
 
-- [ ] 4.1.1 [FIX 4.1] Fix: `AddBrokerAdeptClient()` defined but never invoked — `IBrokerAdeptClient` not resolvable from DI container
+- [x] 4.1.1 [FIX 4.1] Fix: `AddBrokerAdeptClient()` defined but never invoked — `IBrokerAdeptClient` not resolvable from DI container
   - **Do**: Address the review finding: task 4.1's own "Done when" criterion required DI registration, but `BrokerAdeptClientServiceCollectionExtensions.AddBrokerAdeptClient()` is never called anywhere.
     1. Call `services.AddBrokerAdeptClient()` in `src/Api.Host/Program.cs` (in the `builder.Services` chain, alongside wherever other module infrastructure services are registered — check `SubmissionIntakeModule`/`Module.cs` first in case module registration is the intended call site instead of `Program.cs` directly, matching whatever convention 001 established for its own infrastructure service registration, if any).
     2. Confirm `IBrokerAdeptClient` resolves from the DI container by adding a minimal resolution check (either a quick manual `app.Services.GetRequiredService<IBrokerAdeptClient>()` smoke check during startup, or simply confirming `dotnet build`/`dotnet run` boots cleanly with the registration present — use your judgment on the lightest sufficient proof).
