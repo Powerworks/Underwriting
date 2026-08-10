@@ -87,7 +87,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - _Requirements: FR-1 through FR-12_
   - _Design: Board-Sourced vs. Inferred Elements table, Components_
 
-- [ ] 2.2 [P] Domain test: `Submission.Create(BrokerSubmissionReceived)` initializes stream state
+- [x] 2.2 [P] Domain test: `Submission.Create(BrokerSubmissionReceived)` initializes stream state
   - **Do**: Write an xUnit + Shouldly test (no mocks, per Principle IV Layer 1) asserting `Submission.Create` from a `BrokerSubmissionReceived` sets `SubmissionId`/`BrokerFirmId`/`RawPayloadRef` and leaves normalization/routing/pricing fields unset. Must fail (type doesn't exist yet).
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
   - **Done when**: Test exists and fails to compile/fails assertion
