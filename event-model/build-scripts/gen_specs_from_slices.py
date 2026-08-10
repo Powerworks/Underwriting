@@ -1,16 +1,30 @@
 #!/usr/bin/env python3
-"""Generate spec-kit spec.md files from the Underwriting event-model static export.
+"""Generate spec artifacts from the Underwriting event-model static export.
 
-Source of truth: event-model/import-config.json (the same 25 slices as
-event-model/slices/*.json, bundled into one file). Every command/event/
-readmodel/processor and every field on them is rendered into the spec so
-nothing from the static export is lost.
+Source of truth: event-model/import-config.json (bundled slices export).
+Every command/event/readmodel/processor and every field on them is rendered
+into the output so nothing from the static export is lost.
 
-Run from anywhere (paths are resolved relative to this file); it
-overwrites specs/*/spec.md in place. The FEATURES map below encodes this
-board's context -> spec-kit-feature grouping — re-check/adjust it if the
-board's contexts change. See ../../event-model-to-speckit-guide.md for the
-full mapping rationale and how to verify completeness after running this.
+Two target formats, one per feature (see FEATURES below):
+
+- **spec-kit**: the original GitHub Spec Kit `spec.md` shape. Used only for
+  `001-authority-administration`, which is already complete under that
+  workflow and not retroactively migrated (constitution v1.3.0).
+- **ralph**: `requirements.md` (Ralph Specum's shape: User Stories/AC,
+  FR/NFR tables, Glossary, etc., plus the same lossless Event Model Detail
+  appendix spec-kit had) and `research.md` (a stub — this feature's
+  "research" is the board itself, not external/codebase exploration — plus
+  a UI Reference section transcribing any screens for the design phase to
+  fold into design.md). Used for every feature from `002-submission-intake`
+  onward, per constitution v1.3.0.
+
+Run from anywhere (paths are resolved relative to this file); it overwrites
+specs/*/{spec,requirements,research}.md in place, per each feature's target.
+The FEATURES map below encodes this board's context -> feature grouping AND
+target format — re-check/adjust it if the board's contexts change. See
+../../event-model-to-speckit-guide.md for the original mapping rationale and
+how to verify completeness after running this (the Event Model Detail
+appendix substring-check applies to both targets).
 """
 import datetime
 import json
@@ -22,22 +36,24 @@ ROOT = Path(__file__).resolve().parents[2]  # event-model/build-scripts/ -> even
 SRC = ROOT / "event-model" / "import-config.json"
 TODAY = datetime.date.today().isoformat()
 
-# context -> (feature number, spec dir slug) — must match the directories
-# already created via create-new-feature.sh. This is Phase A / MVP scope only
-# (Project Plan/01-project-plan.md §4) — the 4 exploratory contexts (Exposure
-# Intelligence, External Threat, Portfolio Governance, Capital & Reinsurance
-# Instruments) are Phase B, not yet pulled/generated.
+# context -> (spec dir slug, target format) — target must match the directories
+# already created via create-new-feature.sh (spec-kit) or /ralph-specum:start
+# (ralph). This is Phase A / MVP scope only (Project Plan/01-project-plan.md
+# §4) — the 4 exploratory contexts (Exposure Intelligence, External Threat,
+# Portfolio Governance, Capital & Reinsurance Instruments) are Phase B, not
+# yet pulled/generated.
 FEATURES = OrderedDict([
-    ("Authority Administration", "001-authority-administration"),
-    ("Submission Intake", "002-submission-intake"),
-    ("Search & Retrieval", "003-search-retrieval"),
-    ("Underwriting Decisioning", "004-underwriting-decisioning"),
-    ("Binding", "005-binding"),
-    ("Bordereaux Settlement", "006-bordereaux-settlement"),
-    ("Claims", "007-claims"),
+    ("Authority Administration", ("001-authority-administration", "spec-kit")),
+    ("Submission Intake", ("002-submission-intake", "ralph")),
+    ("Search & Retrieval", ("003-search-retrieval", "ralph")),
+    ("Underwriting Decisioning", ("004-underwriting-decisioning", "ralph")),
+    ("Binding", ("005-binding", "ralph")),
+    ("Bordereaux Settlement", ("006-bordereaux-settlement", "ralph")),
+    ("Claims", ("007-claims", "ralph")),
 ])
 
 NEGATIVE_WORDS = ("Declined", "Rejected", "Referred", "Blocked", "Failed")
+MOSCOW = {"P1": "Must", "P2": "Should", "P3": "Could"}
 
 
 def load_slices():
@@ -121,64 +137,160 @@ def slug(title):
     return re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
 
 
+def classify_slice(s):
+    """Shared slice-kind/actor/priority inference — the one tricky heuristic in
+    this script (see event-model-to-speckit-guide.md, 'Slices with no
+    sliceType' for the empirical basis), factored out so every renderer
+    (spec-kit and ralph targets alike) uses the same source of truth instead
+    of two copies that can quietly diverge. Returns computed data, not markdown.
+    """
+    events = s["events"]
+    readmodels = s.get("readmodels", [])
+
+    raw_slice_type = s.get("sliceType")
+    if raw_slice_type == "AUTOMATION":
+        slice_kind = "AUTOMATION"
+    elif raw_slice_type == "STATE_VIEW":
+        slice_kind = "STATE_VIEW"
+    elif raw_slice_type == "STATE_CHANGE" or s["commands"]:
+        slice_kind = "STATE_CHANGE"
+    elif s["processors"]:
+        slice_kind = "AUTOMATION"
+    elif not s["commands"] and readmodels:
+        slice_kind = "STATE_VIEW"
+    elif not s["commands"] and not s["processors"] and events:
+        slice_kind = "FACT_ONLY"
+    else:
+        slice_kind = "STATE_CHANGE"
+
+    is_automation = slice_kind == "AUTOMATION"
+    is_state_view = slice_kind == "STATE_VIEW"
+    is_fact_only = slice_kind == "FACT_ONLY"
+    if is_automation:
+        actor_list = s["processors"]
+    elif is_state_view or is_fact_only:
+        actor_list = []
+    else:
+        actor_list = s["commands"]
+    actor = actor_list[0] if actor_list else None
+
+    priority = "P2" if (is_automation or is_state_view) else "P1"
+    if is_fact_only or s["id"] == "decline-submission":
+        priority = "P3"
+
+    narrative = actor.get("description") if actor else (
+        (readmodels[0].get("description") if readmodels else None)
+        or (events[0].get("description") if events else "")
+    )
+    cmd_title = actor["title"] if actor else (
+        "(projection, no command)" if is_state_view else
+        "(no command in source — see narrative)" if is_fact_only else
+        "(automation trigger)"
+    )
+    rm_join = " and ".join(r["title"] for r in readmodels) if readmodels else "a read model"
+
+    return {
+        "slice_kind": slice_kind,
+        "raw_slice_type": raw_slice_type,
+        "is_automation": is_automation,
+        "is_state_view": is_state_view,
+        "is_fact_only": is_fact_only,
+        "actor": actor,
+        "priority": priority,
+        "narrative": narrative,
+        "cmd_title": cmd_title,
+        "rm_join": rm_join,
+        "events": events,
+        "readmodels": readmodels,
+    }
+
+
+def collect_entities_and_detail(slices, include_screens):
+    """Entities (aggregate -> touched-by titles), readmodel entities, and the
+    per-slice Event Model Detail block — shared across every renderer, since
+    this part is a straight transcription, not renderer-specific prose.
+
+    include_screens=False for requirements.md (screens live in research.md's
+    UI Reference section instead, for the design phase — not a requirement).
+    """
+    entities = OrderedDict()
+    readmodel_entities = OrderedDict()
+    detail_sections = []
+    for s in slices:
+        all_elements = s["commands"] + s["events"] + s["processors"]
+        for el in all_elements:
+            agg = el.get("aggregate")
+            if not agg or agg == "default":
+                continue
+            entities.setdefault(agg, set()).add(el["title"])
+        for rm in s.get("readmodels", []):
+            readmodel_entities[rm["title"]] = (rm.get("description", ""), rm.get("fields", []))
+
+        info = classify_slice(s)
+        type_label = info["raw_slice_type"] or f"{info['slice_kind']} (inferred — sliceType missing in source export)"
+        block = [f"### Slice: {s['title']} (`{s['id']}`, status: {s['status']}, type: {type_label})", ""]
+        for c in s["commands"]:
+            block.append(element_block(c, "command"))
+        for p in s["processors"]:
+            block.append(element_block(p, "automation/processor"))
+        for e in s["events"]:
+            block.append(element_block(e, "event"))
+        for rm in s.get("readmodels", []):
+            block.append(element_block(rm, "read model"))
+        if include_screens:
+            for sc in s.get("screens", []):
+                block.append(element_block(sc, "screen"))
+        detail_sections.append("\n".join(block))
+    return entities, readmodel_entities, detail_sections
+
+
+def collect_screens(slices):
+    out = []
+    for s in slices:
+        for sc in s.get("screens", []):
+            out.append((s["title"], sc))
+    return out
+
+
+def collect_open_questions(slices):
+    """Slices where sliceType had to be inferred (see classify_slice) are
+    genuine ambiguity in the source, not settled fact — surface them rather
+    than let the inference pass silently."""
+    qs = []
+    for s in slices:
+        if not s.get("sliceType"):
+            kind = classify_slice(s)["slice_kind"]
+            qs.append(f"`{s['title']}` has no `sliceType` in the source export — kind was inferred as {kind}; confirm this is correct.")
+    return qs
+
+
+# ---------------------------------------------------------------------------
+# spec-kit target (001-authority-administration only)
+# ---------------------------------------------------------------------------
+
 def build_stories(slices):
-    """Returns (story_markdown, fr_lines, edge_case_lines, entities, event_detail_sections, story_count)."""
+    """Returns (story_markdown, fr_lines, edge_case_lines, entities, readmodel_entities, event_detail_sections).
+    spec-kit (GitHub Spec Kit) target only — see render_requirements_md for the ralph target."""
     stories = []
     fr_lines = []
     edge_lines = []
-    entities = OrderedDict()  # aggregate -> set of event/readmodel titles touching it
-    readmodel_entities = OrderedDict()  # readmodel title -> (description, fields)
-    detail_sections = []
     fr_num = 0
     story_num = 0
 
     for s in slices:
         story_num += 1
-        events = s["events"]
-        readmodels = s.get("readmodels", [])
-
-        # sliceType is missing on some board exports for standalone alternate-outcome
-        # events (a command's happy-path lives in one slice; its "declined"/"referred"/
-        # "for-cause" counterpart event got modeled as its own slice with no command,
-        # processor, or readmodel of its own). Infer a type rather than crash — see
-        # ../../event-model-to-speckit-guide.md, "Slices with no sliceType" for the
-        # empirical basis of this heuristic.
-        raw_slice_type = s.get("sliceType")
-        if raw_slice_type == "AUTOMATION":
-            slice_kind = "AUTOMATION"
-        elif raw_slice_type == "STATE_VIEW":
-            slice_kind = "STATE_VIEW"
-        elif raw_slice_type == "STATE_CHANGE" or s["commands"]:
-            slice_kind = "STATE_CHANGE"
-        elif s["processors"]:
-            slice_kind = "AUTOMATION"
-        elif not s["commands"] and readmodels:
-            slice_kind = "STATE_VIEW"
-        elif not s["commands"] and not s["processors"] and events:
-            slice_kind = "FACT_ONLY"
-        else:
-            slice_kind = "STATE_CHANGE"
-
-        is_automation = slice_kind == "AUTOMATION"
-        is_state_view = slice_kind == "STATE_VIEW"
-        is_fact_only = slice_kind == "FACT_ONLY"
-        if is_automation:
-            actor_list = s["processors"]
-        elif is_state_view or is_fact_only:
-            actor_list = []
-        else:
-            actor_list = s["commands"]
-        actor = actor_list[0] if actor_list else None
-
-        priority = "P2" if (is_automation or is_state_view) else "P1"
-        if is_fact_only or s["id"] == "decline-submission":
-            priority = "P3"
-
+        info = classify_slice(s)
+        events = info["events"]
+        readmodels = info["readmodels"]
+        is_automation = info["is_automation"]
+        is_state_view = info["is_state_view"]
+        is_fact_only = info["is_fact_only"]
+        actor = info["actor"]
+        priority = info["priority"]
+        narrative = info["narrative"]
+        cmd_title = info["cmd_title"]
+        rm_join_bold = " and ".join(bold(r["title"]) for r in readmodels) if readmodels else "a read model"
         title = s["title"]
-        narrative = actor.get("description") if actor else (
-            (readmodels[0].get("description") if readmodels else None)
-            or (events[0].get("description") if events else "")
-        )
 
         stories.append(f"### User Story {story_num} - {title} (Priority: {priority})")
         stories.append("")
@@ -189,9 +301,8 @@ def build_stories(slices):
                 + " or ".join(bold(e['title']) for e in events) + "."
             )
         elif is_state_view:
-            rm_join = " and ".join(bold(r["title"]) for r in readmodels) if readmodels else "a read model"
             stories.append(
-                f"The system maintains {rm_join}, projected from "
+                f"The system maintains {rm_join_bold}, projected from "
                 + " and ".join(bold(e["title"]) for e in events) + "."
             )
         elif is_fact_only:
@@ -223,16 +334,11 @@ def build_stories(slices):
             why = "Primary, human-initiated action in this bounded context — without it the underlying business process cannot proceed."
         stories.append(f"**Why this priority**: {why}")
         stories.append("")
-        cmd_title = actor["title"] if actor else (
-            "(projection, no command)" if is_state_view else
-            "(no command in source — see narrative)" if is_fact_only else
-            "(automation trigger)"
-        )
         if is_state_view:
             stories.append(
                 f"**Independent Test**: Can be tested by appending "
                 + " and/or ".join(bold(e["title"]) for e in events)
-                + f" and asserting that {rm_join} reflects the update."
+                + f" and asserting that {rm_join_bold} reflects the update."
             )
         elif is_fact_only:
             stories.append(
@@ -255,7 +361,7 @@ def build_stories(slices):
         for i, e in enumerate(events, start=1):
             given = e.get("description") or "the preconditions for this step are met"
             if is_state_view:
-                stories.append(f"{i}. **Given** {given}, **When** {e['title']} is appended, **Then** {rm_join} reflects it")
+                stories.append(f"{i}. **Given** {given}, **When** {e['title']} is appended, **Then** {rm_join_bold} reflects it")
             elif is_fact_only:
                 stories.append(f"{i}. **Given** {given}, **When** the triggering condition occurs, **Then** {e['title']}")
             else:
@@ -264,18 +370,15 @@ def build_stories(slices):
         stories.append("---")
         stories.append("")
 
-        # FRs — one per command/processor/projection, covering all its events
         fr_num += 1
         ev_join = " or ".join(bold(e["title"]) for e in events) if events else "(no event)"
         if is_state_view:
-            fr_lines.append(f"- **FR-{fr_num:03d}**: System MUST project {rm_join} from the {ev_join} domain event(s).")
+            fr_lines.append(f"- **FR-{fr_num:03d}**: System MUST project {rm_join_bold} from the {ev_join} domain event(s).")
         elif is_fact_only:
             fr_lines.append(f"- **FR-{fr_num:03d}**: System MUST record the {ev_join} domain event(s) under the condition described in its narrative (source export has no command/processor of its own for this outcome).")
         else:
             fr_lines.append(f"- **FR-{fr_num:03d}**: System MUST support {bold(cmd_title)}, producing the {ev_join} domain event(s).")
 
-        # Edge cases — any event beyond the first, or any event with a negative-sounding title,
-        # or the whole slice if it's a P3 off-ramp. Not applicable to pure projections.
         if is_fact_only:
             for e in events:
                 edge_lines.append(
@@ -293,40 +396,11 @@ def build_stories(slices):
                         + (f" — {e['description']}" if e.get("description") else "") + "."
                     )
 
-        # Entities: aggregates touched by this slice's commands/events. "default" is
-        # the board's un-set placeholder (confirmed: literally every element on this
-        # board carries it — see event-model-to-speckit-guide.md, "The aggregate field
-        # is unusable on this board"), not a real aggregate name — skip it rather than
-        # bucket the entire feature under a fake "default" entity.
-        all_elements = (s["commands"] + s["events"] + s["processors"])
-        for el in all_elements:
-            agg = el.get("aggregate")
-            if not agg or agg == "default":
-                continue
-            entities.setdefault(agg, set()).add(el["title"])
-
-        # Read models are their own entity class
-        for rm in s.get("readmodels", []):
-            readmodel_entities[rm["title"]] = (rm.get("description", ""), rm.get("fields", []))
-
-        # Full detail appendix — every command/event/readmodel/processor, every field
-        type_label = raw_slice_type or f"{slice_kind} (inferred — sliceType missing in source export)"
-        block = [f"### Slice: {title} (`{s['id']}`, status: {s['status']}, type: {type_label})", ""]
-        for c in s["commands"]:
-            block.append(element_block(c, "command"))
-        for p in s["processors"]:
-            block.append(element_block(p, "automation/processor"))
-        for e in s["events"]:
-            block.append(element_block(e, "event"))
-        for rm in s.get("readmodels", []):
-            block.append(element_block(rm, "read model"))
-        detail_sections.append("\n".join(block))
-
+    entities, readmodel_entities, detail_sections = collect_entities_and_detail(slices, include_screens=True)
     return "\n".join(stories), fr_lines, edge_lines, entities, readmodel_entities, detail_sections
 
 
 def render_spec(context, feature_slug, slices):
-    feature_num = feature_slug.split("-")[0]
     feature_name = " ".join(w.capitalize() for w in feature_slug.split("-")[1:])
     stories_md, fr_lines, edge_lines, entities, readmodel_entities, detail_sections = build_stories(slices)
 
@@ -432,15 +506,317 @@ def render_spec(context, feature_slug, slices):
     return "\n".join(lines) + "\n"
 
 
+# ---------------------------------------------------------------------------
+# ralph target (002-submission-intake onward)
+# ---------------------------------------------------------------------------
+
+def render_requirements_md(context, feature_slug, slices):
+    feature_name = " ".join(w.capitalize() for w in feature_slug.split("-")[1:])
+    entities, readmodel_entities, detail_sections = collect_entities_and_detail(slices, include_screens=False)
+
+    us_blocks = []
+    fr_rows = []
+    glossary = OrderedDict()
+    fr_num = 0
+
+    for story_num, s in enumerate(slices, start=1):
+        info = classify_slice(s)
+        events = info["events"]
+        readmodels = info["readmodels"]
+        actor = info["actor"]
+        cmd_title = info["cmd_title"]
+        priority = info["priority"]
+        rm_join = info["rm_join"]
+        title = s["title"]
+
+        if info["is_automation"]:
+            as_a = f"background policy in {context}"
+            i_want = f"the system to execute {cmd_title} automatically"
+            so_that = "derived state stays consistent after the triggering action(s): " + " or ".join(e["title"] for e in events)
+        elif info["is_state_view"]:
+            as_a = "a consumer of this read-side projection"
+            i_want = f"{rm_join} to reflect {' and '.join(e['title'] for e in events)}"
+            so_that = "downstream queries/decisions see current state"
+        elif info["is_fact_only"]:
+            as_a = "the system"
+            i_want = f"to record {' and '.join(e['title'] for e in events)}"
+            so_that = "the alternate/terminal outcome is captured explicitly, not left implicit"
+        else:
+            as_a = actor["title"] if actor else "a user"
+            i_want = title[0].lower() + title[1:]
+            so_that = " or ".join(e["title"] for e in events) + " is recorded"
+
+        us_blocks.append(f"### US-{story_num}: {title}")
+        us_blocks.append("")
+        us_blocks.append(f"**As a** {as_a}")
+        us_blocks.append(f"**I want to** {i_want}")
+        us_blocks.append(f"**So that** {so_that}")
+        us_blocks.append("")
+        if info["narrative"]:
+            us_blocks.append(f"_Narrative (verbatim from the board export)_: {info['narrative']}")
+            us_blocks.append("")
+        us_blocks.append("**Acceptance Criteria:**")
+        for i, e in enumerate(events, start=1):
+            given = e.get("description") or "the preconditions for this step are met"
+            if info["is_state_view"]:
+                when = f"{e['title']} is appended"
+                then = f"{rm_join} reflects it"
+            elif info["is_fact_only"]:
+                when = "the triggering condition occurs"
+                then = e["title"]
+            else:
+                when = cmd_title
+                then = e["title"]
+            us_blocks.append(f"- AC-{story_num}.{i}: Given {given}, When {when}, Then {then}")
+        us_blocks.append("")
+
+        fr_num += 1
+        ev_join = " or ".join(e["title"] for e in events) if events else "(no event)"
+        ac_refs = ", ".join(f"AC-{story_num}.{i}" for i in range(1, len(events) + 1)) or "—"
+        moscow = MOSCOW[priority]
+        modal = "MUST" if moscow == "Must" else moscow.upper()
+        if info["is_state_view"]:
+            req_text = f"System {modal} project {rm_join} from the {ev_join} domain event(s)"
+        elif info["is_fact_only"]:
+            req_text = f"System {modal} record the {ev_join} domain event(s) under the condition described in US-{story_num}'s narrative"
+        else:
+            req_text = f"System {modal} support {cmd_title}, producing the {ev_join} domain event(s)"
+        fr_rows.append(f"| FR-{fr_num} | {req_text} | {moscow} | {ac_refs} |")
+
+        for el in s["commands"] + s["events"] + s["processors"]:
+            agg = el.get("aggregate")
+            if agg and agg != "default" and agg not in glossary:
+                glossary[agg] = f"Aggregate in the {context} context (see Event Model Detail for the elements that touch it)."
+        for rm in readmodels:
+            if rm["title"] not in glossary:
+                desc = rm.get("description", "")
+                glossary[rm["title"]] = (f"Read model. {desc}").strip()
+
+    lines = []
+    lines.append("---")
+    lines.append(f"spec: {feature_slug}")
+    lines.append("phase: requirements")
+    lines.append(f"created: {TODAY}")
+    lines.append("---")
+    lines.append("")
+    lines.append(f"# Requirements: {feature_name}")
+    lines.append("")
+    lines.append("## Problem Statement")
+    lines.append("")
+    lines.append(
+        f"{feature_name} is one of the bounded contexts modeled on the \"BrokerConnect\" "
+        f"eventmodelers.ai board (chapter **Broker Connect**, context **{context}**). Evidence: "
+        "the board's own live export (`event-model/import-config.json`), transcribed verbatim in "
+        "the Event Model Detail appendix below — this is not a hypothesis needing validation, the "
+        "domain already exists as a modeled event model."
+    )
+    lines.append("")
+    lines.append("## Goal")
+    lines.append("")
+    lines.append(
+        f"Implement the **{context}** bounded context's commands, events, automations, and read "
+        "models exactly as modeled on the board, per constitution Principle III (the spec is the "
+        "source of truth — no invented fields, no guessed names)."
+    )
+    lines.append("")
+    lines.append("## User Stories")
+    lines.append("")
+    lines.extend(us_blocks)
+    lines.append("## Functional Requirements")
+    lines.append("")
+    lines.append("| ID | Requirement | Priority | Acceptance Criteria |")
+    lines.append("|----|-------------|----------|---------------------|")
+    lines.extend(fr_rows)
+    lines.append("")
+    lines.append("## Non-Functional Requirements")
+    lines.append("")
+    lines.append(
+        "<!-- The source board does not specify numeric NFR targets for this context — every row is "
+        "N/A, not invented, per constitution Principle III. Revisit via a clarification pass before "
+        "/ralph-specum:design if any of these genuinely matter for this feature. -->"
+    )
+    lines.append("")
+    lines.append("| ID | Requirement | Metric | Target |")
+    lines.append("|----|-------------|--------|--------|")
+    lines.append("| NFR-1 | Performance | N/A | N/A: not specified by board export |")
+    lines.append("| NFR-2 | Reliability | N/A | N/A: not specified by board export |")
+    lines.append("| NFR-3 | Security | N/A | N/A: not specified by board export |")
+    lines.append("")
+    lines.append("## Glossary")
+    lines.append("")
+    if glossary:
+        for term, definition in glossary.items():
+            lines.append(f"- **{term}**: {definition}")
+    else:
+        lines.append("- No named aggregates/read models beyond the board's placeholder `\"default\"` — see Event Model Detail below.")
+    lines.append("")
+    lines.append("## Out of Scope")
+    lines.append("")
+    lines.append("Default-scope rule: anything not listed here that falls under the Goal is in scope.")
+    lines.append("")
+    lines.append("- The 4 exploratory contexts (Phase B) — not yet pulled from the board, out of scope for this pass.")
+    lines.append("- Any command/event/read model not present in the Event Model Detail appendix below.")
+    lines.append("")
+    lines.append("## Dependencies")
+    lines.append("")
+    lines.append(
+        "- Cross-context dependencies are visible in the Event Model Detail appendix below (each "
+        "element's own `Dependencies`/`Aggregate dependencies` lines) but not resolved to spec names "
+        "here — cross-reference `elementType`/`title` against the other features' own Event Model "
+        "Detail sections manually."
+    )
+    lines.append("")
+    lines.append("## Success Criteria")
+    lines.append("")
+    lines.append(
+        "<!-- The source board does not define measurable success metrics for this context — fill in "
+        "via a clarification pass, don't invent numbers. -->"
+    )
+    lines.append("")
+    lines.append("- TBD (user, next review)")
+    lines.append("")
+    lines.append("## Risks")
+    lines.append("")
+    lines.append("| Risk | Impact | Mitigation |")
+    lines.append("|------|--------|------------|")
+    lines.append("| Board export goes stale relative to a live board edit | Medium | Re-run `gen_specs_from_slices.py` against a fresh pull before trusting this file; nothing here watches the board automatically |")
+    lines.append("")
+    lines.append("## Unresolved Questions")
+    lines.append("")
+    open_qs = collect_open_questions(slices)
+    if open_qs:
+        for q in open_qs:
+            lines.append(f"- {q} Owner: user, next review")
+    else:
+        lines.append("- None")
+    lines.append("")
+    lines.append("## Event Model Detail (Source of Truth)")
+    lines.append("")
+    lines.append(
+        "Full, unabridged transcription of every command, automation/processor, event, and read "
+        "model in this context from the static export — every field's type, cardinality, and flags. "
+        "This is the lossless source; the User Stories above are a readable summary of it, not the "
+        "other way around. Screens are deliberately excluded here — see this spec's `research.md` "
+        "(UI Reference section), which the design phase reads directly; screens are UI reference, "
+        "not a requirement."
+    )
+    lines.append("")
+    lines.extend(detail_sections)
+
+    return "\n".join(lines) + "\n"
+
+
+def render_research_md(context, feature_slug, slices):
+    feature_name = " ".join(w.capitalize() for w in feature_slug.split("-")[1:])
+    screens = collect_screens(slices)
+
+    lines = []
+    lines.append("---")
+    lines.append(f"spec: {feature_slug}")
+    lines.append("phase: research")
+    lines.append(f"created: {TODAY}")
+    lines.append("---")
+    lines.append("")
+    lines.append(f"# Research: {feature_name}")
+    lines.append("")
+    lines.append("## Executive Summary")
+    lines.append("")
+    lines.append(
+        f"This spec is sourced directly from the \"BrokerConnect\" event-modeling board's "
+        f"**{context}** context, not free-form research — the domain (commands, events, read "
+        "models, and screens) is board-authored, not derived here. This file exists to satisfy "
+        "`/ralph-specum:design`'s context-gathering step (it reads `research.md` if present), not "
+        "because external/codebase research was actually performed for this feature."
+    )
+    lines.append("")
+    lines.append("## External Research")
+    lines.append("")
+    lines.append("N/A — requirements are board-sourced, not derived from external research. See `requirements.md`.")
+    lines.append("")
+    lines.append("## Codebase Analysis")
+    lines.append("")
+    lines.append("N/A — deferred to the design phase's own codebase exploration (`architect-reviewer`).")
+    lines.append("")
+    lines.append("## Related Specs")
+    lines.append("")
+    lines.append("| Spec | Relevance | Relationship | May Need Update |")
+    lines.append("|------|-----------|--------------|-----------------|")
+    lines.append("| _(not automatically cross-referenced)_ | — | See this context's Event Model Detail appendix in `requirements.md` for raw dependency edges | — |")
+    lines.append("")
+    lines.append("## Feasibility Assessment")
+    lines.append("")
+    lines.append("| Aspect | Assessment | Notes |")
+    lines.append("|--------|------------|-------|")
+    lines.append(f"| Technical Viability | High | Domain already modeled end-to-end on the board ({len(slices)} slices) |")
+    lines.append("| Effort Estimate | See `tasks.md` once generated | Not estimated here — board doesn't carry effort data |")
+    lines.append("| Risk Level | Low | Board-sourced, not speculative |")
+    lines.append("")
+    lines.append("## Recommendations for Requirements")
+    lines.append("")
+    lines.append("1. Treat `requirements.md`'s Event Model Detail appendix as the literal field/event source — no invented fields, per constitution Principle III.")
+    lines.append("2. Follow the same Marten/Wolverine conventions as `001-authority-administration` (`build-state-change`/`build-state-view` skills) — this is the same tech-kit, not a new stack decision.")
+    lines.append("")
+    lines.append("## Open Questions")
+    lines.append("")
+    open_qs = collect_open_questions(slices)
+    if open_qs:
+        lines.extend(f"- {q}" for q in open_qs)
+    else:
+        lines.append("- None")
+    lines.append("")
+    lines.append("## Sources")
+    lines.append("")
+    lines.append(
+        "- `event-model/import-config.json` — live pull from the \"BrokerConnect\" eventmodelers.ai "
+        f"board, chapter **Broker Connect**, context **{context}**, as of {TODAY}."
+    )
+    lines.append("")
+    lines.append("## UI Reference (event-modeling board — for Design phase)")
+    lines.append("")
+    lines.append(
+        "Screens from the board export, for `architect-reviewer` to fold into `design.md`'s own "
+        "`## Screens` section — map each screen's displayed fields back to the API/read-model "
+        "surface that has to support it. Not a requirement; UI reference only (decided while "
+        "adapting this generator for the Ralph Specum workflow: screens belong in design, not "
+        "requirements)."
+    )
+    lines.append("")
+    if screens:
+        for slice_title, sc in screens:
+            lines.append(f"_(from slice: {slice_title})_")
+            lines.append("")
+            lines.append(element_block(sc, "screen"))
+    else:
+        lines.append("_(no screens populated on this context's slices in the source export)_")
+        lines.append("")
+
+    return "\n".join(lines) + "\n"
+
+
 def main():
     by_context = load_slices()
-    for context, feature_slug in FEATURES.items():
+    for context, (feature_slug, target) in FEATURES.items():
         slices = by_context[context]
         assert slices, f"no slices found for context {context}"
-        content = render_spec(context, feature_slug, slices)
-        out_path = ROOT / "specs" / feature_slug / "spec.md"
-        out_path.write_text(content)
-        print(f"wrote {out_path} ({len(slices)} slices, {len(content)} bytes)")
+        out_dir = ROOT / "specs" / feature_slug
+
+        if target == "spec-kit":
+            content = render_spec(context, feature_slug, slices)
+            out_path = out_dir / "spec.md"
+            out_path.write_text(content)
+            print(f"wrote {out_path} ({len(slices)} slices, {len(content)} bytes)")
+        elif target == "ralph":
+            req_content = render_requirements_md(context, feature_slug, slices)
+            req_path = out_dir / "requirements.md"
+            req_path.write_text(req_content)
+            print(f"wrote {req_path} ({len(slices)} slices, {len(req_content)} bytes)")
+
+            research_content = render_research_md(context, feature_slug, slices)
+            research_path = out_dir / "research.md"
+            research_path.write_text(research_content)
+            print(f"wrote {research_path} ({len(slices)} slices, {len(research_content)} bytes)")
+        else:
+            raise ValueError(f"unknown target {target!r} for context {context!r}")
 
 
 if __name__ == "__main__":
