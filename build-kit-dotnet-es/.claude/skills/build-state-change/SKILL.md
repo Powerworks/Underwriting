@@ -280,6 +280,19 @@ No per-entity registration is *required* beyond that — Marten discovers the st
 options.Projections.Snapshot<<Entity>>(SnapshotLifecycle.Inline);
 ```
 
+**Verify against live docs before writing this line.** Marten's registration API for self-aggregating snapshots has shifted across versions, and its failure modes below don't surface at `dotnet build` — only when `DocumentStore.For(...)` actually runs (first Testcontainers test, or first real deploy). Spawn a subagent (general-purpose, foreground — its findings are needed before continuing) to fetch the current `martendb.io` pages for `Projections.Snapshot`/single-stream projections and confirm the signature against this project's actual pinned `Marten`/`WolverineFx.Marten` versions (`Directory.Build.props`) before trusting memorized API shape. This is not a hypothetical caution — both failure modes below were only found by doing exactly this after a wrong assumption produced a confusing runtime exception.
+
+**Two silent failure modes specific to `Projections.Snapshot<T>`**, both found the hard way:
+
+1. **The identity member must be literally named `Id`.** The "`{TypeName}Id` is also honored" convention (e.g. `OrderId` for `Order`) is real for plain document `Query`/`LoadAsync`, but snapshot *registration itself* throws `ArgumentNullException` from `JasperFx.Core.Reflection.TypeExtensions.CloseAndBuildAs` if the entity's own id property isn't literally `Id`. Since this kit's entities are named `<Entity>Id` by convention (Step 3 above), add a `[JsonIgnore]` alias rather than renaming the canonical property:
+   ```csharp
+   [JsonIgnore]
+   public Guid Id => <Entity>Id;
+   ```
+2. **Never name a business field `Version`.** Marten silently overwrites any document property literally named `Version` with its own internal optimistic-concurrency sequence number — no warning, no exception, just a wrong value the next time it's read back (a freshly-created entity reads back as version 1, not 0, silently corrupting anything that assumed otherwise). If the entity needs its own business revision counter, name it something else (`RevisionNumber`, `SequenceNumber`) — anything but `Version`.
+
+**Also**: the `Create`/`Apply` dispatcher is source-generated **per-assembly, not per-solution**. The generator (a Marten analyzer) only sees types declared in the project it's compiling — if `<Entity>` lives in `<SolutionName>.Modules.<Context>.Domain` and only the `.Api` project references `Marten`, `Projections.Snapshot<<Entity>>` throws `InvalidProjectionException: No source-generated dispatcher found...` at store-build time even though everything compiled cleanly. The `Domain` project itself needs a plain `<PackageReference Include="Marten" />` — not analyzers-only; stripping the `analyzers` asset breaks generation just as thoroughly as omitting the reference entirely.
+
 **Add a snapshot only when something under `ReadModels/**` genuinely queries this entity's current state by id** — a `GetXStatus`/`GetXDetails`-style query handler that does `session.LoadAsync<<Entity>>(id)`, or an ownership check elsewhere that loads it. If nothing queries it, leave it as a bare event stream with no snapshot — there's no cost to paying for a materialized read side nothing reads.
 
 This is a genuinely different kind of decision than the state-computation rule in `build-automation`'s Step 3 (a command/automation's own narrow decision-state is *never* snapshotted, full stop) — don't conflate the two. This step is about the entity's *own* durable identity, which read models are allowed to depend on; that step is about a single handler's private, disposable scratch state, which nothing else should depend on. See `build-automation`'s Step 3 for why persisting or sharing that kind of state specifically causes problems.

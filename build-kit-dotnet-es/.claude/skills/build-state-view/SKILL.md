@@ -45,6 +45,8 @@ Extract:
 
 ## Step 3 — The projector (if needed)
 
+**Verify against live docs before writing projector code.** Marten's projection APIs have shifted across versions and have failure modes that only surface at `DocumentStore.For(...)` runtime, never at `dotnet build`. Before writing or debugging anything under this step — the Wolverine-subscriber pattern below, or the native Marten async-projection alternative further down — spawn a subagent (general-purpose, foreground) to fetch the current `martendb.io` pages for whichever mechanism applies and confirm the signature against this project's pinned `Marten`/`WolverineFx.Marten` versions before trusting memorized API shape. Every gotcha documented in this step was only found this way, after a wrong assumption produced a confusing runtime exception rather than a compile error.
+
 ### The read-model document
 
 `src/Modules/<Context>/<SolutionName>.Modules.<Context>.Domain/<ReadModelName>.cs` — plain public-settable class (**not** an `Entity` subclass with restricted access — read-model documents don't need `[JsonInclude]`/`[JsonConstructor]` since nothing restricts their setters, unlike the event-sourced entities in `build-state-change`):
@@ -96,6 +98,42 @@ public static class <TriggerEvent>ProjectorHandler
 Delivery is at-least-once; Wolverine's inbox deduplicates by envelope id, and `Store()` is an upsert keyed by `Id`, so redelivery is safe without extra idempotency logic.
 
 For an update/delete rather than a create, `LoadAsync`/`Query` the existing document first, or `session.Delete<T>(id)` — mirror whichever the slice.json's event semantics call for.
+
+### Alternative: native Marten async projection (only when you need event replay)
+
+The Wolverine-subscriber pattern above is the default for a reason — it reuses the same message pipeline every other handler in this kit goes through, and needs none of the machinery below. Reach for Marten's own `MultiStreamProjection`/`SingleStreamProjection` + `ProjectionLifecycle.Async` instead only when the read model must be **rebuildable from history** — e.g. the projector is added after events already exist and needs to backfill, or you need Marten's own daemon rebuild tooling (`dotnet run -- projections rebuild`). The Wolverine-subscriber pattern only reacts to events flowing through it *from the point it's wired on* — it does not replay history.
+
+If you do need this, the requirements are stricter than the Wolverine-subscriber path and every one of them fails silently or with a confusing error if missed:
+
+```csharp
+// Api/ReadModels/<ReadModelName>/<ReadModelName>Projector.cs
+public partial class <ReadModelName>Projector : MultiStreamProjection<<ReadModelName>, <KeyType>>
+{
+    public <ReadModelName>Projector()
+    {
+        Identity<<TriggerEvent>>(e => e.<ForeignKeyField>);
+        // one Identity<T> call per event type this projector reacts to —
+        // each maps that event to the document id it should update, which is
+        // NOT necessarily the event's own stream id (see the next bullet)
+    }
+
+    public static <ReadModelName> Create(<TriggerEvent> @event) => new() { /* ... */ };
+    public void Apply(<OtherTriggerEvent> @event, <ReadModelName> doc) { /* mutate doc */ }
+}
+```
+
+- **The class must be declared `partial`.** Same source-generator requirement as `build-state-change`'s Step 5 — a non-`partial` projection subclass throws `InvalidProjectionException: No source-generated dispatcher found...` at store-build time, with the error message explicitly noting self-aggregating entities don't need `partial` but projection subclasses do. Easy to miss because it's the *opposite* rule from the entity itself.
+- **The Identity selector needs a field the trigger event actually carries.** If the read model is keyed by something other than the trigger event's own stream id (e.g. a `CellAuthorityRegister` keyed by `cellId`, fed partly by an event whose own stream is keyed by a different id), that foreign key must be a field *on the event itself* — `Identity<T>(e => e.SomeId)` has no way to do an async lookup mid-mapping. If the event doesn't carry it yet, that's usually a legitimate reason to add the field (the value is normally already in scope on the command handler that raises the event) rather than working around it.
+- **Registering `ProjectionLifecycle.Async` alone does nothing without the daemon.** `options.Projections.Add<<ReadModelName>Projector>(ProjectionLifecycle.Async)` in `<Context>Module.cs` only declares the projection; `Api.Host/Program.cs` needs `.AddAsyncDaemon(DaemonMode.Solo)` chained onto `AddMarten(...)` or no events are ever processed into documents, in production or otherwise — this is easy to add once for the whole host and then forget it's a per-registration prerequisite.
+- **Testing it needs the daemon running too**, plus an explicit wait for catch-up — a Testcontainers fixture built for Inline snapshots does not exercise this at all:
+  ```csharp
+  // In the module's PostgresFixture, alongside DocumentStore.For(...):
+  var daemon = await Store.BuildProjectionDaemonAsync();
+  await daemon.StartAllAsync();
+  // ...before asserting on the projected document, after appending events:
+  await daemon.WaitForNonStaleData(TimeSpan.FromSeconds(30));
+  ```
+  Marten's own source generator prints a build-time "the async daemon is disabled" warning for any project that doesn't call the declarative `AddAsyncDaemon(...)` DI extension — it does not recognize this manual `BuildProjectionDaemonAsync`/`StartAllAsync` pair as "enabled." The warning is a false positive in this case, not a sign the daemon isn't really running; confirm empirically with a passing assertion on real daemon-produced data instead of trusting the warning either way.
 
 ---
 
