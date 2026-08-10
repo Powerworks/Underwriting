@@ -119,7 +119,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): register module in Api.Host`
   - _Design: Technical Decisions (`Submission` Inline snapshot: none), Existing Patterns to Follow_
 
-- [ ] 2.6 [VERIFY] Quality checkpoint: build + domain tests pass
+- [x] 2.6 [VERIFY] Quality checkpoint: build + domain tests pass
   - **Do**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests`
   - **Verify**: Both commands exit 0
   - **Done when**: No build errors, 2.2's test green
