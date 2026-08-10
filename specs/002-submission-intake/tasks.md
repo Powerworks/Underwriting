@@ -62,7 +62,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet restore src/BrokerConnect.slnx && echo PASS`
   - **Commit**: `chore(submission-intake): add package references`
 
-- [ ] 1.5 [VERIFY] Quality checkpoint: solution builds with empty stubs
+- [x] 1.5 [VERIFY] Quality checkpoint: solution builds with empty stubs
   - **Do**: Run `dotnet build src/BrokerConnect.slnx`
   - **Verify**: `dotnet build src/BrokerConnect.slnx && echo PASS`
   - **Done when**: Build succeeds, zero errors
