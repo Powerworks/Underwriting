@@ -1,4 +1,26 @@
 # Underwriting Constitution
+<!-- Sync Impact Report — 1.1.0 → 1.2.0
+Version bump: MINOR (materially expanded guidance in two existing principles, one existing
+Quality Gates bullet amended with a carve-out, one new Quality Gates bullet added — no
+principle renamed, removed, or redefined incompatibly).
+Modified principles:
+  - III. The Spec Is the Source of Truth — added guidance on verifying a read model's
+    dependency-edge gap against spec.md's literal board export before treating it as a bug
+    vs. an intentional, board-consistent limitation.
+  - XI. AI-Assisted Development Rules — added a bullet: confirm with the user before
+    widening an already-shipped feature's contract for a later feature's sake.
+Modified sections:
+  - Quality Gates & Workflow — added a full-suite-required exception to the existing
+    per-commit testing bullet, for changes touching a pre-existing shared event/aggregate;
+    added a new bullet on docs/adr/ numbering continuity.
+Added sections: none (no new Principle or top-level section — all changes are additions
+  within existing principles/sections).
+Removed sections: none.
+Follow-up TODOs: none.
+Source: process learnings from completing 001-authority-administration (all tasks done,
+  2026-08-10) — see that feature's tasks.md/commit history for the concrete incidents each
+  addition generalizes from.
+-->
 <!-- Adapted from the sibling "Powergym" project's constitution (2026-08-09) — both projects
 share the same build-kit-dotnet-es (this repo's own eventmodelers .NET build kit) as their
 architecture/quality source; see build-kit-dotnet-es/README.md, .claude/skills/build-{state-change,
@@ -21,7 +43,7 @@ Every domain entity is a self-aggregating event stream — a `Create`/`Apply` pa
 Every feature is exactly one of: a **state-change** slice (`[WolverinePost]`/`[WolverinePut]` request → validate → append event(s) → response), a **state-view** slice (a read model query, plain Marten document), or an **automation** (`EVENT(s) → AUTOMATION → COMMAND/EVENT(s)`, triggered by an event, never by a route). A state-change handler decides only "is this request valid" — never a further consequence. If a slice's own description implies a downstream effect beyond its own event, that effect is a separate automation triggered by the event just emitted, not inlined into the command handler.
 
 ### III. The Spec Is the Source of Truth
-The board slice / spec definition (fields, events, given/when/then scenarios) is authoritative; code follows it, never the reverse. No invented fields, no guessed names, no business rules or defaults beyond what the spec states. A slice is not "done" because it compiles — it is done when every field, every event, and every specification in the source spec has a corresponding, matching element in code, with nothing extra and nothing missing.
+The board slice / spec definition (fields, events, given/when/then scenarios) is authoritative; code follows it, never the reverse. No invented fields, no guessed names, no business rules or defaults beyond what the spec states. A slice is not "done" because it compiles — it is done when every field, every event, and every specification in the source spec has a corresponding, matching element in code, with nothing extra and nothing missing. When a read model's declared dependency edge looks wrong or incomplete, verify against `spec.md`'s literal Event Model Detail appendix (the verbatim board export) before concluding anything — not just `data-model.md`'s prose summary, which can drift from the board itself. A dependency edge that's *consistently* absent across the board's own field data is the board's actual, intentional scope (implement as specified, flag the limitation in a comment); a dependency edge the board declares but that has no field to route by is a genuine defect worth fixing (as `001-authority-administration` did twice: `AuthorityMatrix`'s missing event edges, and `AuthorityLimitRevoked`/`CellAuthorityIncreaseRequested` missing the identifier a later read model needed). Telling these two cases apart requires reading the actual board export, not inferring from a summary.
 
 ### IV. Test-First, Three Layers (NON-NEGOTIABLE)
 Tests are written before, or alongside, the handler they describe — never after. **Layer 1** (domain): xUnit + Shouldly, no mocks, calling factory/domain methods directly. **Layer 2** (handler): xUnit + Shouldly + NSubstitute, mocking `IDocumentSession` where that's tractable. **Layer 3** (Testcontainers): a real Postgres-backed Marten store, used whenever Layer 2 mocking of `FetchForWriting`/`AggregateStreamAsync` becomes more trouble than it's worth — which is most event-sourced handlers. Every scenario in a slice's specifications gets at least one executable test; a specification with no equivalent test is a gap, not a nice-to-have. Shouldly and NSubstitute (both MIT) are a deliberate choice, not a default — they avoid Moq's 2024 SponsorLink trust incident and FluentAssertions' 2025 move to a paid license for commercial use from v8 onward; re-check license terms before adding any other test-tooling dependency.
@@ -51,6 +73,7 @@ Any AI coding agent working in this repository (Claude Code, via Spec Kit or oth
 - Follows the architecture in Principles I–II; a change that needs to violate them requires a documented rationale, not a silent shortcut.
 - Writes or updates tests for any new business logic in the same change, per Principle IV — never as a deferred follow-up.
 - Flags, rather than silently resolves, any conflict it finds between this constitution, the source spec (Principle III), and existing code.
+- Confirms with the user before widening an already-shipped feature's contract (a request/response shape, a domain event's fields) to satisfy a *different*, later feature's needs — e.g. a read model discovering an earlier event lacks a field it needs to route by. The fix is often correct and minimal, but it revises delivered, tested scope for another feature's sake, which is not a unilateral call the way an internal-only, non-breaking addition is.
 
 ## Architecture Constraints
 
@@ -75,7 +98,8 @@ Any AI coding agent working in this repository (Claude Code, via Spec Kit or oth
 
 ## Quality Gates & Workflow
 
-- **Every commit must pass `dotnet build` and the slice's own tests** (`dotnet test --filter <SliceName>`) before landing — running only the affected slice's tests is enough; the full suite is not required per commit.
+- **Every commit must pass `dotnet build` and the slice's own tests** (`dotnet test --filter <SliceName>`) before landing — running only the affected slice's tests is enough; the full suite is not required per commit. **Exception**: a change to a domain event or aggregate that predates the current slice (extending an existing event's fields, fixing a shared aggregate) requires running the full solution suite before landing, not just the new slice's tests — the change is not confined to the slice touching it, and the cheapest place to catch a break is before the commit, not in a later, unrelated slice's session.
+- **`docs/adr/` continues this project's own ADR numbering** from Solution Arch §10's summary table (currently ADR-001 through ADR-018) — a feature's own `research.md` decisions get the next free numbers in that same sequence when written up as full ADRs (Quality Gates, `speckit-plan`'s ADR step). Do not reuse or confuse these with ADR numbers appearing in `build-kit-dotnet-es`'s own reference material (e.g. "ADR-019"/"ADR-031" in its `AGENT.md`/`README.md`) — those belong to an unrelated prior project that toolkit was validated against, not this one.
 - **Pre-checkin deterministic checks** (see `build-kit-dotnet-es/quality-checks.md` for the source rationale): `dotnet format --verify-no-changes`, `dotnet list package --vulnerable`, a SAST pass, and a secret-scan pass over the staged diff, run before any change lands — regardless of what enforces them (CI, a git hook, or manual discipline); this project does not run the Ralph loop, so nothing here assumes its specific hook mechanism. High/Critical findings from any of these gate the change (Principle VIII); lower-severity findings are a signal, not a blocker.
 - **Bypassing the gate requires a stated reason and is always audited** — never a silent skip. If a check must be bypassed, that decision is logged (timestamp, slice, reason), unconditionally.
 - **New PII-shaped fields** (name, address, phone, email, or similar) are flagged for an explicit masking/retention decision at the point they're added — not deferred, not assumed safe by default. In an underwriting/insurance domain this applies to insured names, broker contact details, and claimant information at minimum.
@@ -90,6 +114,7 @@ Amendments happen by editing this file directly, with a version bump and a dated
 
 `build-kit-dotnet-es/AGENT.md` (this repo's own accumulated, project-specific learnings log) is the living companion to this document: it records concrete gotchas and patterns discovered while building against these principles, and should be read alongside this constitution during implementation — but it *refines and illustrates* these principles, it does not override them. A learning that contradicts a principle here means either the learning is wrong, or this constitution needs an amendment; it does not silently win by being more recent.
 
-**Version**: 1.1.0 | **Ratified**: 2026-08-09 | **Last Amended**: 2026-08-09
+**Version**: 1.2.0 | **Ratified**: 2026-08-09 | **Last Amended**: 2026-08-10
 <!-- 1.0.0: initial adoption for Underwriting, adapted verbatim (minus naming) from Powergym's 1.2.0 constitution — both projects share build-kit-dotnet-es as their common architecture source. -->
 <!-- 1.1.0: added Technology Constraints solution-file-format entry (.slnx over legacy .sln) while scaffolding 001-authority-administration. -->
+<!-- 1.2.0: process learnings from completing 001-authority-administration (all tasks done, 2026-08-10) — Principle III: verify against spec.md's literal board export, not just data-model.md's summary, before treating a dependency-edge gap as a bug vs. an intentional limitation. Principle XI: confirm with the user before widening an already-shipped feature's contract for a later feature's sake. Quality Gates: full-suite requirement when a change touches a pre-existing shared event/aggregate; docs/adr/ numbering continues this project's own ADR-001-018 sequence, distinct from build-kit-dotnet-es's own unrelated reference-project ADR numbers. -->
