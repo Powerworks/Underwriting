@@ -133,7 +133,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: `ReceiveBrokerSubmission` always succeeds and starts the `Submission` stream (AC-1.1) — the entry point every downstream automation in later phases depends on. **This phase is the first end-to-end working slice.**
 
-- [ ] 3.1 [P] Layer 2 handler test: `ReceiveBrokerSubmissionHandler` always succeeds
+- [x] 3.1 [P] Layer 2 handler test: `ReceiveBrokerSubmissionHandler` always succeeds
   - **Do**: Write an xUnit + Shouldly + NSubstitute test asserting the handler appends `BrokerSubmissionReceived` and returns `201`/`SubmissionId` for any well-formed request — no validation beyond `[Required]` presence (AC-1.1: "always succeeds if the payload arrives at all"). Must fail (handler doesn't exist).
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests/ReceiveBrokerSubmissionHandlerTests.cs`
   - **Done when**: Test exists and fails
