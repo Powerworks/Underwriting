@@ -95,7 +95,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - Submission.Create from BrokerSubmissionReceived`
   - _Requirements: FR-1, AC-1.1_
 
-- [ ] 2.3 `Submission` aggregate skeleton + `Create`/`Apply(BrokerSubmissionReceived)`
+- [x] 2.3 `Submission` aggregate skeleton + `Create`/`Apply(BrokerSubmissionReceived)`
   - **Do**: 1. Create `Submission` class per `design.md` Components' Apply-computed state table (`[JsonInclude]`/`[JsonConstructor]`, `[JsonIgnore] Id` alias over `SubmissionId` per 001's discovered Marten gotcha). 2. Implement `Create(BrokerSubmissionReceived)`. 3. Leave `Apply` for the other 10 stream events as later additions (each event's own phase).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/Submission.cs`
   - **Done when**: 2.2's test passes
