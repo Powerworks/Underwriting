@@ -192,7 +192,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: Async ADEPT normalization (IR-001) produces `SubmissionNormalized`/`SubmissionNormalizationFailed`; `SubmissionQueue` (underwriter worklist) and `SubmissionExceptionQueue` (ops) read models come online.
 
-- [ ] 4.1 [P] `IBrokerAdeptClient`/`BrokerAdeptClient` (IR-001, Polly retry + circuit breaker)
+- [x] 4.1 [P] `IBrokerAdeptClient`/`BrokerAdeptClient` (IR-001, Polly retry + circuit breaker)
   - **Do**: Implement per `design.md` Interfaces (`NormalizeAsync(rawPayloadRef, ct) → AdeptNormalizationResult`), Polly-wrapped (ADR-008), registered in DI.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/BrokerAdeptClient.cs`
   - **Done when**: Interface + impl compile, DI-registered
