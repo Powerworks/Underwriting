@@ -64,7 +64,7 @@ public static class ReviseAuthorityLimitHandler
             request.Reason,
             RevisedBy: "system", // TODO(ADR-010): populate from the authenticated caller once identity lands
             EffectiveDate: DateOnly.FromDateTime(DateTimeOffset.UtcNow.Date),
-            Version: entity.Version + 1,
+            Version: entity.RevisionNumber + 1,
             RevisedAt: DateTimeOffset.UtcNow);
 
         stream.AppendOne(revised);

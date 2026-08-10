@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Marten's JasperFx.Events source generator must run in the assembly that
+         defines a self-aggregating type (constitution Principle I) — it looks up
+         the generated [GeneratedEvolver] via typeof(TAggregate).Assembly at
+         runtime, so a plain PackageReference here (not just in the Api project
+         that calls Projections.Snapshot<AuthorityLimit>) is required, not optional. -->
+    <PackageReference Include="Marten" Version="9.19.0" />
+  </ItemGroup>
+
 </Project>

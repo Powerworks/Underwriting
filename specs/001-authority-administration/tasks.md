@@ -70,8 +70,8 @@ immediately (quickstart.md scenario 1).
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Contract test `POST /api/authority/cells/{cellId}/limits` (happy path) in `tests/Modules/AuthorityAdministration/AuthorityAdministration.Api.Tests/GrantCellAuthorityLimitTests.cs` — **not yet written**, see Phase status note below
-- [ ] T011 [P] [US1] Contract test duplicate-active-grant → `409 CellAuthorityLimitGrantRejected` (Clarified 2026-08-09, FR-011) in the same test file — **not yet written**
+- [X] T010 [P] [US1] Contract test `POST /api/authority/cells/{cellId}/limits` (happy path) — **retargeted to Layer 3**: `tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/GrantCellAuthorityLimitIntegrationTests.cs`, not the Api.Tests path originally named — `session.Query<AuthorityLimit>`/`FetchForWriting` are awkward to mock meaningfully (build-state-change SKILL.md), so all of US1/US3/US4/US5's contract tests run against a real Postgres via Testcontainers instead. Passing.
+- [X] T011 [P] [US1] Contract test duplicate-active-grant → `409 CellAuthorityLimitGrantRejected` (Clarified 2026-08-09, FR-011) — same file/retarget as T010. Passing.
 - [X] T012 [P] [US1] Domain test `AuthorityLimit.Create(CellAuthorityLimitGranted)` in `tests/Modules/AuthorityAdministration/AuthorityAdministration.Domain.Tests/AuthorityLimitTests.cs` — passing
 
 ### Implementation for User Story 1
@@ -96,9 +96,9 @@ rejection path (FR-011) both explicit.
 
 ### Tests for User Story 3
 
-- [ ] T018 [P] [US3] Contract test happy-path grant in `tests/Modules/AuthorityAdministration/AuthorityAdministration.Api.Tests/GrantUnderwriterAuthorityLimitTests.cs` — **not yet written**
-- [ ] T019 [P] [US3] Contract test `rejectionReason: "ExceedsCellLimit"` in the same file — **not yet written**
-- [ ] T020 [P] [US3] Contract test `rejectionReason: "DuplicateActiveGrant"` (Clarified 2026-08-09, FR-011) in the same file — **not yet written**
+- [X] T018 [P] [US3] Contract test happy-path grant — **retargeted to Layer 3** (same rationale as T010): `tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/GrantUnderwriterAuthorityLimitIntegrationTests.cs`. Passing.
+- [X] T019 [P] [US3] Contract test `rejectionReason: "ExceedsCellLimit"` — same file/retarget as T018. Passing.
+- [X] T020 [P] [US3] Contract test `rejectionReason: "DuplicateActiveGrant"` (Clarified 2026-08-09, FR-011) — same file/retarget as T018. Passing.
 - [X] T021 [P] [US3] Domain test cascade-limit calculation in `tests/Modules/AuthorityAdministration/AuthorityAdministration.Domain.Tests/AuthorityLimitTests.cs` — **scope note**: cascade *rejection* logic lives in the handler (`Apply` never guards, per constitution), so this landed as a narrower scope-documentation test rather than a cascade-rejection test; the real cascade-rejection behavior is only verifiable via T019/T020 (still open)
 
 ### Implementation for User Story 3
@@ -121,10 +121,10 @@ trail; both new rejection paths (Revoked-terminal, cascade-exceeded) enforced.
 
 ### Tests for User Story 4
 
-- [ ] T026 [P] [US4] Contract test happy-path revise in `tests/Modules/AuthorityAdministration/AuthorityAdministration.Api.Tests/ReviseAuthorityLimitTests.cs` — **not yet written**
-- [ ] T027 [P] [US4] Contract test `rejectionReason: "RevokedRecord"` (Clarified 2026-08-09, FR-010) in the same file — **not yet written**
-- [ ] T028 [P] [US4] Contract test `rejectionReason: "ExceedsCellLimit"` on revise (Clarified 2026-08-09, FR-012) in the same file — **not yet written**
-- [ ] T029 [P] [US4] Integration test (Layer 3) asserting `AuthorityLimitChangedV1` is published via the Wolverine/Marten outbox on `AuthorityLimitRevised` in `tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/AuthorityLimitChangedIntegrationEventTests.cs` — **not yet written**; Docker is available in this environment so Testcontainers-backed runs are actually possible here, just not done yet
+- [X] T026 [P] [US4] Contract test happy-path revise — **retargeted to Layer 3** (same rationale as T010): `tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/ReviseAuthorityLimitIntegrationTests.cs`. Passing.
+- [X] T027 [P] [US4] Contract test `rejectionReason: "RevokedRecord"` (Clarified 2026-08-09, FR-010) — same file/retarget as T026. Passing.
+- [X] T028 [P] [US4] Contract test `rejectionReason: "ExceedsCellLimit"` on revise (Clarified 2026-08-09, FR-012) — same file/retarget as T026. Passing.
+- [X] T029 [P] [US4] Integration test (Layer 3) asserting `AuthorityLimitChangedV1` is published — landed in the same `ReviseAuthorityLimitIntegrationTests.cs` file rather than a separate `AuthorityLimitChangedIntegrationEventTests.cs`; `IMessageBus` is substituted (NSubstitute) rather than run through a real host/RabbitMQ, since there is no consumer of `AuthorityLimitChangedV1` yet (004 doesn't exist) to verify actual cross-process delivery against — the test asserts the handler hands the outbox the right event shape, not outbox durability itself. Passing. **Also surfaced two real bugs while getting Testcontainers runs working for the first time** (T046's Inline snapshot registration had never actually been exercised against real Postgres before this session): (1) Marten's `Projections.Snapshot<T>` registration throws unless the identity member is literally named `Id` — `AuthorityLimitId` alone (the "{TypeName}Id" convention, which `LoadAsync`/`Query` *do* honor) isn't enough; fixed with a `JsonIgnore`d `Id` alias in `AuthorityLimit.cs`. (2) The generator that dispatches `Create`/`Apply` must run in the assembly defining the aggregate — `AuthorityAdministration.Domain.csproj` needed its own `Marten` PackageReference, not just the Api project's. (3) Marten silently overwrites a document property literally named `Version` with its own internal concurrency sequence number — `AuthorityLimit.Version` (the business revision counter) was renamed to `RevisionNumber` after this was caught corrupting revise-response version numbers.
 
 ### Implementation for User Story 4
 
@@ -148,8 +148,8 @@ jointly with US4's T027 test, since it needs both handlers).
 
 ### Tests for User Story 5
 
-- [ ] T035 [P] [US5] Contract test happy-path revoke in `tests/Modules/AuthorityAdministration/AuthorityAdministration.Api.Tests/RevokeAuthorityLimitTests.cs` — **not yet written**
-- [ ] T036 [P] [US5] Integration test asserting `AuthorityLimitChangedV1` published on revoke, reusing T029's harness — **not yet written**
+- [X] T035 [P] [US5] Contract test happy-path revoke — **retargeted to Layer 3** (same rationale as T010): `tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/RevokeAuthorityLimitIntegrationTests.cs`. Passing.
+- [X] T036 [P] [US5] Integration test asserting `AuthorityLimitChangedV1` published on revoke, reusing T029's harness (NSubstitute `IMessageBus`, same scope note as T029) — same file as T035. Passing.
 
 ### Implementation for User Story 5
 
@@ -198,7 +198,7 @@ this phase is what makes it pass rather than 404).
 
 ### Implementation for User Story 2
 
-- [ ] T046 [US2] Register `Projections.Snapshot<AuthorityLimit>(SnapshotLifecycle.Inline)` projecting to `AuthorityMatrix` DTO in `AuthorityAdministrationModuleDbConfig.cs` (depends on T006, T007; constitution Architecture Constraints — `Inline` only because `AuthorityMatrix` is queried by id at decision time)
+- [X] T046 [US2] Register `Projections.Snapshot<AuthorityLimit>(SnapshotLifecycle.Inline)` — **consolidated into `Module.cs`** (same T006 pattern), not a separate DbConfig file. Registration compiled since early in the session but was never actually run against real Postgres until T010/T018/T026/T035's Testcontainers work in this session, which surfaced (and this task's fix resolved) two blocking bugs — see T029's note. Now verified working: a grant is queryable via `session.Query<AuthorityLimit>()`/`LoadAsync` in the same session. **Still projecting `AuthorityLimit` itself, not a distinct `AuthorityMatrix` DTO** — T047 (the `GET` endpoint) is what was supposed to shape that DTO and is still not started, so flagging rather than claiming the DTO half of this task's own description is done.
 - [ ] T047 [US2] `GET /api/authority/matrix/{authorityLimitId}` `[WolverineGet]` endpoint in `.../Api/ReadModels/AuthorityMatrix/GetAuthorityMatrix.cs` (depends on T046)
 - [ ] T048 [US2] Wire T016's and T025's duplicate/cascade checks to query this snapshot directly rather than re-deriving state (depends on T046; retrofit into US1/US3 handlers)
 

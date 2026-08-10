@@ -27,7 +27,7 @@ public class AuthorityLimitTests
         entity.CellId.ShouldBe("CELL-04");
         entity.UnderwriterId.ShouldBeNull();
         entity.Status.ShouldBe("Active");
-        entity.Version.ShouldBe(0);
+        entity.RevisionNumber.ShouldBe(0);
     }
 
     // [US3]
@@ -75,7 +75,7 @@ public class AuthorityLimitTests
             DateOnly.FromDateTime(DateTime.UtcNow), Version: 1, DateTimeOffset.UtcNow));
 
         entity.Scope.MaxLineSize.ShouldBe(20_000_000);
-        entity.Version.ShouldBe(1);
+        entity.RevisionNumber.ShouldBe(1);
         entity.Status.ShouldBe("Active");
     }
 
@@ -116,6 +116,6 @@ public class AuthorityLimitTests
             "Gov", DateTimeOffset.UtcNow));
 
         entity.Status.ShouldBe("Active");
-        entity.Version.ShouldBe(0);
+        entity.RevisionNumber.ShouldBe(0);
     }
 }

@@ -14,6 +14,20 @@ public sealed class AuthorityLimit
 {
     public Guid AuthorityLimitId { get; private init; }
 
+    /// <summary>
+    /// Alias required by Marten: <c>options.Projections.Snapshot&lt;AuthorityLimit&gt;</c>
+    /// (Module.cs) fails to close its internal generic types unless the identity
+    /// member is literally named <c>Id</c> — the "{TypeName}Id" convention (which
+    /// <see cref="AuthorityLimitId"/> follows and which document Query/LoadAsync
+    /// does honor) is not enough for snapshot-projection registration specifically.
+    /// Confirmed by reproducing `DocumentStore.For` throwing
+    /// `ArgumentNullException` from `CloseAndBuildAs` with Marten 9.19.0 when this
+    /// alias is absent. JsonIgnore keeps AuthorityLimitId as the one serialized/
+    /// canonical field.
+    /// </summary>
+    [JsonIgnore]
+    public Guid Id => AuthorityLimitId;
+
     /// <summary>"Cell" | "Underwriter" — set once, at creation, never changes.</summary>
     public string Tier { get; private init; } = string.Empty;
 
@@ -33,13 +47,22 @@ public sealed class AuthorityLimit
     /// <summary>"Active" | "Revoked" (Clarified 2026-08-09) — Revoked is terminal.</summary>
     public string Status { get; private set; } = "Active";
 
-    public int Version { get; private set; }
+    /// <summary>
+    /// Business revision counter (data-model.md), exposed on the wire as "version"
+    /// on every response DTO/event — but deliberately NOT named "Version" on this
+    /// class: Marten silently overwrites a document property literally named
+    /// `Version` with its own internal optimistic-concurrency sequence number
+    /// (confirmed empirically — after 1 event a property named `Version` reads
+    /// back as 1 instead of the 0 this domain logic assigned it), corrupting this
+    /// field's actual business meaning without any error or warning.
+    /// </summary>
+    public int RevisionNumber { get; private set; }
 
     [JsonConstructor]
     private AuthorityLimit(
         Guid authorityLimitId, string tier, string cellId, string? underwriterId,
         AuthorityScope scope, string? sourceAgreementReference, string grantedBy,
-        DateTimeOffset grantedAt, string status, int version)
+        DateTimeOffset grantedAt, string status, int revisionNumber)
     {
         AuthorityLimitId = authorityLimitId;
         Tier = tier;
@@ -50,7 +73,7 @@ public sealed class AuthorityLimit
         GrantedBy = grantedBy;
         GrantedAt = grantedAt;
         Status = status;
-        Version = version;
+        RevisionNumber = revisionNumber;
     }
 
     public static AuthorityLimit Create(CellAuthorityLimitGranted @event) => new(
@@ -66,7 +89,7 @@ public sealed class AuthorityLimit
     public void Apply(AuthorityLimitRevised @event)
     {
         Scope = @event.NewLimit;
-        Version = @event.Version;
+        RevisionNumber = @event.Version;
     }
 
     public void Apply(AuthorityLimitRevoked @event) => Status = "Revoked";
