@@ -282,14 +282,19 @@ options.Projections.Snapshot<<Entity>>(SnapshotLifecycle.Inline);
 
 **Verify against live docs before writing this line.** Marten's registration API for self-aggregating snapshots has shifted across versions, and its failure modes below don't surface at `dotnet build` — only when `DocumentStore.For(...)` actually runs (first Testcontainers test, or first real deploy). Spawn a subagent (general-purpose, foreground — its findings are needed before continuing) to fetch the current `martendb.io` pages for `Projections.Snapshot`/single-stream projections and confirm the signature against this project's actual pinned `Marten`/`WolverineFx.Marten` versions (`Directory.Build.props`) before trusting memorized API shape. This is not a hypothetical caution — both failure modes below were only found by doing exactly this after a wrong assumption produced a confusing runtime exception.
 
-**Two silent failure modes specific to `Projections.Snapshot<T>`**, both found the hard way:
+**Three silent failure modes specific to `Projections.Snapshot<T>`**, all found the hard way:
 
-1. **The identity member must be literally named `Id`.** The "`{TypeName}Id` is also honored" convention (e.g. `OrderId` for `Order`) is real for plain document `Query`/`LoadAsync`, but snapshot *registration itself* throws `ArgumentNullException` from `JasperFx.Core.Reflection.TypeExtensions.CloseAndBuildAs` if the entity's own id property isn't literally `Id`. Since this kit's entities are named `<Entity>Id` by convention (Step 3 above), add a `[JsonIgnore]` alias rather than renaming the canonical property:
+1. **The identity member must be literally named `Id`.** The "`{TypeName}Id` is also honored" convention (e.g. `OrderId` for `Order`) is real for plain document `Query`/`LoadAsync`, but snapshot *registration itself* throws `ArgumentNullException` from `JasperFx.Core.Reflection.TypeExtensions.CloseAndBuildAs` if the entity's own id property isn't literally `Id`. Since this kit's entities are named `<Entity>Id` by convention (Step 3 above), add a `[JsonIgnore]` alias rather than renaming the canonical property — and give it a `private set` even though nothing outside the class ever needs to set it:
    ```csharp
    [JsonIgnore]
-   public Guid Id => <Entity>Id;
+   public Guid Id
+   {
+       get => <Entity>Id;
+       private set { } // see point 3 below — a get-only Id is not enough
+   }
    ```
 2. **Never name a business field `Version`.** Marten silently overwrites any document property literally named `Version` with its own internal optimistic-concurrency sequence number — no warning, no exception, just a wrong value the next time it's read back (a freshly-created entity reads back as version 1, not 0, silently corrupting anything that assumed otherwise). If the entity needs its own business revision counter, name it something else (`RevisionNumber`, `SequenceNumber`) — anything but `Version`.
+3. **A get-only `Id` works for `LoadAsync`/`Query` but not for `session.Events.AggregateStreamAsync<T>`.** That call throws `NullReferenceException` from `Marten.Internal.Storage.DocumentStorage.SetIdentityFromGuid` — it compiles a setter delegate for this code path specifically, and a get-only property has none to compile, so the call lands on a null delegate. This only surfaces the first time a handler that reads state via `AggregateStreamAsync` (rather than `FetchForWriting`, e.g. a handler that reads another entity's state without intending to append to its stream) actually runs against real Postgres — easy to miss if that handler's only test is Layer 1/2. The `private set { }` no-op above is the fix; there is nothing else to change, since the entity's own canonical id field is still the only thing that ever actually gets read or written.
 
 **Also**: the `Create`/`Apply` dispatcher is source-generated **per-assembly, not per-solution**. The generator (a Marten analyzer) only sees types declared in the project it's compiling — if `<Entity>` lives in `<SolutionName>.Modules.<Context>.Domain` and only the `.Api` project references `Marten`, `Projections.Snapshot<<Entity>>` throws `InvalidProjectionException: No source-generated dispatcher found...` at store-build time even though everything compiled cleanly. The `Domain` project itself needs a plain `<PackageReference Include="Marten" />` — not analyzers-only; stripping the `analyzers` asset breaks generation just as thoroughly as omitting the reference entirely.
 

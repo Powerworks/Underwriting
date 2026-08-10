@@ -34,8 +34,10 @@ Request:
 ## `POST /api/v1/authority/limits/{authorityLimitId}/increase-requests`
 **Command**: `RequestCellAuthorityIncrease` — records the request only; no approval workflow modeled yet (see `data-model.md`, `CellAuthorityIncreaseRequest`).
 
-Request: `{ "requestedLimit": { "maxLineSize": 0, "maxAggregate": 0 }, "justification": "string" }`
-`201 Created` → `{ requestId, cellId, requestedAt }`
+Request: `{ "underwriterId": "string", "requestedLimit": { "maxLineSize": 0, "maxAggregate": 0 }, "justification": "string" }`
+`201 Created` → `{ requestId, cellId, underwriterId, requestedAt }`
+
+`underwriterId` (added for US8 — not on the original board export): required, not optional — the real flow is always escalating one specific underwriter's rejected grant, and `UnderwriterAuthorityRegister` (US8) has no other field to route `CellAuthorityIncreaseRequested` by underwriter. See the event's own XML doc remarks for the full rationale.
 
 ## `PUT /api/v1/authority/limits/{authorityLimitId}/revision`
 **Command**: `ReviseAuthorityLimit`

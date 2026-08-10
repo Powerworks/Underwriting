@@ -28,6 +28,7 @@ public static class RequestCellAuthorityIncreaseHandler
         var requested = new CellAuthorityIncreaseRequested(
             requestId,
             cellGrant.CellId,
+            request.UnderwriterId,
             RequestedBy: "system", // TODO(ADR-010): populate from the authenticated caller once identity lands
             CurrentLimit: cellGrant.Scope,
             request.RequestedLimit,
@@ -39,6 +40,6 @@ public static class RequestCellAuthorityIncreaseHandler
 
         return TypedResults.Created(
             $"/api/v1/authority/increase-requests/{requestId}",
-            new RequestCellAuthorityIncreaseResponse(requestId, cellGrant.CellId, requested.RequestedAt));
+            new RequestCellAuthorityIncreaseResponse(requestId, cellGrant.CellId, request.UnderwriterId, requested.RequestedAt));
     }
 }

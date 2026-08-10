@@ -12,6 +12,7 @@ public sealed class CellAuthorityIncreaseRequest
 {
     public Guid RequestId { get; private init; }
     public string CellId { get; private init; } = string.Empty;
+    public string UnderwriterId { get; private init; } = string.Empty;
     public string RequestedBy { get; private init; } = string.Empty;
     public AuthorityScope CurrentLimit { get; private init; } = null!;
     public AuthorityScope RequestedLimit { get; private init; } = null!;
@@ -20,11 +21,12 @@ public sealed class CellAuthorityIncreaseRequest
 
     [JsonConstructor]
     private CellAuthorityIncreaseRequest(
-        Guid requestId, string cellId, string requestedBy, AuthorityScope currentLimit,
+        Guid requestId, string cellId, string underwriterId, string requestedBy, AuthorityScope currentLimit,
         AuthorityScope requestedLimit, string justification, DateTimeOffset requestedAt)
     {
         RequestId = requestId;
         CellId = cellId;
+        UnderwriterId = underwriterId;
         RequestedBy = requestedBy;
         CurrentLimit = currentLimit;
         RequestedLimit = requestedLimit;
@@ -33,6 +35,6 @@ public sealed class CellAuthorityIncreaseRequest
     }
 
     public static CellAuthorityIncreaseRequest Create(CellAuthorityIncreaseRequested @event) => new(
-        @event.RequestId, @event.CellId, @event.RequestedBy, @event.CurrentLimit,
+        @event.RequestId, @event.CellId, @event.UnderwriterId, @event.RequestedBy, @event.CurrentLimit,
         @event.RequestedLimit, @event.Justification, @event.RequestedAt);
 }

@@ -1,5 +1,6 @@
 using BrokerConnect.BuildingBlocks.Domain;
 using BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.CellAuthorityRegister;
+using BrokerConnect.Modules.AuthorityAdministration.Api.ReadModels.UnderwriterAuthorityRegister;
 using BrokerConnect.Modules.AuthorityAdministration.Domain.Aggregates;
 using JasperFx.Events.Projections;
 using Marten;
@@ -30,6 +31,9 @@ public sealed class AuthorityAdministrationModule : IMartenModuleConfiguration
         // the test fixture's BuildProjectionDaemonAsync) — registering it here alone
         // is not enough for documents to ever get produced.
         options.Projections.Add<CellAuthorityRegisterProjector>(ProjectionLifecycle.Async);
+
+        // T053/US8 — same async-projection requirements as CellAuthorityRegister above.
+        options.Projections.Add<UnderwriterAuthorityRegisterProjector>(ProjectionLifecycle.Async);
     }
 
     // No IntegrationEventQueueName override — this module only publishes

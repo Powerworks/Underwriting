@@ -25,8 +25,23 @@ public sealed class AuthorityLimit
     /// alias is absent. JsonIgnore keeps AuthorityLimitId as the one serialized/
     /// canonical field.
     /// </summary>
+    /// <remarks>
+    /// The `private set` (a no-op — <see cref="AuthorityLimitId"/> is still the
+    /// only real source of truth) is not decorative: a get-only <c>Id</c> compiles
+    /// fine and works for `LoadAsync`/`Query`, but `session.Events.AggregateStreamAsync&lt;T&gt;`
+    /// throws `NullReferenceException` from `DocumentStorage.SetIdentityFromGuid` —
+    /// Marten compiles a setter delegate for that code path specifically, and a
+    /// get-only property has none to compile, so the call is against a null
+    /// delegate. Found only once `RequestCellAuthorityIncreaseHandler` (the one
+    /// handler in this module using `AggregateStreamAsync` instead of
+    /// `FetchForWriting`) first ran against a real Postgres.
+    /// </remarks>
     [JsonIgnore]
-    public Guid Id => AuthorityLimitId;
+    public Guid Id
+    {
+        get => AuthorityLimitId;
+        private set { }
+    }
 
     /// <summary>"Cell" | "Underwriter" — set once, at creation, never changes.</summary>
     public string Tier { get; private init; } = string.Empty;

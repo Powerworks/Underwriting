@@ -176,8 +176,8 @@ auditable request.
 ### Implementation for User Story 7
 
 - [X] T042 [P] [US7] `CellAuthorityIncreaseRequest` aggregate (single-event stream, `data-model.md`) in `.../Domain/Aggregates/CellAuthorityIncreaseRequest.cs`
-- [X] T043 [P] [US7] `CellAuthorityIncreaseRequested` event record in `.../Domain/Events/CellAuthorityIncreaseRequested.cs`
-- [X] T044 [US7] `RequestCellAuthorityIncrease` command + handler in `.../Api/Commands/RequestCellAuthorityIncrease/` (depends on T042, T043). Builds clean.
+- [X] T043 [P] [US7] `CellAuthorityIncreaseRequested` event record in `.../Domain/Events/CellAuthorityIncreaseRequested.cs` — **amended during US8**: gained a required `UnderwriterId` field. The board's own dependency edge wires this event into `UnderwriterAuthorityRegister` (US8), keyed by `underwriterId`, but neither this event nor `RequestCellAuthorityIncrease`'s route/request ever captured which underwriter the escalation was for, even though the narrative is "escalation path from [a specific underwriter's] rejection" — not an incompleteness like US6's unwired `Revised`, an impossibility (no field to route by at all). Confirmed with the user before widening this already-shipped P1 contract: `RequestCellAuthorityIncreaseRequest`/`Response`, the aggregate, and `contracts/authority-administration-http.md` all updated to match. Required, not optional, since the underwriter is always known in the real flow.
+- [X] T044 [US7] `RequestCellAuthorityIncrease` command + handler in `.../Api/Commands/RequestCellAuthorityIncrease/` (depends on T042, T043). Builds clean. **Also surfaced a third Marten `Id`-property gotcha this session** (alongside T029's two): this handler is the only one in the module using `session.Events.AggregateStreamAsync<AuthorityLimit>` rather than `FetchForWriting`, and that code path throws `NullReferenceException` from `DocumentStorage.SetIdentityFromGuid` against a get-only `Id` alias — it compiles a setter delegate specifically for this path, unlike `LoadAsync`/`Query`. Fixed by giving `AuthorityLimit.Id` a no-op `private set`. Only found once this handler (previously untested past Layer 1) first ran against real Postgres, via US8's own tests.
 
 **Checkpoint**: All 5 P1 stories independently functional — this is the P1 MVP slice of this feature.
 
@@ -229,12 +229,12 @@ this phase is what makes it pass rather than 404).
 
 ### Tests for User Story 8
 
-- [ ] T052 [P] [US8] Projection test in `tests/Modules/AuthorityAdministration/AuthorityAdministration.Api.Tests/UnderwriterAuthorityRegisterProjectionTests.cs`
+- [X] T052 [P] [US8] Projection test — **retargeted to Layer 3** (same rationale as T049): `tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/UnderwriterAuthorityRegisterProjectionTests.cs`, not Api.Tests. Covers grant reflected, an increase request with no prior grant (leaves `currentScope`/`currentVersion` null — a real, common path since escalation follows a *rejected* grant), an increase request after a grant (appends history without touching current authority), and T054's pagination. Passing.
 
 ### Implementation for User Story 8
 
-- [ ] T053 [P] [US8] `UnderwriterAuthorityRegister` async projection reacting to `UnderwriterAuthorityLimitGranted`, `CellAuthorityIncreaseRequested` in `.../Api/ReadModels/UnderwriterAuthorityRegister/UnderwriterAuthorityRegisterProjector.cs`
-- [ ] T054 [US8] `GET /api/authority/underwriters/{underwriterId}/register` endpoint in `.../Api/ReadModels/UnderwriterAuthorityRegister/GetUnderwriterAuthorityRegister.cs`
+- [X] T053 [P] [US8] `UnderwriterAuthorityRegister` async projection reacting to `UnderwriterAuthorityLimitGranted`, `CellAuthorityIncreaseRequested` in `.../Api/ReadModels/UnderwriterAuthorityRegister/UnderwriterAuthorityRegisterProjector.cs` — `MultiStreamProjection<UnderwriterAuthorityRegister, string>` keyed by `underwriterId` (declared `partial`, same as T050). **Two divergences from a literal "same shape as CellAuthorityRegister" reading, both flagged**: (1) `CurrentScope`/`CurrentVersion`/`EffectiveDate` are nullable — an increase request can be the first-ever event for an underwriter (it follows a *rejected* grant, so no prior `UnderwriterAuthorityLimitGranted` may exist). (2) History entries gained a `Kind`/`SourceId` beyond the literal `{version, scope, effectiveDate, supersededAt?}` shape, since a grant and a request don't map onto the same fields (a request has no grant version). No `AuthorityLimitRevoked` wiring exists for this register at all (confirmed against spec.md's board export, unlike `CellAuthorityRegister`) — `supersededAt` is carried for shape parity but will never be populated.
+- [X] T054 [US8] `GET /api/v1/authority/underwriters/{underwriterId}/register` endpoint in `.../Api/ReadModels/UnderwriterAuthorityRegister/GetUnderwriterAuthorityRegister.cs` — same pagination approach as T051 (default 20 / max 200, flagged as a guess, not silently invented).
 
 **Checkpoint**: All 8 in-scope stories functional (US9 is scope-narrowed below).
 
