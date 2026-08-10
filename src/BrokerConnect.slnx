@@ -11,5 +11,14 @@
   <Project Path="../tests/Modules/AuthorityAdministration/AuthorityAdministration.Api.Tests/AuthorityAdministration.Api.Tests.csproj" />
   <Project Path="../tests/Modules/AuthorityAdministration/AuthorityAdministration.Domain.Tests/AuthorityAdministration.Domain.Tests.csproj" />
   <Project Path="../tests/Modules/AuthorityAdministration/AuthorityAdministration.IntegrationTests/AuthorityAdministration.IntegrationTests.csproj" />
+  <Folder Name="/Modules/SubmissionIntake/">
+    <Project Path="Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/BrokerConnect.Modules.SubmissionIntake.Api.csproj" />
+    <Project Path="Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Contracts/BrokerConnect.Modules.SubmissionIntake.Contracts.csproj" />
+    <Project Path="Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/BrokerConnect.Modules.SubmissionIntake.Domain.csproj" />
+    <Project Path="Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/BrokerConnect.Modules.SubmissionIntake.Infrastructure.csproj" />
+  </Folder>
+  <Project Path="../tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests/SubmissionIntake.Api.Tests.csproj" />
+  <Project Path="../tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionIntake.Domain.Tests.csproj" />
+  <Project Path="../tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/SubmissionIntake.IntegrationTests.csproj" />
   <Project Path="Api.Host/Api.Host.csproj" />
 </Solution>

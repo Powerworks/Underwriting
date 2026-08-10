@@ -48,7 +48,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `find tests/Modules/SubmissionIntake -name "*.csproj" | wc -l | grep -q 3 && echo PASS`
   - **Commit**: `chore(submission-intake): scaffold test projects`
 
-- [ ] 1.3 Add all 7 new projects to `src/BrokerConnect.slnx`
+- [x] 1.3 Add all 7 new projects to `src/BrokerConnect.slnx`
   - **Do**: Add `<Project Path="...">` entries for the 4 module projects and 3 test projects, under a `/Modules/SubmissionIntake/` solution folder (mirrors 001's `/Modules/AuthorityAdministration/` folder).
   - **Files**: `src/BrokerConnect.slnx`
   - **Done when**: `dotnet sln src/BrokerConnect.slnx list` shows all 7 new projects
