@@ -209,6 +209,15 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet build src/Api.Host/Api.Host.csproj && echo PASS`
   - **Commit**: `fix(submission-intake): wire AddBrokerAdeptClient into DI container`
 
+- [ ] 4.1.2 [FIX 4.1] Fix: remove redundant `Api.Host` → `SubmissionIntake.Infrastructure` direct `ProjectReference`
+  - **Do**: Address the review finding: fix 4.1.1 added a direct `ProjectReference` from `Api.Host.csproj` to `SubmissionIntake.Infrastructure.csproj`, but this is unneeded — `Api.Host` already transitively depends on `Infrastructure` via its existing reference to `SubmissionIntake.Api` (SDK-style `ProjectReference` is transitive by default). This also breaks the `AuthorityAdministration` precedent, where `Api.Host` only ever references a module's `...Api.csproj`, never its internal `Infrastructure` project directly.
+    1. Remove the `<ProjectReference Include="...SubmissionIntake.Infrastructure...csproj" />` line from `src/Api.Host/Api.Host.csproj`.
+    2. Confirm `dotnet build src/Api.Host/Api.Host.csproj` still succeeds (proving the reference was genuinely redundant, not load-bearing).
+  - **Files**: `src/Api.Host/Api.Host.csproj`
+  - **Done when**: `Api.Host.csproj` has no direct reference to `SubmissionIntake.Infrastructure`, and the build still succeeds
+  - **Verify**: `dotnet build src/Api.Host/Api.Host.csproj && echo PASS`
+  - **Commit**: `fix(submission-intake): remove redundant Api.Host to Infrastructure project reference`
+
 - [ ] 4.2 [P] Domain test: `Submission.Apply(SubmissionNormalized)` and `Apply(SubmissionNormalizationFailed)`
   - **Do**: Assert `Apply(SubmissionNormalized)` sets `ClassOfBusiness`/`Territory`/`NamedInsured`/`LineSizeSought`/`KeyTerms`/`EffectiveDateRequested`/`NormalizationStatus`; `Apply(SubmissionNormalizationFailed)` sets `NormalizationStatus` to the failure state, preserves `RawPayloadRef` (AC-4.1: never discarded). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
