@@ -1,4 +1,28 @@
 # Underwriting Constitution
+<!-- Sync Impact Report — 1.2.0 → 1.3.0
+Version bump: MINOR (one principle amended with a scoped exception, three Quality Gates
+bullets changed/added, top-of-file tooling note rewritten — no principle renamed, removed,
+or redefined incompatibly; the base no-auto-push/no-direct-to-master rules still apply by
+default, this only carves out a conditional exception).
+Modified principles:
+  - XI. AI-Assisted Development Rules — the no-auto-push-without-confirmation bullet gained
+    a scoped exception for Ralph Specum's own execution loop, itself conditional on Ralph
+    running on a dedicated feature branch rather than master.
+Modified sections:
+  - Top-of-file tooling note — documents adoption of the Ralph Specum Claude Code plugin
+    (tzachbon/smart-ralph) for feature work from 002-submission-intake onward, replacing the
+    speckit-* skills; clarifies this is unrelated to build-kit-dotnet-es's own (still
+    out-of-scope) Ralph tooling.
+  - Quality Gates & Workflow — removed the stale "this project does not run the Ralph loop"
+    clause; added a bullet naming Ralph Specum as the 002+ workflow; added a
+    one-feature-branch-per-spec rule the Principle XI exception depends on.
+Added sections: none.
+Removed sections: none.
+Follow-up TODOs: none.
+Source: decided 2026-08-10, while about to start 002-submission-intake — see conversation
+  history for the reasoning (trusting an autonomous auto-push loop is conditioned on it never
+  landing directly on master).
+-->
 <!-- Sync Impact Report — 1.1.0 → 1.2.0
 Version bump: MINOR (materially expanded guidance in two existing principles, one existing
 Quality Gates bullet amended with a carve-out, one new Quality Gates bullet added — no
@@ -27,8 +51,14 @@ architecture/quality source; see build-kit-dotnet-es/README.md, .claude/skills/b
 state-view,automation}/SKILL.md, and quality-checks.md for the full source material these
 principles are distilled from. These are architecture/quality principles only — build-kit-dotnet-es's
 own Ralph autonomous-loop tooling (ralph-claude.js, orchestrate.mjs, lib/backend-prompt.md,
-tasks.json/progress.txt) is out of scope for this project: implementation happens through Claude
-Code against the specs in specs/, not the Ralph loop. Principles VI–XI and the Technology
+tasks.json/progress.txt) remains out of scope for this project and is unrelated to the note below.
+As of 2026-08-10, feature work from `002-submission-intake` onward uses the **Ralph Specum**
+Claude Code plugin (`tzachbon/smart-ralph`, installed as `ralph-specum`) in place of the
+`speckit-*` skills: `specs/<name>/` holds Ralph's own `research.md`/`requirements.md`/`design.md`/
+`tasks.md` artifacts (phase commands `/ralph-specum:research|requirements|design|tasks`), and
+`/ralph-specum:implement` drives task execution autonomously per Quality Gates & Workflow.
+`001-authority-administration` is already complete under the prior `speckit-*` workflow
+(`spec.md`/`plan.md`/`tasks.md`) and is not retroactively migrated. Principles VI–XI and the Technology
 Constraints section were folded in from a personal greenfield Spec Kit constitution template
 (modeled after barretb/BarretApi) to close gaps this constitution didn't originally cover. Content
 is unchanged from Powergym's constitution except for this project's name and the version/date
@@ -69,7 +99,7 @@ All logging uses structured message templates (`_logger.LogInformation("Slice {S
 ### XI. AI-Assisted Development Rules
 Any AI coding agent working in this repository (Claude Code, via Spec Kit or otherwise) treats this constitution as binding, alongside `build-kit-dotnet-es/AGENT.md` (Governance). Specifically, an agent:
 - Does not change Marten's schema-auto-creation/`AutoCreate` configuration, or otherwise alter how schema is managed, without explicit review — Marten auto-manages schema (Architecture Constraints), so there is no migration file to review, which makes an unreviewed change to that behavior riskier, not safer.
-- Does not push commits, open pull requests, or merge without explicit confirmation for that specific action.
+- Does not push commits, open pull requests, or merge without explicit confirmation for that specific action — **except** within an active Ralph Specum (`/ralph-specum:implement`) execution loop, whose per-task auto-commit/push is the plugin's own designed behavior and which the user authorizes by starting that loop. This exception is itself conditional on the branch-per-feature rule below: it applies only when Ralph is running on its own dedicated feature branch, never when the active branch is `master` — auto-push is only trusted because it lands somewhere reviewable before merge, not because auto-push itself is now blanket-safe.
 - Follows the architecture in Principles I–II; a change that needs to violate them requires a documented rationale, not a silent shortcut.
 - Writes or updates tests for any new business logic in the same change, per Principle IV — never as a deferred follow-up.
 - Flags, rather than silently resolves, any conflict it finds between this constitution, the source spec (Principle III), and existing code.
@@ -100,7 +130,9 @@ Any AI coding agent working in this repository (Claude Code, via Spec Kit or oth
 
 - **Every commit must pass `dotnet build` and the slice's own tests** (`dotnet test --filter <SliceName>`) before landing — running only the affected slice's tests is enough; the full suite is not required per commit. **Exception**: a change to a domain event or aggregate that predates the current slice (extending an existing event's fields, fixing a shared aggregate) requires running the full solution suite before landing, not just the new slice's tests — the change is not confined to the slice touching it, and the cheapest place to catch a break is before the commit, not in a later, unrelated slice's session.
 - **`docs/adr/` continues this project's own ADR numbering** from Solution Arch §10's summary table (currently ADR-001 through ADR-018) — a feature's own `research.md` decisions get the next free numbers in that same sequence when written up as full ADRs (Quality Gates, `speckit-plan`'s ADR step). Do not reuse or confuse these with ADR numbers appearing in `build-kit-dotnet-es`'s own reference material (e.g. "ADR-019"/"ADR-031" in its `AGENT.md`/`README.md`) — those belong to an unrelated prior project that toolkit was validated against, not this one.
-- **Pre-checkin deterministic checks** (see `build-kit-dotnet-es/quality-checks.md` for the source rationale): `dotnet format --verify-no-changes`, `dotnet list package --vulnerable`, a SAST pass, and a secret-scan pass over the staged diff, run before any change lands — regardless of what enforces them (CI, a git hook, or manual discipline); this project does not run the Ralph loop, so nothing here assumes its specific hook mechanism. High/Critical findings from any of these gate the change (Principle VIII); lower-severity findings are a signal, not a blocker.
+- **Pre-checkin deterministic checks** (see `build-kit-dotnet-es/quality-checks.md` for the source rationale): `dotnet format --verify-no-changes`, `dotnet list package --vulnerable`, a SAST pass, and a secret-scan pass over the staged diff, run before any change lands — regardless of what enforces them (CI, a git hook, Ralph Specum's own quality-gate phase, or manual discipline). High/Critical findings from any of these gate the change (Principle VIII); lower-severity findings are a signal, not a blocker.
+- **Feature work from `002-submission-intake` onward runs through the Ralph Specum plugin** (`/ralph-specum:start`/`research`/`requirements`/`design`/`tasks`/`implement`), not the `speckit-*` skills — see the top-of-file note. Adopting the tool does not relax the standard: everything else in this constitution (Principles I–X, Architecture/Technology Constraints, the rest of this section) still applies to whatever Ralph produces.
+- **One dedicated feature branch per spec, never Ralph pushing directly to `master`.** Because Ralph's execution loop auto-commits and auto-pushes per task without per-action confirmation (Principle XI's scoped exception), that trust is only extended to a branch created for that spec (Ralph's own branch-management behavior prompts for this on start) — `master` only receives already-reviewed, merged work, the same as any other change. `001-authority-administration` was built directly on `master` before this rule existed and is not retroactively affected.
 - **Bypassing the gate requires a stated reason and is always audited** — never a silent skip. If a check must be bypassed, that decision is logged (timestamp, slice, reason), unconditionally.
 - **New PII-shaped fields** (name, address, phone, email, or similar) are flagged for an explicit masking/retention decision at the point they're added — not deferred, not assumed safe by default. In an underwriting/insurance domain this applies to insured names, broker contact details, and claimant information at minimum.
 - **One slice per work session/PR.** Do not chain multiple slices' implementation together; each slice is built, tested, and committed on its own before moving to the next.
@@ -114,7 +146,9 @@ Amendments happen by editing this file directly, with a version bump and a dated
 
 `build-kit-dotnet-es/AGENT.md` (this repo's own accumulated, project-specific learnings log) is the living companion to this document: it records concrete gotchas and patterns discovered while building against these principles, and should be read alongside this constitution during implementation — but it *refines and illustrates* these principles, it does not override them. A learning that contradicts a principle here means either the learning is wrong, or this constitution needs an amendment; it does not silently win by being more recent.
 
-**Version**: 1.2.0 | **Ratified**: 2026-08-09 | **Last Amended**: 2026-08-10
+**Version**: 1.3.0 | **Ratified**: 2026-08-09 | **Last Amended**: 2026-08-10
 <!-- 1.0.0: initial adoption for Underwriting, adapted verbatim (minus naming) from Powergym's 1.2.0 constitution — both projects share build-kit-dotnet-es as their common architecture source. -->
 <!-- 1.1.0: added Technology Constraints solution-file-format entry (.slnx over legacy .sln) while scaffolding 001-authority-administration. -->
 <!-- 1.2.0: process learnings from completing 001-authority-administration (all tasks done, 2026-08-10) — Principle III: verify against spec.md's literal board export, not just data-model.md's summary, before treating a dependency-edge gap as a bug vs. an intentional limitation. Principle XI: confirm with the user before widening an already-shipped feature's contract for a later feature's sake. Quality Gates: full-suite requirement when a change touches a pre-existing shared event/aggregate; docs/adr/ numbering continues this project's own ADR-001-018 sequence, distinct from build-kit-dotnet-es's own unrelated reference-project ADR numbers. -->
+<!-- 1.3.0: adopted the Ralph Specum Claude Code plugin (tzachbon/smart-ralph) for feature work from 002-submission-intake onward, replacing the speckit-* skills — decided 2026-08-10. Top-of-file note explains the tool and file-location change (specs/<name>/research|requirements|design|tasks.md); 001 stays on the prior speckit-* format, not retroactively migrated. Principle XI: scoped exception to the no-auto-push rule for Ralph's own execution loop, conditional on Ralph running on its own feature branch rather than master. Quality Gates: new bullet naming Ralph Specum as the 002+ workflow; new one-branch-per-spec rule this exception depends on; removed the now-stale "this project does not run the Ralph loop" clause from the pre-checkin-checks bullet. -->
+
