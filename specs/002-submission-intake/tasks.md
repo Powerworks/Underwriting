@@ -194,11 +194,20 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 - [x] 4.1 [P] `IBrokerAdeptClient`/`BrokerAdeptClient` (IR-001, Polly retry + circuit breaker)
   - **Do**: Implement per `design.md` Interfaces (`NormalizeAsync(rawPayloadRef, ct) → AdeptNormalizationResult`), Polly-wrapped (ADR-008), registered in DI.
-  - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/BrokerAdeptClient.cs`
-  - **Done when**: Interface + impl compile, DI-registered
+  - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/BrokerAdeptClient.cs`, `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/BrokerConnect.Modules.SubmissionIntake.Infrastructure.csproj` (Microsoft.Extensions.Http, required for AddHttpClient)
+  - **Done when**: Interface + impl compile; DI extension method (`AddBrokerAdeptClient()`) defined and actually invoked from `Program.cs` (see fix task 4.1.1)
   - **Verify**: `dotnet build src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/*.csproj && echo PASS`
   - **Commit**: `feat(submission-intake): add BrokerAdeptClient (IR-001)`
   - _Design: Interfaces, Dependencies (IR-001)_
+
+- [ ] 4.1.1 [FIX 4.1] Fix: `AddBrokerAdeptClient()` defined but never invoked — `IBrokerAdeptClient` not resolvable from DI container
+  - **Do**: Address the review finding: task 4.1's own "Done when" criterion required DI registration, but `BrokerAdeptClientServiceCollectionExtensions.AddBrokerAdeptClient()` is never called anywhere.
+    1. Call `services.AddBrokerAdeptClient()` in `src/Api.Host/Program.cs` (in the `builder.Services` chain, alongside wherever other module infrastructure services are registered — check `SubmissionIntakeModule`/`Module.cs` first in case module registration is the intended call site instead of `Program.cs` directly, matching whatever convention 001 established for its own infrastructure service registration, if any).
+    2. Confirm `IBrokerAdeptClient` resolves from the DI container by adding a minimal resolution check (either a quick manual `app.Services.GetRequiredService<IBrokerAdeptClient>()` smoke check during startup, or simply confirming `dotnet build`/`dotnet run` boots cleanly with the registration present — use your judgment on the lightest sufficient proof).
+  - **Files**: `src/Api.Host/Program.cs` (or `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Module.cs`, whichever is the correct call site)
+  - **Done when**: `IBrokerAdeptClient` is resolvable from the app's composition root
+  - **Verify**: `dotnet build src/Api.Host/Api.Host.csproj && echo PASS`
+  - **Commit**: `fix(submission-intake): wire AddBrokerAdeptClient into DI container`
 
 - [ ] 4.2 [P] Domain test: `Submission.Apply(SubmissionNormalized)` and `Apply(SubmissionNormalizationFailed)`
   - **Do**: Assert `Apply(SubmissionNormalized)` sets `ClassOfBusiness`/`Territory`/`NamedInsured`/`LineSizeSought`/`KeyTerms`/`EffectiveDateRequested`/`NormalizationStatus`; `Apply(SubmissionNormalizationFailed)` sets `NormalizationStatus` to the failure state, preserves `RawPayloadRef` (AC-4.1: never discarded). Must fail.
@@ -659,7 +668,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 **Goal**: Confirm every projector/automation is actually invoked (Principle V's silent-failure risk — a missing `Handler` suffix or unregistered `SubscribeToEvent<T>` fails silently, no exception), then prove the entire receipt→normalization→duplicate/routing/pricing→resolution flow works against a real running host.
 
 - [ ] 11.1 Wiring audit: confirm every `*Handler`/`*Projector` class name ends in `Handler`/registers correctly; confirm `IntegrationEventQueueName` for `SubmissionAssessedV1`
-  - **Do**: 1. `grep -rL "Handler$" ` scan of all handler files' class names (Principle V). 2. Confirm `Module.cs` registers all 4 projectors (no snapshot needed per 2.5's decision — Wolverine-subscriber pattern doesn't need explicit `Projections.Add` the way Async-lifecycle ones do; confirm this against 001's actual pattern). 3. Confirm `Program.cs`'s `opts.ListenToRabbitQueue(queueName).UseDurableInbox()` loop picks up `SubmissionIntakeModule.IntegrationEventQueueName` from 10.5.
+  - **Do**: 1. `grep -rL "Handler$" ` scan of all handler files' class names (Principle V). 2. Confirm `Module.cs` registers all 4 projectors (no snapshot needed per 2.5's decision — Wolverine-subscriber pattern doesn't need explicit `Projections.Add` the way Async-lifecycle ones do; confirm this against 001's actual pattern). 3. Confirm `Program.cs`'s `opts.ListenToRabbitQueue(queueName).UseDurableInbox()` loop picks up `SubmissionIntakeModule.IntegrationEventQueueName` from 10.5. 4. Confirm `AddBrokerAdeptClient()`/`AddRatingEngineClient()` are actually called in `Program.cs`'s `builder.Services` chain (flagged in task 4.1's review: DI extension methods existing is not the same as being invoked).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Module.cs`, `src/Api.Host/Program.cs`
   - **Done when**: No handler class fails the naming convention; integration-event queue confirmed wired
   - **Verify**: `dotnet build src/BrokerConnect.slnx && grep -c "class.*Handler" src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/**/*.cs | grep -qv "^0" && echo PASS`
