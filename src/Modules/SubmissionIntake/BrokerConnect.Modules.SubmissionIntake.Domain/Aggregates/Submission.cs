@@ -145,4 +145,11 @@ public sealed class Submission
     {
         IsConfirmedDistinct = true;
     }
+
+    public void Apply(BaselinePremiumGenerated @event)
+    {
+        BaselinePremium = @event.BaselinePremium;
+        RiskFactorSummary = @event.RiskFactorSummary;
+        ModelVersion = @event.ModelVersion;
+    }
 }

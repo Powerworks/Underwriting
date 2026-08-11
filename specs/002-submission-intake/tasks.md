@@ -497,7 +497,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - Submission.Apply BaselinePremiumGenerated`
   - _Requirements: FR-9, AC-9.1_
 
-- [ ] 7.3 `Submission.Apply(BaselinePremiumGenerated)` impl
+- [x] 7.3 `Submission.Apply(BaselinePremiumGenerated)` impl
   - **Do**: Add the `Apply` overload.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/Submission.cs`
   - **Done when**: 7.2's test passes
