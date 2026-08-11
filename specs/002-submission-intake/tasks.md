@@ -404,7 +404,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - Submission.Apply SubmissionRoutingRejected`
   - _Requirements: FR-2, AC-2.1_
 
-- [ ] 6.2 `Submission.Apply(SubmissionRoutingRejected)` impl
+- [x] 6.2 `Submission.Apply(SubmissionRoutingRejected)` impl
   - **Do**: Add the `Apply` overload.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/Submission.cs`
   - **Done when**: 6.1's test passes

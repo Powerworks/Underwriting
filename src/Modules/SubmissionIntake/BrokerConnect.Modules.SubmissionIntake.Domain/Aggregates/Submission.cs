@@ -125,6 +125,11 @@ public sealed class Submission
         NormalizationStatus = "Failed";
     }
 
+    public void Apply(SubmissionRoutingRejected @event)
+    {
+        IsRoutingRejected = true;
+    }
+
     public void Apply(PotentialDuplicateSubmissionDetected @event)
     {
         IsPossibleDuplicate = true;
