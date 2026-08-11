@@ -274,7 +274,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests --filter SubmissionQueueProjector && echo PASS`
   - **Commit**: `fix(submission-intake): SubmissionQueueProjector subscribes to BrokerSubmissionReceived for BrokerFirmId/ReceivedAt`
 
-- [ ] 4.8 [P] `GetSubmissionQueue` query handler + DTOs + Layer 2 test
+- [x] 4.8 [P] `GetSubmissionQueue` query handler + DTOs + Layer 2 test
   - **Do**: 1. `SubmissionQueueResponse`/`SubmissionQueueItem` DTOs per `design.md` Screens. 2. `[WolverineGet("/api/v1/submission-intake/submission-queue")]` — filters `brokerFirmId?`/`classOfBusiness?`/`search?`, paginated (`page`/`pageSize`, default 20/max 200 per 001's precedent, flagged as a guess). 3. Layer 2 test covering filter + pagination logic in-memory.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionQueue/GetSubmissionQueue.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests/GetSubmissionQueueTests.cs`
   - **Done when**: Test passes
