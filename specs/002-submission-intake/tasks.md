@@ -319,7 +319,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - Submission.Apply duplicate-resolution events`
   - _Requirements: FR-6, FR-7, FR-8, AC-6.1, AC-7.1, AC-8.1_
 
-- [ ] 5.2 `Submission.Apply` impl for the three duplicate-resolution events
+- [x] 5.2 `Submission.Apply` impl for the three duplicate-resolution events
   - **Do**: Add the three `Apply` overloads.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/Submission.cs`
   - **Done when**: 5.1's tests pass

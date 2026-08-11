@@ -124,4 +124,20 @@ public sealed class Submission
     {
         NormalizationStatus = "Failed";
     }
+
+    public void Apply(PotentialDuplicateSubmissionDetected @event)
+    {
+        IsPossibleDuplicate = true;
+        SuspectedOriginalSubmissionId = @event.SuspectedOriginalSubmissionId;
+    }
+
+    public void Apply(SubmissionSuperseded @event)
+    {
+        SupersededBySubmissionId = @event.SupersedingSubmissionId;
+    }
+
+    public void Apply(SubmissionConfirmedDistinct @event)
+    {
+        IsConfirmedDistinct = true;
+    }
 }
