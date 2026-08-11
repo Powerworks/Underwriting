@@ -264,6 +264,16 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - _Requirements: FR-3, AC-3.1_
   - _Design: Read Models table, Screens (namedInsured gap-fix), Technical Decisions_
 
+- [ ] 4.7.1 [FIX 4.7] Fix: `SubmissionQueue.BrokerFirmId`/`ReceivedAt` never populated — projector doesn't subscribe to `BrokerSubmissionReceived`
+  - **Do**: Address a design.md internal inconsistency the executor found: design.md's field-source table states `BrokerFirmId | string | BrokerSubmissionReceived` (line 114), but design.md's `SubmissionQueue` subscription list (line 156) only names `SubmissionNormalized`/`SubmissionRoutingRejected` + the 3 duplicate-detection gap-fix events — `BrokerSubmissionReceived` is missing from it. The field-source table is authoritative for where each field actually comes from; the subscription list is treated as incomplete, not the field table as wrong.
+    1. Add a `Handle(BrokerSubmissionReceived)` overload to `SubmissionQueueProjector` that creates/upserts the initial `SubmissionQueue` row with `BrokerFirmId` and a real `ReceivedAt` (currently stubbed from `NormalizedAt` as a placeholder).
+    2. `Handle(SubmissionNormalized)` continues to update the rest of the fields on the existing row (upsert, not insert-only) — a submission's queue row now starts at receipt and gets enriched at normalization, matching the screen's actual worklist semantics (a broker firm's identity is known before ADEPT normalization completes).
+    3. Add a test asserting `BrokerFirmId`/`ReceivedAt` are populated correctly after both events land.
+  - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionQueue/SubmissionQueueProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/SubmissionQueueProjectorTests.cs`
+  - **Done when**: A `SubmissionQueue` row has a correct non-empty `BrokerFirmId` and real `ReceivedAt` after `BrokerSubmissionReceived` + `SubmissionNormalized` both land
+  - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests --filter SubmissionQueueProjector && echo PASS`
+  - **Commit**: `fix(submission-intake): SubmissionQueueProjector subscribes to BrokerSubmissionReceived for BrokerFirmId/ReceivedAt`
+
 - [ ] 4.8 [P] `GetSubmissionQueue` query handler + DTOs + Layer 2 test
   - **Do**: 1. `SubmissionQueueResponse`/`SubmissionQueueItem` DTOs per `design.md` Screens. 2. `[WolverineGet("/api/v1/submission-intake/submission-queue")]` — filters `brokerFirmId?`/`classOfBusiness?`/`search?`, paginated (`page`/`pageSize`, default 20/max 200 per 001's precedent, flagged as a guess). 3. Layer 2 test covering filter + pagination logic in-memory.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionQueue/GetSubmissionQueue.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests/GetSubmissionQueueTests.cs`
