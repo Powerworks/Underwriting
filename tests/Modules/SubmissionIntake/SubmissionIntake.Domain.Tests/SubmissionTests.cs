@@ -216,4 +216,56 @@ public class SubmissionTests
         entity.EffectiveDateRequested.ShouldBe(new DateOnly(2026, 9, 1));
         entity.NormalizationStatus.ShouldBe("Normalized");
     }
+
+    // 10.1 — [FR-10/FR-11, AC-10.1/AC-11.1]. design.md's Submission "Apply-computed
+    // state" table (Components section) has no row sourced from PricingBaselineAccepted
+    // or PricingBaselineOverridden -- same shape as 8.1's SubmissionManuallyCorrected
+    // finding. Both events are modeled with aggregate: Submission (design.md Technical
+    // Decisions: "they belong to this module's stream even though the triggering
+    // command does not"), but nothing on the aggregate needs to decide anything from
+    // them -- the comparison metadata is recorded in the event stream itself, not
+    // projected into aggregate state. True no-ops; this test asserts neither mutates
+    // any field already set by prior events.
+    [Fact]
+    public void Apply_PricingBaselineAccepted_does_not_mutate_other_fields()
+    {
+        var submissionId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            submissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+        var generated = new BaselinePremiumGenerated(
+            submissionId, 125_000m, "{\"windExposure\":\"High\"}", "rating-model-v3", DateTimeOffset.UtcNow);
+        entity.Apply(generated);
+
+        var accepted = new PricingBaselineAccepted(submissionId, 125_000m, "underwriter-1", DateTimeOffset.UtcNow);
+
+        entity.Apply(accepted);
+
+        entity.BaselinePremium.ShouldBe(125_000m);
+        entity.RiskFactorSummary.ShouldBe("{\"windExposure\":\"High\"}");
+        entity.ModelVersion.ShouldBe("rating-model-v3");
+    }
+
+    [Fact]
+    public void Apply_PricingBaselineOverridden_does_not_mutate_other_fields()
+    {
+        var submissionId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            submissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+        var generated = new BaselinePremiumGenerated(
+            submissionId, 125_000m, "{\"windExposure\":\"High\"}", "rating-model-v3", DateTimeOffset.UtcNow);
+        entity.Apply(generated);
+
+        var overridden = new PricingBaselineOverridden(
+            submissionId, 125_000m, 140_000m, 15_000m, "underwriter-1", DateTimeOffset.UtcNow);
+
+        entity.Apply(overridden);
+
+        entity.BaselinePremium.ShouldBe(125_000m);
+        entity.RiskFactorSummary.ShouldBe("{\"windExposure\":\"High\"}");
+        entity.ModelVersion.ShouldBe("rating-model-v3");
+    }
 }

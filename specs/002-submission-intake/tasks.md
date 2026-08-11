@@ -652,7 +652,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: `RecordPricingBaselineComparisonOnAssessment` consuming the **assumed** `SubmissionAssessedV1` integration event (Unresolved Q2 — implements the stubbed interim contract from `design.md` Implementation Step 12, per instruction not to leave it undone).
 
-- [ ] 10.1 [P] Domain test: `Submission.Apply(PricingBaselineAccepted)`/`Apply(PricingBaselineOverridden)`
+- [x] 10.1 [P] Domain test: `Submission.Apply(PricingBaselineAccepted)`/`Apply(PricingBaselineOverridden)`
   - **Do**: Assert both set comparison metadata on the stream (fires "alongside AssessSubmission", modeled on this module's stream per `design.md` Board-Sourced vs. Inferred Elements). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
   - **Done when**: Tests exist and fail
