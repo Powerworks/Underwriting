@@ -67,6 +67,10 @@ builder.Services.AddWolverineHttp();
 // directly, same flat-list convention as AddMarten/AddWolverineHttp above.
 builder.Services.AddBrokerAdeptClient();
 
+// Stub pending design.md Unresolved Questions (RouteSubmissionOnReceipt's data source
+// not confirmed) — always-authorized default so the automation is testable now.
+builder.Services.AddBrokerPanelAuthorizationSource();
+
 var app = builder.Build();
 
 // Constitution Architecture Constraints: concurrency conflicts map to 409 centrally,

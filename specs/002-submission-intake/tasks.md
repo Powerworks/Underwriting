@@ -411,7 +411,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests --filter SubmissionRoutingRejected && echo PASS`
   - **Commit**: `feat(submission-intake): green - Submission.Apply SubmissionRoutingRejected`
 
-- [ ] 6.3 [P] `IBrokerPanelAuthorizationSource` stub interface + always-authorized default implementation
+- [x] 6.3 [P] `IBrokerPanelAuthorizationSource` stub interface + always-authorized default implementation
   - **Do**: Per design's Unresolved Questions (`RouteSubmissionOnReceipt`'s data source not confirmed — likely Authority Administration, no dependency edge confirms it): define `IBrokerPanelAuthorizationSource.IsAuthorizedAsync(brokerFirmId, cellIdHint, classOfBusinessHint, ct) → bool`, register a stub implementation that always returns `true` (never blocks) behind DI, with an inline comment flagging it as a stand-in pending confirmation — so `RouteSubmissionOnReceipt` is fully testable now and swappable later without touching the handler.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/IBrokerPanelAuthorizationSource.cs`
   - **Done when**: Interface + stub compile, DI-registered
