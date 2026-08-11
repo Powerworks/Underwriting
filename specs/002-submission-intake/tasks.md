@@ -607,7 +607,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: `DeployPricingModelVersion` — audit-only reference data on its own, unrelated stream (resolves Unresolved Q3: generated `Guid` stream identity, per Foundational's 2.4 decision).
 
-- [ ] 9.1 [P] Domain test: `PricingModel.Create(PricingModelVersionDeployed)`
+- [x] 9.1 [P] Domain test: `PricingModel.Create(PricingModelVersionDeployed)`
   - **Do**: Assert `Id`/`ModelVersion`/`DeployedBy`/`DeployedAt`/`ChangeSummary` set from the event. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/PricingModelTests.cs`
   - **Done when**: Test exists and fails
