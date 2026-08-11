@@ -249,7 +249,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests --filter NormalizeSubmissionViaAdept && echo PASS`
   - **Commit**: `feat(submission-intake): green - NormalizeSubmissionViaAdept automation`
 
-- [ ] 4.6 [VERIFY] Quality checkpoint: build + Layer 1/3 tests pass
+- [x] 4.6 [VERIFY] Quality checkpoint: build + Layer 1/3 tests pass
   - **Do**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests --filter NormalizeSubmissionViaAdept`
   - **Verify**: All exit 0
   - **Done when**: No errors
