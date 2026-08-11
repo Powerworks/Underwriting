@@ -290,7 +290,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): SubmissionExceptionQueue projector reacts to SubmissionNormalizationFailed`
   - _Requirements: FR-4, AC-4.1_
 
-- [ ] 4.10 [P] `GetSubmissionExceptionQueue` query handler + DTO + Layer 2 test
+- [x] 4.10 [P] `GetSubmissionExceptionQueue` query handler + DTO + Layer 2 test
   - **Do**: `[WolverineGet("/api/v1/submission-intake/submission-exception-queue")]` (route inferred, consistent with 4.8's convention — not board-specified), paginated, DTO never exposes the aggregate directly (Principle VII).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionExceptionQueue/GetSubmissionExceptionQueue.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests/GetSubmissionExceptionQueueTests.cs`
   - **Done when**: Test passes
