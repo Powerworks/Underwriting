@@ -452,7 +452,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): BrokerAuthorizationExceptionLog projector`
   - _Requirements: FR-2, AC-2.1_
 
-- [ ] 6.7 [P] `GetBrokerAuthorizationExceptionLog` query handler + DTO + Layer 2 test
+- [x] 6.7 [P] `GetBrokerAuthorizationExceptionLog` query handler + DTO + Layer 2 test
   - **Do**: `[WolverineGet("/api/v1/submission-intake/broker-authorization-exception-log")]` (route inferred, consistent convention), paginated, visible to ops/broker-relationship-management (never underwriter queue, per US-2 narrative).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/BrokerAuthorizationExceptionLog/GetBrokerAuthorizationExceptionLog.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests/GetBrokerAuthorizationExceptionLogTests.cs`
   - **Done when**: Test passes
