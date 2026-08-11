@@ -630,7 +630,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - DeployPricingModelVersion starts new stream`
   - _Requirements: FR-12, AC-12.1_
 
-- [ ] 9.4 `DeployPricingModelVersionHandler` impl
+- [x] 9.4 `DeployPricingModelVersionHandler` impl
   - **Do**: `POST /api/v1/submission-intake/pricing-models` → `StartStream<PricingModel>(PricingModelVersionDeployed)`, no read model (per `design.md`: no board dependency edge consumes it). Actuarial/admin role-gated (`[Authorize]` TODO).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Commands/DeployPricingModelVersion/DeployPricingModelVersion.cs`, `.../DeployPricingModelVersionHandler.cs`
   - **Done when**: 9.3's test passes
