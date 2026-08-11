@@ -242,7 +242,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - _Requirements: FR-3, FR-4, AC-3.1, AC-4.1_
   - _Design: Automations table, Test Strategy Layer 3_
 
-- [ ] 4.5 `NormalizeSubmissionViaAdeptHandler` impl
+- [x] 4.5 `NormalizeSubmissionViaAdeptHandler` impl
   - **Do**: 1. Trigger on `BrokerSubmissionReceived` and `SubmissionManuallyCorrected` (guard: `resubmittedForNormalization == true` — wired fully in Phase 8, subscribe now, guard added then). 2. Idempotency guard: no-op if `NormalizationStatus` already set. 3. Call `IBrokerAdeptClient.NormalizeAsync`, append `SubmissionNormalized`/`SubmissionNormalizationFailed` per result.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Automations/NormalizeSubmissionViaAdept/NormalizeSubmissionViaAdeptHandler.cs`
   - **Done when**: 4.4's tests pass
