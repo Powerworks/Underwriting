@@ -667,7 +667,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests --filter "PricingBaselineAccepted|PricingBaselineOverridden" && echo PASS`
   - **Commit**: `feat(submission-intake): green - Submission.Apply pricing-baseline-comparison events`
 
-- [ ] 10.3 [P] `SubmissionAssessedV1` consumer contract + `SubmissionPricingState`
+- [x] 10.3 [P] `SubmissionAssessedV1` consumer contract + `SubmissionPricingState`
   - **Do**: 1. `SubmissionAssessedV1` record (assumed shape: `submissionId`, `proposedPremium`, `underwriterId` minimum, per Unresolved Questions — flagged inline as unconfirmed pending Underwriting Decisioning's own design). 2. `SubmissionPricingState`: live-computed via `AggregateStreamAsync`, never persisted, never a snapshot (Architecture Constraints).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/IntegrationEvents/Consumers/SubmissionAssessedV1.cs`, `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Automations/RecordPricingBaselineComparisonOnAssessment/SubmissionPricingState.cs`
   - **Done when**: Both types compile
