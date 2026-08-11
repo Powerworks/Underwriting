@@ -360,7 +360,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): SubmissionQueue projector gap-fix for duplicate-resolution events`
   - _Design: Technical Decisions (isPossibleDuplicate/suspectedOriginalSubmissionId gap-fix)_
 
-- [ ] 5.6 [VERIFY] Quality checkpoint: build + tests pass
+- [x] 5.6 [VERIFY] Quality checkpoint: build + tests pass
   - **Do**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests`
   - **Verify**: All exit 0
   - **Done when**: No errors
