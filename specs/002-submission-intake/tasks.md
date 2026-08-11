@@ -311,7 +311,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: Exact-field duplicate detection (DEC-010) on successful normalization, plus the two underwriter/ops resolution commands.
 
-- [ ] 5.1 [P] Domain test: `Submission.Apply` for `PotentialDuplicateSubmissionDetected` / `SubmissionSuperseded` / `SubmissionConfirmedDistinct`
+- [x] 5.1 [P] Domain test: `Submission.Apply` for `PotentialDuplicateSubmissionDetected` / `SubmissionSuperseded` / `SubmissionConfirmedDistinct`
   - **Do**: Assert `IsPossibleDuplicate`/`SuspectedOriginalSubmissionId` set by the first; `SupersededBySubmissionId` by the second; `IsConfirmedDistinct` by the third. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
   - **Done when**: Tests exist and fail

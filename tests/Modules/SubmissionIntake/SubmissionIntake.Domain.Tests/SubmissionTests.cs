@@ -81,4 +81,62 @@ public class SubmissionTests
         entity.NormalizationStatus.ShouldBe("Failed");
         entity.RawPayloadRef.ShouldBe("raw-payload-ref-1");
     }
+
+    // 5.1 — [FR-6, AC-6.1]
+    [Fact]
+    public void Apply_PotentialDuplicateSubmissionDetected_sets_IsPossibleDuplicate_and_SuspectedOriginalSubmissionId()
+    {
+        var submissionId = Guid.NewGuid();
+        var suspectedOriginalId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            submissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+
+        var detected = new PotentialDuplicateSubmissionDetected(
+            submissionId, suspectedOriginalId, "ClassOfBusiness+Territory+NamedInsured", 0.92m, DateTimeOffset.UtcNow);
+
+        entity.Apply(detected);
+
+        entity.IsPossibleDuplicate.ShouldBeTrue();
+        entity.SuspectedOriginalSubmissionId.ShouldBe(suspectedOriginalId);
+    }
+
+    // 5.1 — [FR-7, AC-7.1]
+    [Fact]
+    public void Apply_SubmissionSuperseded_sets_SupersededBySubmissionId()
+    {
+        var originalSubmissionId = Guid.NewGuid();
+        var supersedingSubmissionId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            originalSubmissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+
+        var superseded = new SubmissionSuperseded(
+            originalSubmissionId, supersedingSubmissionId, "underwriter-1", DateTimeOffset.UtcNow);
+
+        entity.Apply(superseded);
+
+        entity.SupersededBySubmissionId.ShouldBe(supersedingSubmissionId);
+    }
+
+    // 5.1 — [FR-8, AC-8.1]
+    [Fact]
+    public void Apply_SubmissionConfirmedDistinct_sets_IsConfirmedDistinct()
+    {
+        var submissionId = Guid.NewGuid();
+        var suspectedOriginalId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            submissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+
+        var confirmedDistinct = new SubmissionConfirmedDistinct(
+            submissionId, suspectedOriginalId, "underwriter-1", DateTimeOffset.UtcNow);
+
+        entity.Apply(confirmedDistinct);
+
+        entity.IsConfirmedDistinct.ShouldBeTrue();
+    }
 }
