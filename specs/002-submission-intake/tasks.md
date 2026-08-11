@@ -569,7 +569,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests --filter SubmissionManuallyCorrected && echo PASS`
   - **Commit**: `feat(submission-intake): green - Submission.Apply SubmissionManuallyCorrected`
 
-- [ ] 8.3 Layer 3 test: `CorrectSubmissionHandler` appends event; `resubmittedForNormalization=true` re-triggers `NormalizeSubmissionViaAdept`
+- [x] 8.3 Layer 3 test: `CorrectSubmissionHandler` appends event; `resubmittedForNormalization=true` re-triggers `NormalizeSubmissionViaAdept`
   - **Do**: Real Postgres, `IBrokerAdeptClient` mocked. Assert `CorrectSubmission` appends `SubmissionManuallyCorrected`; when `resubmittedForNormalization == true`, the already-subscribed `NormalizeSubmissionViaAdeptHandler` (4.5's guard extended in 8.4) fires and re-normalizes. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/CorrectSubmissionHandlerTests.cs`
   - **Done when**: Test exists and fails
