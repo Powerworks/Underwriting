@@ -23,6 +23,14 @@ public class SubmissionQueueProjectorTests(SubmissionIntakePostgresFixture fixtu
         "Normalized",
         DateTimeOffset.UtcNow);
 
+    private static BrokerSubmissionReceived ReceivedEvent(Guid submissionId, DateTimeOffset receivedAt) => new(
+        submissionId,
+        "Acme Brokerage LLC",
+        "jane.doe@acmebrokerage.com",
+        "raw-payload-ref-123",
+        "Email",
+        receivedAt);
+
     // Submitting SubmissionNormalized produces a SubmissionQueue row with
     // namedInsured (Technical Decisions gap-fix) and status sourced from
     // normalizationStatus.
@@ -49,5 +57,31 @@ public class SubmissionQueueProjectorTests(SubmissionIntakePostgresFixture fixtu
         // at their unflagged defaults on a row created only from SubmissionNormalized.
         queueItem.IsPossibleDuplicate.ShouldBeFalse();
         queueItem.SuspectedOriginalSubmissionId.ShouldBeNull();
+    }
+
+    // 4.7.1 [FIX 4.7] -- BrokerSubmissionReceived creates the row with BrokerFirmId
+    // and the real ReceivedAt; SubmissionNormalized then upserts onto that same row
+    // (not insert-only) without clobbering those two fields.
+    [Fact]
+    public async Task BrokerSubmissionReceived_and_SubmissionNormalized_populate_BrokerFirmId_and_ReceivedAt()
+    {
+        await using var session = fixture.Store.LightweightSession();
+        var submissionId = Guid.NewGuid();
+        var receivedAt = DateTimeOffset.UtcNow.AddMinutes(-5);
+        var received = ReceivedEvent(submissionId, receivedAt);
+        var normalized = NormalizedEvent(submissionId);
+
+        await SubmissionQueueProjector.Handle(received, session, CancellationToken.None);
+        await SubmissionQueueProjector.Handle(normalized, session, CancellationToken.None);
+
+        await using var querySession = fixture.Store.LightweightSession();
+        var queueItem = await querySession.LoadAsync<SubmissionQueueDoc>(submissionId);
+
+        queueItem.ShouldNotBeNull();
+        queueItem.SubmissionId.ShouldBe(submissionId);
+        queueItem.BrokerFirmId.ShouldBe("Acme Brokerage LLC");
+        queueItem.ReceivedAt.ShouldBe(receivedAt);
+        queueItem.NamedInsured.ShouldBe("Acme Holdings LLC");
+        queueItem.Status.ShouldBe("Normalized");
     }
 }
