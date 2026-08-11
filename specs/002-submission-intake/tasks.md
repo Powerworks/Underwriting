@@ -519,7 +519,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests --filter GenerateBaselinePremium && echo PASS`
   - **Commit**: `feat(submission-intake): green - GenerateBaselinePremiumOnNormalization automation`
 
-- [ ] 7.6 [VERIFY] Quality checkpoint: build + tests pass
+- [x] 7.6 [VERIFY] Quality checkpoint: build + tests pass
   - **Do**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests`
   - **Verify**: All exit 0
   - **Done when**: No errors
