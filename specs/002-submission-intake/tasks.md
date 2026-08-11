@@ -504,7 +504,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests --filter BaselinePremiumGenerated && echo PASS`
   - **Commit**: `feat(submission-intake): green - Submission.Apply BaselinePremiumGenerated`
 
-- [ ] 7.4 Layer 3 tests: `GenerateBaselinePremiumOnNormalizationHandler` success + idempotency
+- [x] 7.4 Layer 3 tests: `GenerateBaselinePremiumOnNormalizationHandler` success + idempotency
   - **Do**: Real Postgres, `IRatingEngineClient` mocked. Assert success on `SubmissionNormalized` (success only, S1a.5) appends `BaselinePremiumGenerated`; assert already-`BaselinePremium`-set submission isn't re-priced. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/GenerateBaselinePremiumOnNormalizationHandlerTests.cs`
   - **Done when**: 2 methods exist and fail
