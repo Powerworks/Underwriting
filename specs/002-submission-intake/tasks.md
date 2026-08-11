@@ -233,7 +233,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests --filter "SubmissionNormalized|SubmissionNormalizationFailed" && echo PASS`
   - **Commit**: `feat(submission-intake): green - Submission.Apply normalization events`
 
-- [ ] 4.4 Layer 3 tests: `NormalizeSubmissionViaAdeptHandler` success / failure / idempotency
+- [x] 4.4 Layer 3 tests: `NormalizeSubmissionViaAdeptHandler` success / failure / idempotency
   - **Do**: Testcontainers-backed Postgres (real `AggregateStreamAsync`/`FetchForWriting`), `IBrokerAdeptClient` mocked (NSubstitute) at the boundary per Layer 3 guidance. Cover: (1) success → `SubmissionNormalized` appended; (2) `AdeptNormalizationResult.Succeeded == false` → `SubmissionNormalizationFailed` appended, raw payload preserved; (3) redelivered `BrokerSubmissionReceived` when `NormalizationStatus` already set → no duplicate append (Architecture Constraints idempotency). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/NormalizeSubmissionViaAdeptHandlerTests.cs`
   - **Done when**: 3 test methods exist and fail
