@@ -638,7 +638,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): green - DeployPricingModelVersion command`
   - _Design: Commands table, Security Considerations_
 
-- [ ] 9.5 [VERIFY] Quality checkpoint: build + all module tests pass
+- [x] 9.5 [VERIFY] Quality checkpoint: build + all module tests pass
   - **Do**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests`
   - **Verify**: All exit 0
   - **Done when**: No errors
