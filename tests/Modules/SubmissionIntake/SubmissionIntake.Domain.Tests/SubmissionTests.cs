@@ -178,4 +178,42 @@ public class SubmissionTests
         entity.RiskFactorSummary.ShouldBe("{\"windExposure\":\"High\"}");
         entity.ModelVersion.ShouldBe("rating-model-v3");
     }
+
+    // 8.1 — [FR-5, AC-5.1]. design.md's Submission "Apply-computed state" table
+    // (Components section) lists no field sourced from SubmissionManuallyCorrected --
+    // only what handlers/automations actually need to decide something is tracked
+    // there, and NormalizeSubmissionViaAdeptHandler reads resubmittedForNormalization
+    // directly off the trigger event (not off aggregate state, per design.md's
+    // Commands table: "does not itself re-normalize -- the flag is read by the
+    // automation, per Principle II"). So Apply(SubmissionManuallyCorrected) is a true
+    // no-op on the aggregate; this test asserts it doesn't mutate any normalization
+    // field already set by a prior SubmissionNormalized -- the correction event's
+    // metadata is recorded in the event stream itself (Marten's append-only log), not
+    // projected into aggregate state.
+    [Fact]
+    public void Apply_SubmissionManuallyCorrected_does_not_mutate_normalization_fields()
+    {
+        var submissionId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            submissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+        var normalized = new SubmissionNormalized(
+            submissionId, "Commercial Property", "US-NE", 5_000_000m, "Wind exclusion",
+            "Acme Warehousing LLC", new DateOnly(2026, 9, 1), "Normalized", DateTimeOffset.UtcNow);
+        entity.Apply(normalized);
+
+        var corrected = new SubmissionManuallyCorrected(
+            submissionId, "ops-jane", "Fixed missing class code", true, DateTimeOffset.UtcNow);
+
+        entity.Apply(corrected);
+
+        entity.ClassOfBusiness.ShouldBe("Commercial Property");
+        entity.Territory.ShouldBe("US-NE");
+        entity.NamedInsured.ShouldBe("Acme Warehousing LLC");
+        entity.LineSizeSought.ShouldBe(5_000_000m);
+        entity.KeyTerms.ShouldBe("Wind exclusion");
+        entity.EffectiveDateRequested.ShouldBe(new DateOnly(2026, 9, 1));
+        entity.NormalizationStatus.ShouldBe("Normalized");
+    }
 }

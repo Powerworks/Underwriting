@@ -554,7 +554,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: Ops/broker remediation path (`CorrectSubmission`), wired to re-trigger normalization via the `resubmittedForNormalization` flag, never inlined into the command handler itself (Principle II).
 
-- [ ] 8.1 [P] Domain test: `Submission.Apply(SubmissionManuallyCorrected)`
+- [x] 8.1 [P] Domain test: `Submission.Apply(SubmissionManuallyCorrected)`
   - **Do**: Assert correction metadata recorded, no direct state mutation of normalization fields (the automation, not the event, re-triggers normalization). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
   - **Done when**: Test exists and fails
