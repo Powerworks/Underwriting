@@ -622,7 +622,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests --filter PricingModelVersionDeployed && echo PASS`
   - **Commit**: `feat(submission-intake): green - PricingModel.Create PricingModelVersionDeployed`
 
-- [ ] 9.3 Layer 3 test: `DeployPricingModelVersionHandler` starts a new `PricingModel` stream
+- [x] 9.3 Layer 3 test: `DeployPricingModelVersionHandler` starts a new `PricingModel` stream
   - **Do**: Real Postgres, assert `StartStream<PricingModel>` with a fresh generated `Guid`. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/DeployPricingModelVersionHandlerTests.cs`
   - **Done when**: Test exists and fails
