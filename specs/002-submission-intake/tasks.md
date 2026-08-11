@@ -282,7 +282,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): GetSubmissionQueue query endpoint`
   - _Design: Screens (SubmissionQueue DTO), Performance Considerations (pagination from v1)_
 
-- [ ] 4.9 [P] `SubmissionExceptionQueue` doc + projector (`Handle(SubmissionNormalizationFailed)`) + Layer 3 test
+- [x] 4.9 [P] `SubmissionExceptionQueue` doc + projector (`Handle(SubmissionNormalizationFailed)`) + Layer 3 test
   - **Do**: Same pattern as 4.7: test first, then doc + projector (field list per Event Model Detail's `SubmissionExceptionQueue`).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionExceptionQueue/SubmissionExceptionQueue.cs`, `.../SubmissionExceptionQueueProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/SubmissionExceptionQueueProjectorTests.cs`
   - **Done when**: Test passes against real Postgres
