@@ -335,7 +335,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - _Requirements: FR-6, AC-6.1_
   - _Design: Automations table (DEC-010), Performance Considerations (indexed classOfBusiness/territory)_
 
-- [ ] 5.4 `DetectPotentialDuplicateOnNormalizationHandler` impl
+- [x] 5.4 `DetectPotentialDuplicateOnNormalizationHandler` impl
   - **Do**: 1. Trigger on `SubmissionNormalized` (success only). 2. Query `SubmissionQueue` for exact-field match against other non-superseded, non-confirmed-distinct open submissions. 3. Append `PotentialDuplicateSubmissionDetected` if found; idempotency guard on `IsPossibleDuplicate`.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Automations/DetectPotentialDuplicateOnNormalization/DetectPotentialDuplicateOnNormalizationHandler.cs`
   - **Done when**: 5.3's tests pass
