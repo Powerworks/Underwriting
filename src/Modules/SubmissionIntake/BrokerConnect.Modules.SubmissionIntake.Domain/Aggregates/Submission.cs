@@ -164,4 +164,18 @@ public sealed class Submission
     public void Apply(SubmissionManuallyCorrected @event)
     {
     }
+
+    // design.md Technical Decisions: PricingBaselineAccepted/Overridden "belong to this
+    // module's stream even though the triggering command (AssessSubmission) does not" --
+    // but design.md's Submission "Apply-computed state" table has no row sourced from
+    // either event. True no-ops, same reasoning/precedent as Apply(SubmissionManuallyCorrected)
+    // above -- required only so Marten's Apply-method convention resolves for these event
+    // types on the stream; the comparison metadata lives in the event stream itself.
+    public void Apply(PricingBaselineAccepted @event)
+    {
+    }
+
+    public void Apply(PricingBaselineOverridden @event)
+    {
+    }
 }

@@ -660,7 +660,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - Submission.Apply pricing-baseline-comparison events`
   - _Requirements: FR-10, FR-11, AC-10.1, AC-11.1_
 
-- [ ] 10.2 `Submission.Apply` impl for both events
+- [x] 10.2 `Submission.Apply` impl for both events
   - **Do**: Add both `Apply` overloads.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/Submission.cs`
   - **Done when**: 10.1's tests pass
