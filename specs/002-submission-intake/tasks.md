@@ -533,7 +533,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): PricedSubmissionView projector`
   - _Design: Read Models table, Technical Decisions (brokerRequestedTerms gap-fix)_
 
-- [ ] 7.8 [P] `GetPricedSubmissionView` query handler + DTO + Layer 2 test
+- [x] 7.8 [P] `GetPricedSubmissionView` query handler + DTO + Layer 2 test
   - **Do**: `[WolverineGet("/api/v1/submission-intake/submissions/{submissionId}/priced-view")]` (route inferred, consistent convention), returns `brokerRequestedTerms` alongside `baselinePremium`/`riskFactorSummary`/`modelVersion`, never the aggregate.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/PricedSubmissionView/GetPricedSubmissionView.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests/GetPricedSubmissionViewTests.cs`
   - **Done when**: Test passes
