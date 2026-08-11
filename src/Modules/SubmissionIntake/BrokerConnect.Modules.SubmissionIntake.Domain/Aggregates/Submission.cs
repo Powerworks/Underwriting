@@ -152,4 +152,16 @@ public sealed class Submission
         RiskFactorSummary = @event.RiskFactorSummary;
         ModelVersion = @event.ModelVersion;
     }
+
+    // design.md's Submission "Apply-computed state" table (Components section) has no
+    // row sourced from SubmissionManuallyCorrected -- NormalizeSubmissionViaAdeptHandler
+    // reads resubmittedForNormalization directly off the trigger event, not off
+    // aggregate state (Commands table: "does not itself re-normalize -- the flag is
+    // read by the automation, per Principle II"). True no-op, required only so Marten's
+    // Apply-method convention resolves for every event type appended to this stream
+    // (same reasoning as every other Apply overload here); the correction's metadata
+    // lives in the event stream itself, not projected into aggregate state.
+    public void Apply(SubmissionManuallyCorrected @event)
+    {
+    }
 }

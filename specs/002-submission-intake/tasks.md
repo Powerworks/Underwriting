@@ -562,7 +562,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - Submission.Apply SubmissionManuallyCorrected`
   - _Requirements: FR-5, AC-5.1_
 
-- [ ] 8.2 `Submission.Apply(SubmissionManuallyCorrected)` impl
+- [x] 8.2 `Submission.Apply(SubmissionManuallyCorrected)` impl
   - **Do**: Add the `Apply` overload.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/Submission.cs`
   - **Done when**: 8.1's test passes
