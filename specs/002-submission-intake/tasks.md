@@ -419,7 +419,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): stub IBrokerPanelAuthorizationSource pending data-source confirmation`
   - _Design: Unresolved Questions (RouteSubmissionOnReceipt data source), Implementation Step 8_
 
-- [ ] 6.3.1 Carry `CellIdHint`/`ClassOfBusinessHint` from `ReceiveBrokerSubmission` through to `BrokerSubmissionReceived`
+- [x] 6.3.1 Carry `CellIdHint`/`ClassOfBusinessHint` from `ReceiveBrokerSubmission` through to `BrokerSubmissionReceived`
   - **Do**: Prerequisite for task 6.4 (added via TASK_MODIFICATION_REQUEST — `BrokerSubmissionReceived` has no `CellIdHint`/`ClassOfBusinessHint` fields, so `ReceiveBrokerSubmissionHandler` silently drops `ReceiveBrokerSubmissionRequest.CellIdHint`/`ClassOfBusinessHint` today; 6.4's rejected-path test needs `SubmissionRoutingRejected.RequestedCellId`/`RequestedClassOfBusiness` to legitimately mirror the command's hints, and 6.5's handler triggers on `BrokerSubmissionReceived` alone with no other input to source them from).
     1. Add `string? CellIdHint = null, string? ClassOfBusinessHint = null` as trailing optional params to the `BrokerSubmissionReceived` record in `SubmissionIntakeEvents.cs` (existing 6-arg positional call sites remain valid since the new params default to null).
     2. In `ReceiveBrokerSubmissionHandler.Handle`, pass `request.CellIdHint`/`request.ClassOfBusinessHint` into the new `BrokerSubmissionReceived` fields.

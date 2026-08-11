@@ -38,7 +38,9 @@ public class ReceiveBrokerSubmissionHandler
             request.SubmittingContact,
             rawPayloadRef,
             request.SourceChannel,
-            receivedAt);
+            receivedAt,
+            request.CellIdHint,
+            request.ClassOfBusinessHint);
 
         session.Events.StartStream<Submission>(submissionId, received);
         await session.SaveChangesAsync(cancellationToken);

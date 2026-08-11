@@ -7,7 +7,9 @@ public sealed record BrokerSubmissionReceived(
     string SubmittingContact,
     string RawPayloadRef,
     string SourceChannel,
-    DateTimeOffset ReceivedAt);
+    DateTimeOffset ReceivedAt,
+    string? CellIdHint = null,
+    string? ClassOfBusinessHint = null);
 
 /// <summary>US-2/FR-2 — broker's panel authorization doesn't cover the requested cell/class. Never silently dropped.</summary>
 public sealed record SubmissionRoutingRejected(
