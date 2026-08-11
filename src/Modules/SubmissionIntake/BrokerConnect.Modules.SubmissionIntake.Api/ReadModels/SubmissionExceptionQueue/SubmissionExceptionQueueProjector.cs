@@ -21,10 +21,6 @@ namespace BrokerConnect.Modules.SubmissionIntake.Api.ReadModels.SubmissionExcept
 // with BrokerFirmId, SubmissionNormalizationFailed fills in the rest without
 // clobbering it.
 //
-// SubmissionManuallyCorrected's status-update Handle overload (design.md Technical
-// Decisions: "status field otherwise has no event that can ever move it off its
-// initial value") lands in task 8.5 as an additional Handle overload on this same
-// class -- out of scope here per tasks.md's phasing.
 public sealed class SubmissionExceptionQueueProjector
 {
     public static async Task Handle(
@@ -48,6 +44,27 @@ public sealed class SubmissionExceptionQueueProjector
         queueItem.FailureReason = @event.FailureReason;
         queueItem.AttemptedAt = @event.AttemptedAt;
         queueItem.Status = "Failed";
+
+        session.Store(queueItem);
+        await session.SaveChangesAsync(cancellationToken);
+    }
+
+    // Task 8.5 gap-fix (design.md Technical Decisions): "status field otherwise has no
+    // event that can ever move it off its initial value" -- DEC-008 (resolved):
+    // entries persist indefinitely until SubmissionManuallyCorrected. Status-only
+    // update; if no row exists yet (correction landed before any normalization
+    // failure was ever recorded here), no-op rather than creating a row with no
+    // failureReason/attemptedAt of its own.
+    public static async Task Handle(
+        SubmissionManuallyCorrected @event, IDocumentSession session, CancellationToken cancellationToken)
+    {
+        var queueItem = await session.LoadAsync<SubmissionExceptionQueue>(@event.SubmissionId, cancellationToken);
+        if (queueItem is null)
+        {
+            return;
+        }
+
+        queueItem.Status = "Corrected";
 
         session.Store(queueItem);
         await session.SaveChangesAsync(cancellationToken);

@@ -76,4 +76,31 @@ public class SubmissionExceptionQueueProjectorTests(SubmissionIntakePostgresFixt
         queueItem.AttemptedAt.ShouldBe(attemptedAt);
         queueItem.Status.ShouldBe("Failed");
     }
+
+    // 8.5 -- design.md Technical Decisions gap-fix: "status field otherwise has no
+    // event that can ever move it off its initial value" -- SubmissionManuallyCorrected
+    // moves a Failed exception-queue entry's status to "Corrected" (DEC-008: entries
+    // persist indefinitely until a correction).
+    [Fact]
+    public async Task SubmissionManuallyCorrected_updates_status_to_Corrected()
+    {
+        await using var session = fixture.Store.LightweightSession();
+        var submissionId = Guid.NewGuid();
+        var attemptedAt = DateTimeOffset.UtcNow;
+        var failed = FailedEvent(submissionId, attemptedAt);
+        var corrected = new SubmissionManuallyCorrected(
+            submissionId, "ops-jane", "Fixed missing class code", true, DateTimeOffset.UtcNow);
+
+        await SubmissionExceptionQueueProjector.Handle(failed, session, CancellationToken.None);
+        await SubmissionExceptionQueueProjector.Handle(corrected, session, CancellationToken.None);
+
+        await using var querySession = fixture.Store.LightweightSession();
+        var queueItem = await querySession.LoadAsync<SubmissionExceptionQueueDoc>(submissionId);
+
+        queueItem.ShouldNotBeNull();
+        queueItem.Status.ShouldBe("Corrected");
+        // Prior fields untouched by the status-only update.
+        queueItem.FailureReason.ShouldBe("Unrecognized class code");
+        queueItem.AttemptedAt.ShouldBe(attemptedAt);
+    }
 }

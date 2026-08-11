@@ -585,7 +585,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests --filter CorrectSubmission && echo PASS`
   - **Commit**: `feat(submission-intake): green - CorrectSubmission command and normalization re-trigger guard`
 
-- [ ] 8.5 `SubmissionExceptionQueueProjector`: `Handle(SubmissionManuallyCorrected)` status update + Layer 3 test
+- [x] 8.5 `SubmissionExceptionQueueProjector`: `Handle(SubmissionManuallyCorrected)` status update + Layer 3 test
   - **Do**: Test first — a correction updates the exception-queue entry's `status` (Technical Decisions gap-fix: otherwise `status` never moves off its initial value). Then the `Handle` method.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionExceptionQueue/SubmissionExceptionQueueProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/SubmissionExceptionQueueProjectorTests.cs`
   - **Done when**: New test method passes
