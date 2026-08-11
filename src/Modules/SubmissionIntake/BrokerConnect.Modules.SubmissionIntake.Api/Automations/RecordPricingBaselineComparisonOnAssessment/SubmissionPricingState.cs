@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using BrokerConnect.Modules.SubmissionIntake.Domain.Events;
 
 namespace BrokerConnect.Modules.SubmissionIntake.Api.Automations.RecordPricingBaselineComparisonOnAssessment;
@@ -20,6 +21,21 @@ namespace BrokerConnect.Modules.SubmissionIntake.Api.Automations.RecordPricingBa
 public sealed class SubmissionPricingState
 {
     public Guid SubmissionId { get; private init; }
+
+    // Marten's document-identity resolution requires the identity member to be
+    // literally named Id, even for a type only ever used with AggregateStreamAsync
+    // (never persisted/queried as a document) -- see Submission.Id's remarks in the
+    // Domain project for the full explanation; same constraint hit here the first
+    // time this codebase live-aggregates into a type whose "id" property isn't
+    // literally named Id. Private setter (no-op) required too: AggregateStreamAsync
+    // compiles a setter delegate for this code path and throws against a get-only
+    // property.
+    [JsonIgnore]
+    public Guid Id
+    {
+        get => SubmissionId;
+        private set { }
+    }
 
     public decimal? BaselinePremium { get; private set; }
 

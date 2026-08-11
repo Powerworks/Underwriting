@@ -684,7 +684,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - _Requirements: FR-10, FR-11, AC-10.1, AC-11.1_
   - _Design: Error Handling (comparison fires before BaselinePremiumGenerated exists)_
 
-- [ ] 10.5 `RecordPricingBaselineComparisonOnAssessmentHandler` impl + module's `IntegrationEventQueueName`
+- [x] 10.5 `RecordPricingBaselineComparisonOnAssessmentHandler` impl + module's `IntegrationEventQueueName`
   - **Do**: 1. Compute `SubmissionPricingState` live via `AggregateStreamAsync<SubmissionPricingState>`. 2. Compare `proposedPremium` to `baselinePremium`; append `PricingBaselineAccepted` (exact) or `PricingBaselineOverridden` (variance). 3. Set `SubmissionIntakeModule.IntegrationEventQueueName` and wire `ListenToRabbitQueue` for `SubmissionAssessedV1` (Architecture Constraints: versioned integration events over durable per-module queues, never a direct cross-module call — ADR-004).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Automations/RecordPricingBaselineComparisonOnAssessment/RecordPricingBaselineComparisonOnAssessmentHandler.cs`, `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Module.cs`
   - **Done when**: 10.4's tests pass
