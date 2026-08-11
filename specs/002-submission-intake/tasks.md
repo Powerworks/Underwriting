@@ -326,7 +326,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests --filter "PotentialDuplicate|Superseded|ConfirmedDistinct" && echo PASS`
   - **Commit**: `feat(submission-intake): green - Submission.Apply duplicate-resolution events`
 
-- [ ] 5.3 Layer 3 tests: `DetectPotentialDuplicateOnNormalizationHandler` match / no-match / idempotency
+- [x] 5.3 Layer 3 tests: `DetectPotentialDuplicateOnNormalizationHandler` match / no-match / idempotency
   - **Do**: Real Postgres. Seed a `SubmissionQueue` entry with matching `classOfBusiness`+`territory`+`namedInsured` (DEC-010 exact match), assert `PotentialDuplicateSubmissionDetected` appended on the new submission's stream; assert no-match case appends nothing; assert already-`IsPossibleDuplicate`-true submission isn't re-flagged (idempotency). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/DetectPotentialDuplicateOnNormalizationHandlerTests.cs`
   - **Done when**: 3 methods exist and fail
