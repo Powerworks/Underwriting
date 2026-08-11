@@ -512,7 +512,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - GenerateBaselinePremiumOnNormalization`
   - _Requirements: FR-9, AC-9.1_
 
-- [ ] 7.5 `GenerateBaselinePremiumOnNormalizationHandler` impl
+- [x] 7.5 `GenerateBaselinePremiumOnNormalizationHandler` impl
   - **Do**: 1. Trigger on `SubmissionNormalized` (success only — an incomplete/failed normalization never gets priced, per S1a.5). 2. Idempotency guard on `BaselinePremium`. 3. Call `IRatingEngineClient.GetBaselinePricingAsync`, append `BaselinePremiumGenerated`.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Automations/GenerateBaselinePremiumOnNormalization/GenerateBaselinePremiumOnNormalizationHandler.cs`
   - **Done when**: 7.4's tests pass
