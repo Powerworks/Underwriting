@@ -366,7 +366,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Done when**: No errors
   - **Commit**: `chore(submission-intake): pass quality checkpoint` (if fixes needed)
 
-- [ ] 5.7 [P] Layer 3 tests: `SupersedeSubmissionHandler` + `ConfirmSubmissionDistinctHandler` happy paths
+- [x] 5.7 [P] Layer 3 tests: `SupersedeSubmissionHandler` + `ConfirmSubmissionDistinctHandler` happy paths
   - **Do**: Assert `SupersedeSubmission` appends `SubmissionSuperseded` on the **original**'s stream; `ConfirmSubmissionDistinct` appends `SubmissionConfirmedDistinct` on the **flagged/new**'s stream (per `design.md` Commands table). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/DuplicateResolutionCommandsTests.cs`
   - **Done when**: 2 methods exist and fail
