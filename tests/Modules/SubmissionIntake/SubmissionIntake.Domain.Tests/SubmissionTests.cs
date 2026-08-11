@@ -82,6 +82,25 @@ public class SubmissionTests
         entity.RawPayloadRef.ShouldBe("raw-payload-ref-1");
     }
 
+    // 6.1 — [FR-2, AC-2.1]
+    [Fact]
+    public void Apply_SubmissionRoutingRejected_sets_IsRoutingRejected()
+    {
+        var submissionId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            submissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+
+        var rejected = new SubmissionRoutingRejected(
+            submissionId, "BROKER-01", "CELL-01", "Commercial Property",
+            "Broker not authorized for requested cell/class", DateTimeOffset.UtcNow);
+
+        entity.Apply(rejected);
+
+        entity.IsRoutingRejected.ShouldBeTrue();
+    }
+
     // 5.1 — [FR-6, AC-6.1]
     [Fact]
     public void Apply_PotentialDuplicateSubmissionDetected_sets_IsPossibleDuplicate_and_SuspectedOriginalSubmissionId()

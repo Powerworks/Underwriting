@@ -396,7 +396,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: `RouteSubmissionOnReceipt` (DEC-009 hard block) + `BrokerAuthorizationExceptionLog`. Implements the interim/stubbed approach from `design.md` Implementation Step 8 for the unresolved data-source question — not left undone.
 
-- [ ] 6.1 [P] Domain test: `Submission.Apply(SubmissionRoutingRejected)`
+- [x] 6.1 [P] Domain test: `Submission.Apply(SubmissionRoutingRejected)`
   - **Do**: Assert `IsRoutingRejected` set. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
   - **Done when**: Test exists and fails
