@@ -67,11 +67,72 @@ public sealed class NormalizeSubmissionViaAdeptHandler
         await session.SaveChangesAsync(cancellationToken);
     }
 
-    // Trigger wiring per design.md Automations table -- subscribed now so Wolverine's
-    // event-forwarding picks it up, but the resubmittedForNormalization guard (and the
-    // actual re-normalization behavior it gates) isn't wired until Phase 8, when
-    // Submission.Apply(SubmissionManuallyCorrected) also lands. Deliberately inert until
-    // then.
-    public static Task Handle(SubmissionManuallyCorrected @event, CancellationToken cancellationToken) =>
-        Task.CompletedTask;
+    // 8.4: resubmittedForNormalization guard (design.md Automations table: "guard:
+    // resubmittedForNormalization == true"). Deliberately does NOT share the
+    // BrokerSubmissionReceived overload's "NormalizationStatus already set" idempotency
+    // guard above -- that check would permanently block re-normalization after any prior
+    // SubmissionNormalizationFailed, defeating the entire purpose of a correction. This
+    // overload's own idempotency concern (redelivery of the same SubmissionManuallyCorrected
+    // event) has no aggregate-tracked state to guard against -- design.md's Submission
+    // "Apply-computed state" table lists no field sourced from this event at all (8.1/8.2) --
+    // so redelivery-safety here is an accepted gap, same shape as the IR-001/IR-005
+    // "operational gap" documented in design.md's Error Handling table, not one this task
+    // is scoped to close.
+    public static async Task Handle(
+        SubmissionManuallyCorrected @event,
+        IDocumentSession session,
+        IBrokerAdeptClient client,
+        ILogger<NormalizeSubmissionViaAdeptHandler> logger,
+        CancellationToken cancellationToken)
+    {
+        if (!@event.ResubmittedForNormalization)
+        {
+            logger.LogInformation(
+                "Submission {SubmissionId} corrected without resubmission; skipping re-normalization",
+                @event.SubmissionId);
+            return;
+        }
+
+        var submission = await session.Events.AggregateStreamAsync<Submission>(
+            @event.SubmissionId, token: cancellationToken);
+        if (submission is null)
+        {
+            logger.LogWarning(
+                "Submission {SubmissionId} not found for correction re-normalization", @event.SubmissionId);
+            return;
+        }
+
+        var result = await client.NormalizeAsync(submission.RawPayloadRef, cancellationToken);
+
+        if (result.Succeeded)
+        {
+            session.Events.Append(@event.SubmissionId, new SubmissionNormalized(
+                @event.SubmissionId,
+                result.ClassOfBusiness!,
+                result.Territory!,
+                result.LineSizeSought!.Value,
+                result.KeyTerms,
+                result.NamedInsured!,
+                result.EffectiveDateRequested!.Value,
+                "Normalized",
+                DateTimeOffset.UtcNow));
+
+            logger.LogInformation(
+                "Submission {SubmissionId} re-normalized via ADEPT (IR-001) after correction", @event.SubmissionId);
+        }
+        else
+        {
+            session.Events.Append(@event.SubmissionId, new SubmissionNormalizationFailed(
+                @event.SubmissionId,
+                result.FailureReason ?? "AdeptUnknownFailure",
+                submission.RawPayloadRef,
+                DateTimeOffset.UtcNow));
+
+            logger.LogWarning(
+                "Submission {SubmissionId} re-normalization failed via ADEPT (IR-001) after correction: {FailureReason}",
+                @event.SubmissionId, result.FailureReason);
+        }
+
+        await session.SaveChangesAsync(cancellationToken);
+    }
 }

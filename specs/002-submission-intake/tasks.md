@@ -578,7 +578,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - _Requirements: FR-5, AC-5.1_
   - _Design: Commands table (CorrectSubmission — Principle II boundary)_
 
-- [ ] 8.4 `CorrectSubmissionHandler` impl + `resubmittedForNormalization` guard in `NormalizeSubmissionViaAdeptHandler`
+- [x] 8.4 `CorrectSubmissionHandler` impl + `resubmittedForNormalization` guard in `NormalizeSubmissionViaAdeptHandler`
   - **Do**: 1. `POST /api/v1/submission-intake/submissions/{submissionId}/corrections` → appends `SubmissionManuallyCorrected`. 2. Extend `NormalizeSubmissionViaAdeptHandler`'s trigger guard: on `SubmissionManuallyCorrected`, only act if `resubmittedForNormalization == true` (already subscribed since 4.5, guard was deferred to here).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Commands/CorrectSubmission/CorrectSubmission.cs`, `.../CorrectSubmissionHandler.cs`, `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Automations/NormalizeSubmissionViaAdept/NormalizeSubmissionViaAdeptHandler.cs`
   - **Done when**: 8.3's test passes
