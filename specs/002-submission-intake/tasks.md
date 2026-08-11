@@ -444,7 +444,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests --filter RouteSubmissionOnReceipt && echo PASS`
   - **Commit**: `feat(submission-intake): green - RouteSubmissionOnReceipt automation`
 
-- [ ] 6.6 [P] `BrokerAuthorizationExceptionLog` doc + projector + Layer 3 test
+- [x] 6.6 [P] `BrokerAuthorizationExceptionLog` doc + projector + Layer 3 test
   - **Do**: Test first, then doc + projector (`Handle(SubmissionRoutingRejected)`), field list per Event Model Detail.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/BrokerAuthorizationExceptionLog/BrokerAuthorizationExceptionLog.cs`, `.../BrokerAuthorizationExceptionLogProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/BrokerAuthorizationExceptionLogProjectorTests.cs`
   - **Done when**: Test passes against real Postgres
