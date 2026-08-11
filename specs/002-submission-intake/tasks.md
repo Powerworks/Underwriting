@@ -255,7 +255,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Done when**: No errors
   - **Commit**: `chore(submission-intake): pass quality checkpoint` (if fixes needed)
 
-- [ ] 4.7 [P] `SubmissionQueue` doc + projector (`Handle(SubmissionNormalized)`) + Layer 3 test
+- [x] 4.7 [P] `SubmissionQueue` doc + projector (`Handle(SubmissionNormalized)`) + Layer 3 test
   - **Do**: 1. Layer 3 test first: submitting `SubmissionNormalized` produces a `SubmissionQueue` row with `namedInsured` (Technical Decisions gap-fix), `status` from `normalizationStatus`. 2. `SubmissionQueue` document class (field list per `design.md` Screens DTO). 3. `SubmissionQueueProjector` (Wolverine-subscriber pattern per Existing Patterns to Follow, not `MultiStreamProjection` — keyed by `submissionId` which is the stream id).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionQueue/SubmissionQueue.cs`, `.../SubmissionQueueProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/SubmissionQueueProjectorTests.cs`
   - **Done when**: Test passes against real Postgres
