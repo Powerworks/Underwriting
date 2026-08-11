@@ -158,4 +158,24 @@ public class SubmissionTests
 
         entity.IsConfirmedDistinct.ShouldBeTrue();
     }
+
+    // 7.2 — [FR-9, AC-9.1]
+    [Fact]
+    public void Apply_BaselinePremiumGenerated_sets_BaselinePremium_RiskFactorSummary_and_ModelVersion()
+    {
+        var submissionId = Guid.NewGuid();
+        var received = new BrokerSubmissionReceived(
+            submissionId, "BROKER-01", "Jane Contact", "raw-payload-ref-1",
+            "Email", DateTimeOffset.UtcNow);
+        var entity = Submission.Create(received);
+
+        var generated = new BaselinePremiumGenerated(
+            submissionId, 125_000m, "{\"windExposure\":\"High\"}", "rating-model-v3", DateTimeOffset.UtcNow);
+
+        entity.Apply(generated);
+
+        entity.BaselinePremium.ShouldBe(125_000m);
+        entity.RiskFactorSummary.ShouldBe("{\"windExposure\":\"High\"}");
+        entity.ModelVersion.ShouldBe("rating-model-v3");
+    }
 }

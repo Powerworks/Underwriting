@@ -489,7 +489,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): add RatingEngineClient (IR-005)`
   - _Design: Interfaces, Dependencies (IR-005)_
 
-- [ ] 7.2 [P] Domain test: `Submission.Apply(BaselinePremiumGenerated)`
+- [x] 7.2 [P] Domain test: `Submission.Apply(BaselinePremiumGenerated)`
   - **Do**: Assert `BaselinePremium`/`RiskFactorSummary`/`ModelVersion` set. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests/SubmissionTests.cs`
   - **Done when**: Test exists and fails
