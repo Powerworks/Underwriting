@@ -525,7 +525,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Done when**: No errors
   - **Commit**: `chore(submission-intake): pass quality checkpoint` (if fixes needed)
 
-- [ ] 7.7 [P] `PricedSubmissionView` doc + projector (3 `Handle` methods) + Layer 3 test
+- [x] 7.7 [P] `PricedSubmissionView` doc + projector (3 `Handle` methods) + Layer 3 test
   - **Do**: Test first, then doc + projector reacting to `BaselinePremiumGenerated`, `SubmissionConfirmedDistinct` (board-wired), and the gap-fixed `SubmissionNormalized` (populates `brokerRequestedTerms`, Technical Decisions).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/PricedSubmissionView/PricedSubmissionView.cs`, `.../PricedSubmissionViewProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/PricedSubmissionViewProjectorTests.cs`
   - **Done when**: Tests pass against real Postgres
