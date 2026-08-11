@@ -99,4 +99,21 @@ public sealed class SubmissionQueueProjector
         session.Store(queueItem);
         await session.SaveChangesAsync(cancellationToken);
     }
+
+    // Task 6.8 -- design.md Edge Cases: "SubmissionRoutingRejected after normalization
+    // already succeeded" -- RouteSubmissionOnReceipt and NormalizeSubmissionViaAdept run
+    // in parallel off the same BrokerSubmissionReceived trigger (design's parallel-not-
+    // sequential decision), so a SubmissionQueue row may already exist by the time the
+    // (late) rejection lands. requirements.md's US-2 narrative is explicit: the
+    // submission must "never appear in any underwriter's queue" once rejected, so the
+    // row is retracted (delete-if-exists), mirroring SubmissionSuperseded's retraction
+    // pattern above. Keyed by SubmissionId directly -- SubmissionRoutingRejected is
+    // appended to the rejected submission's own stream (unlike SubmissionSuperseded's
+    // OriginalSubmissionId indirection).
+    public static async Task Handle(
+        SubmissionRoutingRejected @event, IDocumentSession session, CancellationToken cancellationToken)
+    {
+        session.Delete<SubmissionQueue>(@event.SubmissionId);
+        await session.SaveChangesAsync(cancellationToken);
+    }
 }

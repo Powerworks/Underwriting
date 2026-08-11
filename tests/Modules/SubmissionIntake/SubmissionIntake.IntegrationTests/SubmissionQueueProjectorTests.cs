@@ -162,4 +162,25 @@ public class SubmissionQueueProjectorTests(SubmissionIntakePostgresFixture fixtu
         queueItem.IsPossibleDuplicate.ShouldBeFalse();
         queueItem.SuspectedOriginalSubmissionId.ShouldBeNull();
     }
+
+    // 6.8 -- design.md Edge Cases: a late SubmissionRoutingRejected (routing and
+    // normalization run in parallel off the same trigger) must retract the row so the
+    // submission "never appears in any underwriter's queue" (requirements.md US-2).
+    [Fact]
+    public async Task SubmissionRoutingRejected_removes_row_from_queue()
+    {
+        await using var session = fixture.Store.LightweightSession();
+        var submissionId = Guid.NewGuid();
+        var normalized = NormalizedEvent(submissionId);
+        var rejected = new SubmissionRoutingRejected(
+            submissionId, "Acme Brokerage LLC", "cell-01", "Property", "PanelDoesNotCoverCell", DateTimeOffset.UtcNow);
+
+        await SubmissionQueueProjector.Handle(normalized, session, CancellationToken.None);
+        await SubmissionQueueProjector.Handle(rejected, session, CancellationToken.None);
+
+        await using var querySession = fixture.Store.LightweightSession();
+        var queueItem = await querySession.LoadAsync<SubmissionQueueDoc>(submissionId);
+
+        queueItem.ShouldBeNull();
+    }
 }

@@ -459,7 +459,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests --filter GetBrokerAuthorizationExceptionLog && echo PASS`
   - **Commit**: `feat(submission-intake): GetBrokerAuthorizationExceptionLog query endpoint`
 
-- [ ] 6.8 `SubmissionQueueProjector`: `Handle(SubmissionRoutingRejected)` retraction + Layer 3 test
+- [x] 6.8 `SubmissionQueueProjector`: `Handle(SubmissionRoutingRejected)` retraction + Layer 3 test
   - **Do**: Test first — a submission that already has a `SubmissionQueue` row (routing ran in parallel with normalization, per design's parallel-not-sequential decision) gets that row deleted/suppressed on a late `SubmissionRoutingRejected` (Edge Cases: "never appears in any underwriter's queue"). Then the `Handle` method (delete-if-exists).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionQueue/SubmissionQueueProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/SubmissionQueueProjectorTests.cs`
   - **Done when**: New test method passes
