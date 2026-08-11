@@ -352,7 +352,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests && echo PASS`
   - **Commit**: `fix(submission-intake): unique seed data to prevent cross-test-class SubmissionQueue collisions`
 
-- [ ] 5.5 [P] `SubmissionQueueProjector` gap-fix: `Handle(PotentialDuplicateSubmissionDetected)`/`Handle(SubmissionSuperseded)`/`Handle(SubmissionConfirmedDistinct)` + Layer 3 test
+- [x] 5.5 [P] `SubmissionQueueProjector` gap-fix: `Handle(PotentialDuplicateSubmissionDetected)`/`Handle(SubmissionSuperseded)`/`Handle(SubmissionConfirmedDistinct)` + Layer 3 test
   - **Do**: Test first (asserts `isPossibleDuplicate`/`suspectedOriginalSubmissionId` flip via these 3 events — the Technical Decisions gap-fix, since the board wires only `SubmissionNormalized`/`SubmissionRoutingRejected`), then the 3 `Handle` methods.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/ReadModels/SubmissionQueue/SubmissionQueueProjector.cs`, `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/SubmissionQueueProjectorTests.cs`
   - **Done when**: New test methods pass

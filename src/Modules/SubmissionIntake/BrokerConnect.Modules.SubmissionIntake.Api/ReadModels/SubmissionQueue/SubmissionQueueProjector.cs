@@ -51,4 +51,52 @@ public sealed class SubmissionQueueProjector
         session.Store(queueItem);
         await session.SaveChangesAsync(cancellationToken);
     }
+
+    // Task 5.5 gap-fix: flags the row for the newly-detected submission as a
+    // possible duplicate (design.md Technical Decisions -- IsPossibleDuplicate/
+    // SuspectedOriginalSubmissionId otherwise have no event source at all).
+    public static async Task Handle(
+        PotentialDuplicateSubmissionDetected @event, IDocumentSession session, CancellationToken cancellationToken)
+    {
+        var queueItem = await session.LoadAsync<SubmissionQueue>(@event.SubmissionId, cancellationToken)
+            ?? new SubmissionQueue { SubmissionId = @event.SubmissionId };
+
+        queueItem.IsPossibleDuplicate = true;
+        queueItem.SuspectedOriginalSubmissionId = @event.SuspectedOriginalSubmissionId;
+
+        session.Store(queueItem);
+        await session.SaveChangesAsync(cancellationToken);
+    }
+
+    // SubmissionSuperseded's doc comment: "confirms the new submission is a genuine
+    // resubmission/update of the original" -- the original is now stale and should no
+    // longer appear in the underwriter's active queue, so its row is removed
+    // (delete-if-exists), mirroring the SubmissionRoutingRejected retraction pattern
+    // documented in design.md's Edge Cases. Keyed by OriginalSubmissionId, the field
+    // the event actually lands on (it's appended to the original's own stream).
+    public static async Task Handle(
+        SubmissionSuperseded @event, IDocumentSession session, CancellationToken cancellationToken)
+    {
+        session.Delete<SubmissionQueue>(@event.OriginalSubmissionId);
+        await session.SaveChangesAsync(cancellationToken);
+    }
+
+    // SubmissionConfirmedDistinct's doc comment: "both proceed independently" -- the
+    // flagged submission's row stays in the active queue, but the possible-duplicate
+    // flag is cleared since it's now confirmed to not be a duplicate.
+    public static async Task Handle(
+        SubmissionConfirmedDistinct @event, IDocumentSession session, CancellationToken cancellationToken)
+    {
+        var queueItem = await session.LoadAsync<SubmissionQueue>(@event.SubmissionId, cancellationToken);
+        if (queueItem is null)
+        {
+            return;
+        }
+
+        queueItem.IsPossibleDuplicate = false;
+        queueItem.SuspectedOriginalSubmissionId = null;
+
+        session.Store(queueItem);
+        await session.SaveChangesAsync(cancellationToken);
+    }
 }

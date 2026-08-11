@@ -88,4 +88,78 @@ public class SubmissionQueueProjectorTests(SubmissionIntakePostgresFixture fixtu
         queueItem.NamedInsured.ShouldBe($"Acme Holdings LLC {submissionId:N}");
         queueItem.Status.ShouldBe("Normalized");
     }
+
+    // 5.5 gap-fix -- PotentialDuplicateSubmissionDetected flips IsPossibleDuplicate/
+    // SuspectedOriginalSubmissionId, which otherwise have no event source at all
+    // (design.md Technical Decisions).
+    [Fact]
+    public async Task PotentialDuplicateSubmissionDetected_flags_row_as_possible_duplicate()
+    {
+        await using var session = fixture.Store.LightweightSession();
+        var submissionId = Guid.NewGuid();
+        var suspectedOriginalId = Guid.NewGuid();
+        var normalized = NormalizedEvent(submissionId);
+        var detected = new PotentialDuplicateSubmissionDetected(
+            submissionId, suspectedOriginalId, "ExactFieldMatch", 1.0m, DateTimeOffset.UtcNow);
+
+        await SubmissionQueueProjector.Handle(normalized, session, CancellationToken.None);
+        await SubmissionQueueProjector.Handle(detected, session, CancellationToken.None);
+
+        await using var querySession = fixture.Store.LightweightSession();
+        var queueItem = await querySession.LoadAsync<SubmissionQueueDoc>(submissionId);
+
+        queueItem.ShouldNotBeNull();
+        queueItem.IsPossibleDuplicate.ShouldBeTrue();
+        queueItem.SuspectedOriginalSubmissionId.ShouldBe(suspectedOriginalId);
+    }
+
+    // 5.5 gap-fix -- SubmissionSuperseded appends to the ORIGINAL's own stream
+    // (OriginalSubmissionId) and confirms it's a stale resubmission of the newer
+    // submission, so its queue row is removed (delete-if-exists), mirroring the
+    // SubmissionRoutingRejected retraction pattern.
+    [Fact]
+    public async Task SubmissionSuperseded_removes_original_row_from_queue()
+    {
+        await using var session = fixture.Store.LightweightSession();
+        var originalSubmissionId = Guid.NewGuid();
+        var supersedingSubmissionId = Guid.NewGuid();
+        var normalized = NormalizedEvent(originalSubmissionId);
+        var superseded = new SubmissionSuperseded(
+            originalSubmissionId, supersedingSubmissionId, "jane.underwriter", DateTimeOffset.UtcNow);
+
+        await SubmissionQueueProjector.Handle(normalized, session, CancellationToken.None);
+        await SubmissionQueueProjector.Handle(superseded, session, CancellationToken.None);
+
+        await using var querySession = fixture.Store.LightweightSession();
+        var queueItem = await querySession.LoadAsync<SubmissionQueueDoc>(originalSubmissionId);
+
+        queueItem.ShouldBeNull();
+    }
+
+    // 5.5 gap-fix -- SubmissionConfirmedDistinct appends to the flagged/new
+    // submission's own stream and clears the possible-duplicate flag ("both proceed
+    // independently"), leaving the row active in the queue.
+    [Fact]
+    public async Task SubmissionConfirmedDistinct_clears_possible_duplicate_flag()
+    {
+        await using var session = fixture.Store.LightweightSession();
+        var submissionId = Guid.NewGuid();
+        var suspectedOriginalId = Guid.NewGuid();
+        var normalized = NormalizedEvent(submissionId);
+        var detected = new PotentialDuplicateSubmissionDetected(
+            submissionId, suspectedOriginalId, "ExactFieldMatch", 1.0m, DateTimeOffset.UtcNow);
+        var confirmedDistinct = new SubmissionConfirmedDistinct(
+            submissionId, suspectedOriginalId, "jane.underwriter", DateTimeOffset.UtcNow);
+
+        await SubmissionQueueProjector.Handle(normalized, session, CancellationToken.None);
+        await SubmissionQueueProjector.Handle(detected, session, CancellationToken.None);
+        await SubmissionQueueProjector.Handle(confirmedDistinct, session, CancellationToken.None);
+
+        await using var querySession = fixture.Store.LightweightSession();
+        var queueItem = await querySession.LoadAsync<SubmissionQueueDoc>(submissionId);
+
+        queueItem.ShouldNotBeNull();
+        queueItem.IsPossibleDuplicate.ShouldBeFalse();
+        queueItem.SuspectedOriginalSubmissionId.ShouldBeNull();
+    }
 }
