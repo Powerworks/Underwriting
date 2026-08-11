@@ -615,7 +615,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - PricingModel.Create PricingModelVersionDeployed`
   - _Requirements: FR-12, AC-12.1_
 
-- [ ] 9.2 `PricingModel.Create`/`Apply(PricingModelVersionDeployed)` impl
+- [x] 9.2 `PricingModel.Create`/`Apply(PricingModelVersionDeployed)` impl
   - **Do**: Add `Create`/`Apply`.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Aggregates/PricingModel.cs`
   - **Done when**: 9.1's test passes
