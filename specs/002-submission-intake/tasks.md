@@ -419,6 +419,16 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): stub IBrokerPanelAuthorizationSource pending data-source confirmation`
   - _Design: Unresolved Questions (RouteSubmissionOnReceipt data source), Implementation Step 8_
 
+- [ ] 6.3.1 Carry `CellIdHint`/`ClassOfBusinessHint` from `ReceiveBrokerSubmission` through to `BrokerSubmissionReceived`
+  - **Do**: Prerequisite for task 6.4 (added via TASK_MODIFICATION_REQUEST — `BrokerSubmissionReceived` has no `CellIdHint`/`ClassOfBusinessHint` fields, so `ReceiveBrokerSubmissionHandler` silently drops `ReceiveBrokerSubmissionRequest.CellIdHint`/`ClassOfBusinessHint` today; 6.4's rejected-path test needs `SubmissionRoutingRejected.RequestedCellId`/`RequestedClassOfBusiness` to legitimately mirror the command's hints, and 6.5's handler triggers on `BrokerSubmissionReceived` alone with no other input to source them from).
+    1. Add `string? CellIdHint = null, string? ClassOfBusinessHint = null` as trailing optional params to the `BrokerSubmissionReceived` record in `SubmissionIntakeEvents.cs` (existing 6-arg positional call sites remain valid since the new params default to null).
+    2. In `ReceiveBrokerSubmissionHandler.Handle`, pass `request.CellIdHint`/`request.ClassOfBusinessHint` into the new `BrokerSubmissionReceived` fields.
+    3. Confirm no other call site needs updating.
+  - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Domain/Events/SubmissionIntakeEvents.cs`, `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Commands/ReceiveBrokerSubmission/ReceiveBrokerSubmissionHandler.cs`
+  - **Done when**: Build passes; all existing SubmissionIntake test suites pass unchanged (0 regressions)
+  - **Verify**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests`
+  - **Commit**: `feat(submission-intake): carry CellIdHint/ClassOfBusinessHint through BrokerSubmissionReceived`
+
 - [ ] 6.4 Layer 3 tests: `RouteSubmissionOnReceiptHandler` authorized / rejected paths
   - **Do**: Real Postgres, `IBrokerPanelAuthorizationSource` mocked (NSubstitute) to return `true`/`false`. Assert authorized → no-op; rejected → `SubmissionRoutingRejected` appended with `requestedCellId`/`requestedClassOfBusiness` mirroring the command's hint fields. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/RouteSubmissionOnReceiptHandlerTests.cs`
