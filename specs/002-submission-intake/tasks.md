@@ -675,7 +675,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `feat(submission-intake): add SubmissionAssessedV1 consumer contract and SubmissionPricingState`
   - _Design: Unresolved Questions (SubmissionAssessedV1 shape), Architecture Constraints (automation decision state)_
 
-- [ ] 10.4 Layer 3 tests: `RecordPricingBaselineComparisonOnAssessmentHandler` exact-match / variance / idempotency / missing-baseline guard
+- [x] 10.4 Layer 3 tests: `RecordPricingBaselineComparisonOnAssessmentHandler` exact-match / variance / idempotency / missing-baseline guard
   - **Do**: Real Postgres, real `AggregateStreamAsync` into `SubmissionPricingState`. Cover: (1) `proposedPremium == baselinePremium` exactly → `PricingBaselineAccepted`; (2) diverges → `PricingBaselineOverridden` with computed `variance`; (3) redelivered event when a comparison already exists → no duplicate append; (4) `BaselinePremiumGenerated` doesn't exist yet → no-op/defer, not a failure (Error Handling table edge case). Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/RecordPricingBaselineComparisonOnAssessmentHandlerTests.cs`
   - **Done when**: 4 methods exist and fail
