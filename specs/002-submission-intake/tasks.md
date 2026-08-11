@@ -437,7 +437,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - RouteSubmissionOnReceipt authorized/rejected`
   - _Requirements: FR-2, AC-2.1_
 
-- [ ] 6.5 `RouteSubmissionOnReceiptHandler` impl
+- [x] 6.5 `RouteSubmissionOnReceiptHandler` impl
   - **Do**: 1. Trigger on `BrokerSubmissionReceived`. 2. Call `IBrokerPanelAuthorizationSource.IsAuthorizedAsync`. 3. Append `SubmissionRoutingRejected` if unauthorized (DEC-009: hard block, no broker feedback); no-op otherwise.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Automations/RouteSubmissionOnReceipt/RouteSubmissionOnReceiptHandler.cs`
   - **Done when**: 6.4's tests pass
