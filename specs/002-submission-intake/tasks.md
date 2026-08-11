@@ -481,7 +481,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
 
 **Goal**: AI baseline pricing (IR-005) on successful normalization; `PricedSubmissionView` (the "auditing the AI-generated model" screen driver).
 
-- [ ] 7.1 [P] `IRatingEngineClient`/`RatingEngineClient` (IR-005, Polly retry + circuit breaker)
+- [x] 7.1 [P] `IRatingEngineClient`/`RatingEngineClient` (IR-005, Polly retry + circuit breaker)
   - **Do**: Implement per `design.md` Interfaces (`GetBaselinePricingAsync(...) → BaselinePricingResult`), Polly-wrapped, DI-registered.
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Infrastructure/RatingEngineClient.cs`
   - **Done when**: Interface + impl compile

@@ -67,6 +67,13 @@ builder.Services.AddWolverineHttp();
 // directly, same flat-list convention as AddMarten/AddWolverineHttp above.
 builder.Services.AddBrokerAdeptClient();
 
+// IR-005 anti-corruption-layer client (BrokerConnect.Modules.SubmissionIntake.Infrastructure),
+// same registration shape as AddBrokerAdeptClient above -- registered eagerly here (not
+// deferred to when GenerateBaselinePremiumOnNormalizationHandler is added) per the 4.1.1
+// lesson: a client extension method defined but never invoked leaves it unresolvable
+// from DI.
+builder.Services.AddRatingEngineClient();
+
 // Stub pending design.md Unresolved Questions (RouteSubmissionOnReceipt's data source
 // not confirmed) — always-authorized default so the automation is testable now.
 builder.Services.AddBrokerPanelAuthorizationSource();
