@@ -12,13 +12,17 @@ namespace SubmissionIntake.IntegrationTests;
 [Collection(SubmissionIntakePostgresCollection.Name)]
 public class SubmissionQueueProjectorTests(SubmissionIntakePostgresFixture fixture)
 {
+    // classOfBusiness/territory/namedInsured are suffixed with the submission's own id
+    // so the real SubmissionQueue rows this test persists (via the actual projector, not
+    // just a hand-seeded doc) can never collide with DetectPotentialDuplicateOnNormalization's
+    // exact-match tests, which share this fixture's Postgres collection (5.4.1 fix).
     private static SubmissionNormalized NormalizedEvent(Guid submissionId) => new(
         submissionId,
-        "Property",
-        "Bermuda",
+        $"Property-{submissionId:N}",
+        $"Bermuda-{submissionId:N}",
         5_000_000m,
         "Standard terms",
-        "Acme Holdings LLC",
+        $"Acme Holdings LLC {submissionId:N}",
         DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1)),
         "Normalized",
         DateTimeOffset.UtcNow);
@@ -48,10 +52,10 @@ public class SubmissionQueueProjectorTests(SubmissionIntakePostgresFixture fixtu
 
         queueItem.ShouldNotBeNull();
         queueItem.SubmissionId.ShouldBe(submissionId);
-        queueItem.NamedInsured.ShouldBe("Acme Holdings LLC");
+        queueItem.NamedInsured.ShouldBe($"Acme Holdings LLC {submissionId:N}");
         queueItem.Status.ShouldBe("Normalized");
-        queueItem.ClassOfBusiness.ShouldBe("Property");
-        queueItem.Territory.ShouldBe("Bermuda");
+        queueItem.ClassOfBusiness.ShouldBe($"Property-{submissionId:N}");
+        queueItem.Territory.ShouldBe($"Bermuda-{submissionId:N}");
         queueItem.LineSizeSought.ShouldBe(5_000_000m);
         // Task 4.7 scope: duplicate-detection fields aren't wired until 5.5 -- stay
         // at their unflagged defaults on a row created only from SubmissionNormalized.
@@ -81,7 +85,7 @@ public class SubmissionQueueProjectorTests(SubmissionIntakePostgresFixture fixtu
         queueItem.SubmissionId.ShouldBe(submissionId);
         queueItem.BrokerFirmId.ShouldBe("Acme Brokerage LLC");
         queueItem.ReceivedAt.ShouldBe(receivedAt);
-        queueItem.NamedInsured.ShouldBe("Acme Holdings LLC");
+        queueItem.NamedInsured.ShouldBe($"Acme Holdings LLC {submissionId:N}");
         queueItem.Status.ShouldBe("Normalized");
     }
 }

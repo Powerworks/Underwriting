@@ -30,9 +30,9 @@ public class DetectPotentialDuplicateOnNormalizationHandlerTests(SubmissionIntak
 
     private static SubmissionNormalized NormalizedEvent(
         Guid submissionId,
-        string classOfBusiness = "Property",
-        string territory = "Bermuda",
-        string namedInsured = "Acme Holdings LLC") => new(
+        string classOfBusiness,
+        string territory,
+        string namedInsured) => new(
         submissionId,
         classOfBusiness,
         territory,
@@ -45,9 +45,9 @@ public class DetectPotentialDuplicateOnNormalizationHandlerTests(SubmissionIntak
 
     private static SubmissionQueueDoc QueueEntry(
         Guid submissionId,
-        string classOfBusiness = "Property",
-        string territory = "Bermuda",
-        string namedInsured = "Acme Holdings LLC") => new()
+        string classOfBusiness,
+        string territory,
+        string namedInsured) => new()
     {
         SubmissionId = submissionId,
         BrokerFirmId = "Acme Brokerage LLC",
@@ -68,15 +68,21 @@ public class DetectPotentialDuplicateOnNormalizationHandlerTests(SubmissionIntak
         await using var session = fixture.Store.LightweightSession();
 
         var originalSubmissionId = Guid.NewGuid();
-        session.Store(QueueEntry(originalSubmissionId));
+        var newSubmissionId = Guid.NewGuid();
+        // Unique-per-test literals (suffixed with the new submission's own id) so this
+        // test's match can never collide with SubmissionQueue rows left behind by other
+        // test classes in the same shared-fixture Postgres collection (5.4.1 fix).
+        var classOfBusiness = $"Property-{newSubmissionId:N}";
+        var territory = $"Bermuda-{newSubmissionId:N}";
+        var namedInsured = $"Acme Holdings LLC {newSubmissionId:N}";
+        session.Store(QueueEntry(originalSubmissionId, classOfBusiness, territory, namedInsured));
         await session.SaveChangesAsync();
 
-        var newSubmissionId = Guid.NewGuid();
         var received = ReceivedEvent(newSubmissionId);
         session.Events.StartStream<Submission>(newSubmissionId, received);
         await session.SaveChangesAsync();
 
-        var normalized = NormalizedEvent(newSubmissionId);
+        var normalized = NormalizedEvent(newSubmissionId, classOfBusiness, territory, namedInsured);
 
         await DetectPotentialDuplicateOnNormalizationHandler.Handle(
             normalized, session, NullLogger<DetectPotentialDuplicateOnNormalizationHandler>.Instance, CancellationToken.None);
@@ -95,16 +101,26 @@ public class DetectPotentialDuplicateOnNormalizationHandlerTests(SubmissionIntak
         await using var session = fixture.Store.LightweightSession();
 
         var unrelatedSubmissionId = Guid.NewGuid();
+        var newSubmissionId = Guid.NewGuid();
+        // Unique-per-test literals on both sides so neither this test's own seed nor its
+        // new submission's normalized fields can collide with rows left behind by other
+        // test classes in the same shared-fixture Postgres collection (5.4.1 fix).
         session.Store(QueueEntry(
-            unrelatedSubmissionId, classOfBusiness: "Casualty", territory: "London", namedInsured: "Globex Corp"));
+            unrelatedSubmissionId,
+            classOfBusiness: $"Casualty-{unrelatedSubmissionId:N}",
+            territory: $"London-{unrelatedSubmissionId:N}",
+            namedInsured: $"Globex Corp {unrelatedSubmissionId:N}"));
         await session.SaveChangesAsync();
 
-        var newSubmissionId = Guid.NewGuid();
         var received = ReceivedEvent(newSubmissionId);
         session.Events.StartStream<Submission>(newSubmissionId, received);
         await session.SaveChangesAsync();
 
-        var normalized = NormalizedEvent(newSubmissionId);
+        var normalized = NormalizedEvent(
+            newSubmissionId,
+            classOfBusiness: $"Property-{newSubmissionId:N}",
+            territory: $"Bermuda-{newSubmissionId:N}",
+            namedInsured: $"Acme Holdings LLC {newSubmissionId:N}");
 
         await DetectPotentialDuplicateOnNormalizationHandler.Handle(
             normalized, session, NullLogger<DetectPotentialDuplicateOnNormalizationHandler>.Instance, CancellationToken.None);
@@ -126,12 +142,17 @@ public class DetectPotentialDuplicateOnNormalizationHandlerTests(SubmissionIntak
         await using var session = fixture.Store.LightweightSession();
 
         var originalSubmissionId = Guid.NewGuid();
-        session.Store(QueueEntry(originalSubmissionId));
+        var newSubmissionId = Guid.NewGuid();
+        // Unique-per-test literals (5.4.1 fix) -- not asserted for a match in this test,
+        // but kept collision-free for consistency with the other two tests in this class.
+        var classOfBusiness = $"Property-{newSubmissionId:N}";
+        var territory = $"Bermuda-{newSubmissionId:N}";
+        var namedInsured = $"Acme Holdings LLC {newSubmissionId:N}";
+        session.Store(QueueEntry(originalSubmissionId, classOfBusiness, territory, namedInsured));
         await session.SaveChangesAsync();
 
-        var newSubmissionId = Guid.NewGuid();
         var received = ReceivedEvent(newSubmissionId);
-        var normalized = NormalizedEvent(newSubmissionId);
+        var normalized = NormalizedEvent(newSubmissionId, classOfBusiness, territory, namedInsured);
         var alreadyDetected = new PotentialDuplicateSubmissionDetected(
             newSubmissionId, originalSubmissionId, "classOfBusiness+territory+namedInsured", null, DateTimeOffset.UtcNow);
         session.Events.StartStream<Submission>(newSubmissionId, received, normalized, alreadyDetected);
