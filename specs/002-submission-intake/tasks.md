@@ -429,7 +429,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests`
   - **Commit**: `feat(submission-intake): carry CellIdHint/ClassOfBusinessHint through BrokerSubmissionReceived`
 
-- [ ] 6.4 Layer 3 tests: `RouteSubmissionOnReceiptHandler` authorized / rejected paths
+- [x] 6.4 Layer 3 tests: `RouteSubmissionOnReceiptHandler` authorized / rejected paths
   - **Do**: Real Postgres, `IBrokerPanelAuthorizationSource` mocked (NSubstitute) to return `true`/`false`. Assert authorized → no-op; rejected → `SubmissionRoutingRejected` appended with `requestedCellId`/`requestedClassOfBusiness` mirroring the command's hint fields. Must fail.
   - **Files**: `tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests/RouteSubmissionOnReceiptHandlerTests.cs`
   - **Done when**: 2 methods exist and fail
