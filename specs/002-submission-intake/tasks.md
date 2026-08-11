@@ -374,7 +374,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Commit**: `test(submission-intake): red - SupersedeSubmission and ConfirmSubmissionDistinct`
   - _Requirements: FR-7, FR-8, AC-7.1, AC-8.1_
 
-- [ ] 5.8 `SupersedeSubmissionHandler` + `ConfirmSubmissionDistinctHandler` impl
+- [x] 5.8 `SupersedeSubmissionHandler` + `ConfirmSubmissionDistinctHandler` impl
   - **Do**: 1. `POST /api/v1/submission-intake/submissions/{originalSubmissionId}/supersede` → appends on original's stream. 2. `POST /api/v1/submission-intake/submissions/{submissionId}/confirm-distinct` → appends on the flagged/new's stream. Both are underwriter/ops role-gated (`[Authorize]` TODO comment, ADR-010 blocked, per 001's precedent).
   - **Files**: `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Commands/SupersedeSubmission/SupersedeSubmission.cs`, `.../SupersedeSubmissionHandler.cs`, `src/Modules/SubmissionIntake/BrokerConnect.Modules.SubmissionIntake.Api/Commands/ConfirmSubmissionDistinct/ConfirmSubmissionDistinct.cs`, `.../ConfirmSubmissionDistinctHandler.cs`
   - **Done when**: 5.7's tests pass
