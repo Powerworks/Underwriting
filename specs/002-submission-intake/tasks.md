@@ -540,7 +540,7 @@ Schema name: `submissionintake`. Dev server: `dotnet run --project src/Api.Host/
   - **Verify**: `dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests --filter GetPricedSubmissionView && echo PASS`
   - **Commit**: `feat(submission-intake): GetPricedSubmissionView query endpoint`
 
-- [ ] 7.9 [VERIFY] Quality checkpoint: build + all module tests pass
+- [x] 7.9 [VERIFY] Quality checkpoint: build + all module tests pass
   - **Do**: `dotnet build src/BrokerConnect.slnx && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Domain.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.Api.Tests && dotnet test tests/Modules/SubmissionIntake/SubmissionIntake.IntegrationTests`
   - **Verify**: All exit 0
   - **Done when**: No errors
